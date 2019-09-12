@@ -7,7 +7,7 @@
 
 int main()
 {
-    Map map = MapLoader::loadMap("C:/projects/C++/ConsoleApplication1/World.map");
+    Map map = MapLoader::loadMap("./InvalidWorld.map");
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

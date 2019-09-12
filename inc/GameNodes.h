@@ -13,4 +13,5 @@ struct CountryInformation {
 struct CountryNode {
 	CountryInformation countryInformation;
 	std::vector<CountryNode*> neighbouringCountries;
+	bool visited;
 };
