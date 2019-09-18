@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "MapLoader.h"
+#include "Dice.h"
 
 int main()
 {
