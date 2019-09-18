@@ -26,17 +26,15 @@ void Dice::roll() {
 	std::vector <int> rolled_values;
 
 	//make some random values between 1-6 and insert them in vector
+	std::cout << "You rolled the following: \n";
 	for (int i = 0; i < *numDice_ptr; i++) {
 		int r = (rand() % 6) + 1;
 		rolled_values.insert(rolled_values.begin(), r);
+		std::cout << "[" << r << "] ";
 	}
+	std::cout << "\n";
 
 	std::sort(rolled_values.begin(), rolled_values.end());
-
-	std::cout << "You rolled the following: \n";
-	for (auto it = rolled_values.begin(); it != rolled_values.end(); ++it)
-		std::cout << "[" << *it << "] ";
-	std::cout << "\n";
 
 	addToRollHistory(rolled_values);
 }
