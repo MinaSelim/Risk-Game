@@ -8,7 +8,20 @@
 
 int main()
 {
-    Map map = MapLoader::loadMap("./InvalidWorld.map");
+   /* Map map = MapLoader::loadMap("./InvalidWorld.map");*/
+
+	Dice dice1;
+	Dice dice2;
+
+	dice1.roll();
+	dice1.roll();
+	dice1.roll();
+	dice1.showRollHistory();
+
+	dice2.roll();
+	dice2.roll();
+	dice2.roll();
+	dice2.showRollHistory();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

@@ -19,14 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Dice.cpp" />
+    <ClCompile Include="src\Dice.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Map.cpp" />
     <ClCompile Include="src\MapLoader.cpp" />
     <ClCompile Include="src\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Dice.h" />
+    <ClInclude Include="inc\Dice.h" />
     <ClInclude Include="inc\ErrorCodes.h" />
     <ClInclude Include="inc\GameNodes.h" />
     <ClInclude Include="inc\Map.h" />
