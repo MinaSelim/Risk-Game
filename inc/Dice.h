@@ -1,14 +1,21 @@
 #pragma once
 #include <vector>
 
-class Dice
+class DicesRoller
 {
 private:
 	//multidimensional vector to keep track of all previous rolls
-	std::vector<std::vector <int>> rollHistory;
+	std::vector<std::vector<int>> rollHistory;
 public:
-	void roll();
+	std::vector<int> roll(int numDice);
 	void addToRollHistory(std::vector <int> roll);
 	void showRollHistory();
 
 };
+
+class DicesPrompt
+{
+public:
+	int getRolledNumberOfDice();
+};
+
