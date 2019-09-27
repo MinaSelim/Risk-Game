@@ -4,10 +4,13 @@
 #include <iostream>
 
 #include "MapLoader.h"
+#include "../PlayerDriver.h"
 
 int main()
 {
-    Map map = MapLoader::loadMap("./InvalidWorld.map");
+    //Map map = MapLoader::loadMap("./InvalidWorld.map");
+	PlayerDriver * playerTest = new  PlayerDriver();
+	playerTest->PlayerTester();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
