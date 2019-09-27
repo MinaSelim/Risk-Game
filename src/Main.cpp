@@ -4,10 +4,13 @@
 #include <iostream>
 #include "MapLoader.h"
 #include "DiceDriver.h"
+
 int main()
 {
-    Map map = MapLoader::loadMap("./InvalidWorld.map");
-
+	// Map map = MapLoader::loadMap("./InvalidWorld.map");
+	DiceDriver * diceTest = new DiceDriver();
+	diceTest->DiceTester();
+	
 	
 	
 	

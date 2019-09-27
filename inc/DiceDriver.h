@@ -1,3 +1,7 @@
 #pragma once
 
-void diceDriverTest();
+class DiceDriver
+{
+public:
+	void DiceTester();
+};
