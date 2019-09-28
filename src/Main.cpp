@@ -4,20 +4,24 @@
 #include <iostream>
 #include "MapLoader.h"
 #include "DiceDriver.h"
-
+#include "../PlayerDriver.h"
 int main()
 {
 	// Map map = MapLoader::loadMap("./InvalidWorld.map");
 	DiceDriver * diceTest = new DiceDriver();
 	diceTest->DiceTester();
-	
-	
+	PlayerDriver * playerTest = new  PlayerDriver();
+	playerTest->PlayerTester();
+}
 	
 	
 	
 
 	
-}
+
+
+
+
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu

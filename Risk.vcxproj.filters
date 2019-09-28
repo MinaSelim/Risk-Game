@@ -31,6 +31,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\DiceDriver.cpp">
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,6 +58,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\DiceDriver.h">
+    <ClInclude Include="inc\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerDriver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
