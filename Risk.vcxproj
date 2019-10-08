@@ -19,16 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Cards.cpp" />
+    <ClCompile Include="src\Dice.cpp" />
+    <ClCompile Include="src\DiceDriver.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Map.cpp" />
     <ClCompile Include="src\MapLoader.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlayerDriver.cpp" />
+    <ClCompile Include="src\Source.cpp" />
     <ClCompile Include="src\Utility.cpp" />
-    <ClCompile Include="src\Dice.cpp" />
-    <ClCompile Include="src\DiceDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\Cards.h" />
+    <ClInclude Include="inc\Dice.h" />
+    <ClInclude Include="inc\DiceDriver.h" />
     <ClInclude Include="inc\ErrorCodes.h" />
     <ClInclude Include="inc\GameNodes.h" />
     <ClInclude Include="inc\Map.h" />
@@ -36,8 +41,6 @@
     <ClInclude Include="inc\Player.h" />
     <ClInclude Include="inc\PlayerDriver.h" />
     <ClInclude Include="inc\Utility.h" />
-    <ClCompile Include="inc\Dice.h" />
-    <ClCompile Include="inc\DiceDriver.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -1,24 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Map.cpp" />
-    <ClCompile Include="src\MapLoader.cpp" />
-    <ClCompile Include="src\Player.cpp" />
-    <ClCompile Include="src\Utility.cpp" />
-    <ClCompile Include="src\Dice.cpp" />
-    <ClCompile Include="src\DiceDriver.cpp" />
-    <ClCompile Include="inc\Dice.h" />
-    <ClCompile Include="inc\DiceDriver.h" />
-    <ClCompile Include="src\PlayerDriver.cpp" />
+    <Filter Include="Header">
+      <UniqueIdentifier>{3cba9739-6f31-48d0-ad50-bb7e019ccf45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{f70ff0f5-3a62-434e-95b8-21781b33a73e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\ErrorCodes.h" />
-    <ClInclude Include="inc\GameNodes.h" />
-    <ClInclude Include="inc\Map.h" />
-    <ClInclude Include="inc\MapLoader.h" />
-    <ClInclude Include="inc\Player.h" />
-    <ClInclude Include="inc\Utility.h" />
-    <ClInclude Include="inc\PlayerDriver.h" />
+    <ClCompile Include="src\MapLoader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PlayerDriver.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Source.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utility.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cards.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Dice.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DiceDriver.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Map.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inc\ErrorCodes.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\GameNodes.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Map.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\MapLoader.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Player.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\PlayerDriver.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Utility.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Cards.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Dice.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\DiceDriver.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
