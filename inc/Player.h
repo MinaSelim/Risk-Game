@@ -11,7 +11,7 @@ private:
 	string * playerName;
 	vector<CountryNode> * countries;
 	//std:: vector<Cards> cards;
-	
+
 public:
 	Player();
 	Player(string playerName, vector<CountryNode> countries);

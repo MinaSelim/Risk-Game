@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PlayerDriver.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Map.cpp" />
     <ClCompile Include="src\MapLoader.cpp" />
     <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\PlayerDriver.cpp" />
     <ClCompile Include="src\Utility.cpp" />
     <ClCompile Include="src\Dice.cpp" />
     <ClCompile Include="src\DiceDriver.cpp" />
@@ -34,10 +34,10 @@
     <ClInclude Include="inc\Map.h" />
     <ClInclude Include="inc\MapLoader.h" />
     <ClInclude Include="inc\Player.h" />
+    <ClInclude Include="inc\PlayerDriver.h" />
     <ClInclude Include="inc\Utility.h" />
     <ClCompile Include="inc\Dice.h" />
     <ClCompile Include="inc\DiceDriver.h" />
-    <ClInclude Include="PlayerDriver.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
