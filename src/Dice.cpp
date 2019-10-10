@@ -7,13 +7,13 @@
 
 DicesRoller::DicesRoller() 
 {
-	this->rollHistory = new std::vector<int>{ 0,0,0,0,0,0 };
+	this->rollHistory = new std::vector<int>{0,0,0,0,0,0};
 	this->totalDiceRolled = new int();
 }
 
 DicesRoller::~DicesRoller()
 {
-	delete[] rollHistory;
+	delete rollHistory;
 	delete totalDiceRolled;
 }
 

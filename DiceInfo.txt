@@ -1,0 +1,34 @@
+DicesRoller & DicesPrompt Class
+
+DicesRoller
+
+Data members:
+vector<int> rollHistory - stores all previous rolls for DiceRoller object
+int totalDiceRolled - stores number of Dices rolled 
+
+Methods:
+vector<int> DicesRoller:: roll(int numDice)
+- takes the number of Dice rolled from DicesPrompt
+- randomly generates a number between 1-6 for each dice
+- sorts the vector of dices rolled
+- returns the vector of dices rolled
+
+DicesRoller:: addToRollHistory(std::vector <int> roll)
+- takes the vector returned by roll method
+- iterates through the rolled values
+- depending on values [1-6] increments thats specific in corresponding index in rollHistory data member
+
+DicesRoller:: showRollHistory()
+- uses rollHistory and totalDiceRolled data members
+- calculates percentage of each rolled value
+- does this by dividing rolls of a specific number by the total rolls then * 100
+- returns percentage of each roll to console
+
+
+DicesPrompt
+
+int DicesPrompt::getRolledNumberOfDice()
+- prompts user to enter a number between 1-3
+- returns value as int
+
+
