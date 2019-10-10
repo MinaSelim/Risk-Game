@@ -1,6 +1,7 @@
 #include "Map.h"
 #include "MapDriver.h"
 #include "MapLoader.h"
+#include <iostream>
 
 void MapDriver::MapTester() {
 
@@ -14,8 +15,8 @@ void MapDriver::MapTester() {
 	}
 	catch (int a)
 	{
-		return a;
+		std::cout << a;
 	}
 	
-	return 0;
+
 }
