@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <new>
+#include <map>
 using namespace std;
 enum  CardType
 {
@@ -17,7 +18,25 @@ private:
 public:
 	Card();
 	Card(CardType type);
+	string getCard();
+	void setCard(string newCard);
 	~Card();
+};
+
+class HandOfCards {
+private:
+	map<string*, int*> playersCards;
+
+public:
+	HandOfCards();
+	int getValue(string * key);
+
+	void reduceByOne();
+
+	//int setValue(string * key);
+
+	int exchange();
+	void PrintValues();
 };
 
 
@@ -31,6 +50,8 @@ public:
 	Deck();
 	Deck(int numberOfCountries);
 	~Deck();
-	void draw(vector<Card*>&deck);
-	void generateDeck(vector<Card*>&deck);
+	Card* draw();
+	void generateDeck(int numberOfCountries);
+	int getRandomInt(int min, int max);
+	int getSize();
 };

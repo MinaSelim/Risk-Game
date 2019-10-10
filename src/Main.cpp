@@ -6,16 +6,30 @@
 #include "DiceDriver.h"
 #include "../inc/Cards.h"
 #include "../inc/PlayerDriver.h"
+
 int main()
 {
 	// Map map = MapLoader::loadMap("./InvalidWorld.map");
 	//DiceDriver * diceTest = new DiceDriver();
 	//diceTest->DiceTester();
-	//PlayerDriver * playerTest = new  PlayerDriver();
-	//playerTest->PlayerTester();
-
-	Card * card = new Card();
-	delete card;
+	PlayerDriver * playerTest = new  PlayerDriver();
+	playerTest->PlayerTester();
+	Player *player = new Player();
+	Deck * deckOfCards = new Deck();
+	deckOfCards->generateDeck(15);
+	/*int i = 0;
+	while (i < 15) {
+		Card * nek = deckOfCards->draw();
+		cout << nek->getCard() << " and " << deckOfCards->getSize() << endl;
+		i++;
+	}*/
+	player->attack();
+	//HandOfCards* hand = new HandOfCards();
+	//hand->PrintValues();
+//	string* str = new string("artillery");
+	//cout <<<< endl;
+	
+	player->getDice().addToRollHistory(player->getDice().roll(3));
 }
 	
 	

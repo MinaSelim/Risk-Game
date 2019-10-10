@@ -7,16 +7,20 @@ using namespace std;
 
 Player::Player()
 {
-	this->playerName = new string();
-	this->countries = new vector<CountryNode>();
+	this->playerName	 = new string();
+	this->countries		 = new vector<CountryNode*>();
+	this->numberOfArmies = new int(0);
+	this->dice			 = new DicesRoller();
+	this->hand			 = new HandOfCards();
 }
 
-Player::Player(string playerName, vector<CountryNode> countries)
+Player::Player(string playerName, vector<CountryNode*> countries)
 {
-	this->playerName  = new string();
-	this->countries	  = new vector<CountryNode>();
-	*this->playerName = playerName;
-	*this->countries  = countries;
+	this->playerName	  = new string(playerName);
+	this->countries		  = new vector<CountryNode*>(countries);
+	this->numberOfArmies  = new int(0);
+	this->dice			  = new DicesRoller();
+	this->hand			  = new HandOfCards();
 }
 
 Player::~Player()
@@ -38,4 +42,13 @@ void Player::attack()
 void Player::fortify()
 {
 	cout << "Executing the fortify() method" << endl;
+}
+
+DicesRoller Player::getDice()
+{
+	return *dice;
+}
+
+HandOfCards* Player::getCard() {
+	return hand;
 }

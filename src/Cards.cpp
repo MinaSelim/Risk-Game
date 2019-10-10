@@ -1,17 +1,17 @@
 #include <vector>
 #include "..\inc\Cards.h"
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <map>
+//Talk with mina if u have a number of cards that is not divisble by 3 --> what will u do  ?
+
 
 using namespace std;
-enum  CardType
-{
-	infantry = 0,
-	artillery,
-	cavalry
-};
+
 Card::Card()
 {
 	this->cardtype = new string("njnjn:");
-	//*this->cardtype = nullptr;
 }
 Card::Card(CardType type)
 {
@@ -31,6 +31,17 @@ Card::Card(CardType type)
 	}
 }
 
+string Card::getCard()
+{
+	return (*cardtype);
+}
+
+void Card::setCard(string newCard)
+{
+	*cardtype = newCard;
+}
+
+
 
 
 Card::~Card()
@@ -38,51 +49,159 @@ Card::~Card()
 	delete cardtype;
 }
 
+
 //Functions related to the Deck Class:
 Deck::Deck()
 {
-	this->deck = new vector<Card>();
+	 this->deck = vector<Card*>();
 }
 
 Deck::Deck(int numberOfCountries)
 {
-	int counter					 = 0;
-	int counterInfantry			 = 0;
-	int counterArtillery		 = 0;
-	int counterCavalry			 = 0;
-	//What should I do if the number isn't divisble by 3 ?
-	int numberOfCardsForEachType = numberOfCountries/3;
-	this->deck = new vector<Card> (numberOfCountries);
-
-	while (counter != numberOfCountries) {
-		CardType cardType = CardType(rand() % 3);
-	}
+	 this->deck =  vector<Card*> (numberOfCountries);
 }
 
 Deck::~Deck()
 {
+	//no need to since deck is not a pointer.
 }
 
 
-void Deck::draw(vector<Card>& deck)
+Card* Deck::draw()
 {
+	if (this->deck.size() > 0) {
+		int choosenCard = getRandomInt(0, deck.size() - 1);
+ 		string newValue = deck[choosenCard]->getCard();
+		Card *newCard = new Card();
+		newCard->setCard(newValue);
+		deck.erase(deck.begin() + (choosenCard));
+		return newCard;
+	}
+	else {
+		return NULL;
+	}
+	
 }
 
-void Deck::generateDeck(vector<Card>& deck, int numberOfCountries)
+
+int Deck::getRandomInt(int min, int max)
 {
-	int counter = 0
+	return rand() % (max - min + 1) + min;
+}
+
+int Deck::getSize()
+{
+	return deck.size();
+}
+
+void Deck::generateDeck(int numberOfCountries)
+{
 	bool done = false;
 	int numberOfCardsOfEachType = numberOfCountries/3;
 	int numberOfInfantry  = numberOfCardsOfEachType;
 	int numberOfArtillery = numberOfCardsOfEachType;
 	int numberOfCavalry   = numberOfCardsOfEachType;
 	while (!done) {
-		Type type = Type(rand() % 3);
-		if (type == 0 && numberOfInfantry > 0) {
-			Card * card = new Card(type);
-			deck.insert();
+		CardType type = CardType(rand() % 3);
+		if (type == CardType::infantry && numberOfInfantry > 0) {
+			this->deck.push_back( new Card(type) );
 			numberOfInfantry--;
+		}
+		if (type == CardType::artillery && numberOfArtillery > 0) {
+			this->deck.push_back(new Card(type));
+			numberOfArtillery--;
+		}
+		if (type == CardType::cavalry && numberOfCavalry > 0) {
+			this->deck.push_back(new Card(type));
+			numberOfCavalry--;
+		}
+		if (numberOfArtillery == 0 && numberOfCavalry == 0 && numberOfInfantry == 0) {
+			done = true;
 		}
 	}
 }
 
+//Methods for HandOfCards:
+
+HandOfCards::HandOfCards()
+{
+	this->playersCards.insert({ new string("infantry"), new int(36) });
+	this->playersCards.insert({ new string("artillery"), new int(5) });
+	this->playersCards.insert({ new string("cavalry"), new int(6) });
+}
+
+int HandOfCards::getValue(string *key) {
+	int  value =-1;
+	for (auto it = this->playersCards.begin(); it != this->playersCards.end(); ++it) {
+		string cardType = *it->first;
+		if (cardType.compare(*key)) {
+			value = *it->second;
+		}
+	}
+	return value;
+}
+void HandOfCards::reduceByOne() {
+	for (auto it = this->playersCards.begin(); it != this->playersCards.end(); ++it) {
+		*it->second -= 1;
+	}
+}
+
+//int HandOfCards::setValue(string *key) {
+//	int  value = -1;
+//	for (auto it = this->playersCards.begin(); it != this->playersCards.end(); ++it) {
+//		string cardType = *it->first;
+//		if (cardType.compare(*key)) {
+//			*it->second = 4;
+//		}
+//	}
+//	return value;
+//}
+
+int HandOfCards::exchange()
+{
+	static int numberOfArmies = 4;
+	//static int set			  = 0;
+	int numberOfTypes		  = 0;
+	bool possibleExchange = false;
+	for (auto it = this->playersCards.begin(); it != this->playersCards.end(); ++it) {
+		int numberOfCardsOfAType = *it->second;
+		string cardType = *it->first;
+		
+		if (numberOfCardsOfAType >= 3) {
+			*it->second -= 3;
+			possibleExchange = true;
+			break;
+		}
+		else if (numberOfCardsOfAType >= 0 && numberOfCardsOfAType != 3) {
+			numberOfTypes += 1;
+		}
+		else if (numberOfTypes == 3) {
+			possibleExchange = true;
+			this->reduceByOne();
+			break;
+		}
+	}
+	if (possibleExchange) {
+		//set++;
+		if (numberOfArmies < 12) {
+			numberOfArmies += 2;
+		}
+		else if (numberOfArmies == 12) {
+			numberOfArmies += 3;
+		}
+		else {
+			numberOfArmies += 5;
+		}
+		return numberOfArmies;
+	}
+	else {
+		cout << "You don't have enough cards to execute the exchange mehtod" << endl;
+		return 0;
+	}	
+}
+
+void HandOfCards::PrintValues() {
+	for (auto it = this->playersCards.begin(); it != this->playersCards.end(); ++it) {
+		cout << "Name: " << *it->first << *it->second << endl;
+	}
+}
