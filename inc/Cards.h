@@ -25,17 +25,14 @@ public:
 
 class HandOfCards {
 private:
-	map<string*, int*> playersCards;
+	map<string*, int*> * playersCards;
 
 public:
 	HandOfCards();
+	~HandOfCards();
 	int getValue(string * key);
-
-	void reduceByOne();
-
-	//int setValue(string * key);
-
 	int exchange();
+	void reduceByOne();
 	void PrintValues();
 };
 
@@ -44,7 +41,7 @@ public:
 class Deck {
 
 private:
-	vector<Card*> deck;
+	vector<Card*> * deck;
 
 public:
 	Deck();
@@ -52,6 +49,7 @@ public:
 	~Deck();
 	Card* draw();
 	void generateDeck(int numberOfCountries);
+	void showDeck();
 	int getRandomInt(int min, int max);
 	int getSize();
 };

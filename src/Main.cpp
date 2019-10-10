@@ -10,26 +10,30 @@
 int main()
 {
 	// Map map = MapLoader::loadMap("./InvalidWorld.map");
-	//DiceDriver * diceTest = new DiceDriver();
-	//diceTest->DiceTester();
-	PlayerDriver * playerTest = new  PlayerDriver();
-	playerTest->PlayerTester();
-	Player *player = new Player();
-	Deck * deckOfCards = new Deck();
+	DiceDriver * diceTest = new DiceDriver();
+	diceTest->DiceTester();
+	//PlayerDriver * playerTest = new  PlayerDriver();
+	//playerTest->PlayerTester();
+	//Player *player = new Player();
+	/*Deck * deckOfCards = new Deck();
 	deckOfCards->generateDeck(15);
+	deckOfCards->showDeck();
+	HandOfCards* hand = new HandOfCards();
+	hand->PrintValues();
+	delete hand;*/
+	//hand->PrintValues();
 	/*int i = 0;
 	while (i < 15) {
 		Card * nek = deckOfCards->draw();
 		cout << nek->getCard() << " and " << deckOfCards->getSize() << endl;
 		i++;
 	}*/
-	player->attack();
-	//HandOfCards* hand = new HandOfCards();
+	//player->attack();
 	//hand->PrintValues();
 //	string* str = new string("artillery");
 	//cout <<<< endl;
 	
-	player->getDice().addToRollHistory(player->getDice().roll(3));
+	//player->getDice().addToRollHistory(player->getDice().roll(3));
 }
 	
 	

@@ -11,19 +11,19 @@ using namespace std;
 
 Card::Card()
 {
-	this->cardtype = new string("njnjn:");
+	this->cardtype = new string("N/A");
 }
 Card::Card(CardType type)
 {
 	switch (type)
 	{
-	case 0:
+	case CardType::infantry:
 		this->cardtype  = new string("infantry");
 		break;
-	case 1:
+	case CardType::artillery:
 		this->cardtype  = new string("artillery");
 		break;
-	case 2:
+	case CardType::cavalry:
 		this->cardtype  = new string("cavalry");
 		break;
 	default:
@@ -53,28 +53,31 @@ Card::~Card()
 //Functions related to the Deck Class:
 Deck::Deck()
 {
-	 this->deck = vector<Card*>();
+	 this->deck = new vector<Card*>();
 }
 
 Deck::Deck(int numberOfCountries)
 {
-	 this->deck =  vector<Card*> (numberOfCountries);
+	 this->deck = new vector<Card*>(numberOfCountries);
 }
 
 Deck::~Deck()
 {
-	//no need to since deck is not a pointer.
+	for (unsigned int i = 0; i < deck->size(); i++) {
+		delete (*deck)[i];
+		(*deck)[i] = NULL;
+	}
+	deck->clear();
 }
-
 
 Card* Deck::draw()
 {
-	if (this->deck.size() > 0) {
-		int choosenCard = getRandomInt(0, deck.size() - 1);
- 		string newValue = deck[choosenCard]->getCard();
+	if (this->deck->size() > 0) {
+		int choosenCard = getRandomInt(0, deck->size() - 1);
+ 		string newValue = (*deck)[choosenCard]->getCard();
 		Card *newCard = new Card();
 		newCard->setCard(newValue);
-		deck.erase(deck.begin() + (choosenCard));
+		(*deck).erase((*deck).begin() + (choosenCard));
 		return newCard;
 	}
 	else {
@@ -91,7 +94,7 @@ int Deck::getRandomInt(int min, int max)
 
 int Deck::getSize()
 {
-	return deck.size();
+	return deck->size();
 }
 
 void Deck::generateDeck(int numberOfCountries)
@@ -104,15 +107,15 @@ void Deck::generateDeck(int numberOfCountries)
 	while (!done) {
 		CardType type = CardType(rand() % 3);
 		if (type == CardType::infantry && numberOfInfantry > 0) {
-			this->deck.push_back( new Card(type) );
+			this->deck->push_back( new Card(type) );
 			numberOfInfantry--;
 		}
 		if (type == CardType::artillery && numberOfArtillery > 0) {
-			this->deck.push_back(new Card(type));
+			this->deck->push_back(new Card(type));
 			numberOfArtillery--;
 		}
 		if (type == CardType::cavalry && numberOfCavalry > 0) {
-			this->deck.push_back(new Card(type));
+			this->deck->push_back(new Card(type));
 			numberOfCavalry--;
 		}
 		if (numberOfArtillery == 0 && numberOfCavalry == 0 && numberOfInfantry == 0) {
@@ -121,18 +124,35 @@ void Deck::generateDeck(int numberOfCountries)
 	}
 }
 
+void Deck::showDeck()
+{
+	for (unsigned int i = 0; i < deck->size(); i++) {
+		cout << "element " << i << " " << (*deck)[i]->getCard() << endl;
+	}
+}
+
 //Methods for HandOfCards:
 
 HandOfCards::HandOfCards()
 {
-	this->playersCards.insert({ new string("infantry"), new int(36) });
-	this->playersCards.insert({ new string("artillery"), new int(5) });
-	this->playersCards.insert({ new string("cavalry"), new int(6) });
+	this->playersCards = new map<string*, int*>();
+	this->playersCards->insert({ new string("infantry"), new int(36) });
+	this->playersCards->insert({ new string("artillery"), new int(5) });
+	this->playersCards->insert({ new string("cavalry"), new int(6) });
+}
+
+HandOfCards::~HandOfCards()
+{
+	for (auto it = this->playersCards->begin(); it != this->playersCards->end(); ++it) {
+		delete it->first;
+		delete it->second;
+	}
+	playersCards->clear();
 }
 
 int HandOfCards::getValue(string *key) {
 	int  value =-1;
-	for (auto it = this->playersCards.begin(); it != this->playersCards.end(); ++it) {
+	for (auto it = this->playersCards->begin(); it != this->playersCards->end(); ++it) {
 		string cardType = *it->first;
 		if (cardType.compare(*key)) {
 			value = *it->second;
@@ -141,31 +161,20 @@ int HandOfCards::getValue(string *key) {
 	return value;
 }
 void HandOfCards::reduceByOne() {
-	for (auto it = this->playersCards.begin(); it != this->playersCards.end(); ++it) {
+	for (auto it = this->playersCards->begin(); it != this->playersCards->end(); ++it) {
 		*it->second -= 1;
 	}
 }
 
-//int HandOfCards::setValue(string *key) {
-//	int  value = -1;
-//	for (auto it = this->playersCards.begin(); it != this->playersCards.end(); ++it) {
-//		string cardType = *it->first;
-//		if (cardType.compare(*key)) {
-//			*it->second = 4;
-//		}
-//	}
-//	return value;
-//}
 
 int HandOfCards::exchange()
 {
 	static int numberOfArmies = 4;
-	//static int set			  = 0;
 	int numberOfTypes		  = 0;
-	bool possibleExchange = false;
-	for (auto it = this->playersCards.begin(); it != this->playersCards.end(); ++it) {
+	bool possibleExchange	  = false;
+	for (auto it = this->playersCards->begin(); it != this->playersCards->end(); ++it) {
 		int numberOfCardsOfAType = *it->second;
-		string cardType = *it->first;
+		string cardType			 = *it->first;
 		
 		if (numberOfCardsOfAType >= 3) {
 			*it->second -= 3;
@@ -182,7 +191,6 @@ int HandOfCards::exchange()
 		}
 	}
 	if (possibleExchange) {
-		//set++;
 		if (numberOfArmies < 12) {
 			numberOfArmies += 2;
 		}
@@ -201,7 +209,7 @@ int HandOfCards::exchange()
 }
 
 void HandOfCards::PrintValues() {
-	for (auto it = this->playersCards.begin(); it != this->playersCards.end(); ++it) {
-		cout << "Name: " << *it->first << *it->second << endl;
+	for (auto it = this->playersCards->begin(); it != this->playersCards->end(); ++it) {
+		cout << "Card: " << *it->first << "   " <<  *it->second << endl;
 	}
 }
