@@ -1,7 +1,7 @@
 #include "Utility.h"
 
 #include <sstream> 
-#include "..\inc\Utility.h"
+#include "Utility.h"
 
 int Utility::convertCStringToNumber(const char * string)
 {
@@ -17,4 +17,17 @@ void Utility::safeDelete(void * ptr)
 {
 	if (ptr)
 		delete ptr;
+}
+
+bool Utility::vectorContains(const std::vector<int> & vector, int num)
+{
+	for (int i = 0; i < vector.size(); i++)
+	{
+		if (vector[i] == num)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

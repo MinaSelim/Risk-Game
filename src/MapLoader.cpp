@@ -8,6 +8,8 @@
 
 #include <algorithm>
 
+
+
 //#define Logging
 
 Map * MapLoader::loadMap(std::string fileName)

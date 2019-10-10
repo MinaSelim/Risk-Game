@@ -1,9 +1,9 @@
 #include "Map.h"
-#include "MapDriver.h"
+#include "MapLoaderDriver.h"
 #include "MapLoader.h"
 #include <iostream>
 
-void MapDriver::MapTester() {
+void MapLoaderDriver::MapTester() {
 
 	Map * map = MapLoader::loadMap("./worldNew.map");
 
