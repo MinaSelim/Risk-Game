@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "Map.h"
-#include "GameNodes.h"
+
 using namespace std;
 
 class Player {
