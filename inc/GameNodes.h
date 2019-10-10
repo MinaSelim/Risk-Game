@@ -3,15 +3,28 @@
 #include <vector>
 
 struct CountryInformation {
-	int xCoordinate;
-	int yCoordinate;
-	std::string continentName;
-	std::string locationName;
-	std::vector<std::string> neighbouringCountriesAsStrings;
+	int * countryId;
+	int *xCoordinate;
+	int *yCoordinate;
+	int *continentId;
+	//std::string continentName;
+	std::string *countryName;
+	std::vector<int> neighbouringCountriesIds;
+	CountryInformation(int id, int x, int y, int contId, std::string countName, std::vector<int> neigboursIds);
+	virtual ~CountryInformation();
 };
 
 struct CountryNode {
-	CountryInformation countryInformation;
+	CountryInformation * countryInformation;
 	std::vector<CountryNode*> neighbouringCountries;
-	bool visited;
+	bool * visited;
+	CountryNode(CountryInformation * info);
+	~CountryNode();
+};
+
+struct ContinentInformation {
+	std::string * continentName;
+	int * continentId;
+	ContinentInformation(std::string name, int id);
+	~ContinentInformation();
 };

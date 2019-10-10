@@ -3,8 +3,7 @@
 #include "PlayerDriver.h"
 #include "Player.h"
 
-class PlayerDriver {
+namespace PlayerDriver {
 
-public:
 	void PlayerTester();
 };

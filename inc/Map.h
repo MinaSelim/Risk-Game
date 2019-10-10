@@ -5,16 +5,16 @@
 class Map {
 
 private:
-	std::vector<CountryNode> countriesGraph;
+	std::vector<CountryNode*> countriesGraph;
 
 public:
-	Map(std::vector<CountryInformation> countries);
-
+	Map(std::vector<CountryInformation*> countries);
+	virtual ~Map();
 private:
 	void validateMap();
 	void visitAllUnvisitedEdgesOfNode(CountryNode * node);
 	void attachEdgesToNodes();
 	void resetVisitedNodes();
-	CountryNode* getNodeFromGraphByString(std::string countryName);
+	CountryNode* getNodeFromGraphById(int countryId);
 
 };

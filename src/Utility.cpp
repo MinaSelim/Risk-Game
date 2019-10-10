@@ -1,6 +1,7 @@
 #include "Utility.h"
 
 #include <sstream> 
+#include "..\inc\Utility.h"
 
 int Utility::convertCStringToNumber(const char * string)
 {
@@ -10,4 +11,10 @@ int Utility::convertCStringToNumber(const char * string)
 	stream >> number;
 
 	return number;
+}
+
+void Utility::safeDelete(void * ptr)
+{
+	if (ptr)
+		delete ptr;
 }

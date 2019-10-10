@@ -1,20 +1,21 @@
 #include "Map.h"
 #include "ErrorCodes.h"
+#include <new>
 
 
 
-Map::Map(std::vector<CountryInformation> countries)
+Map::Map(std::vector<CountryInformation*> countries)
 {
 	for (unsigned int i = 0; i < countries.size(); i++)
 	{
-		CountryNode node{0};
-		node.countryInformation = countries[i];
+		CountryNode * node = new CountryNode(countries[i]);
 		countriesGraph.push_back(node);
 	}
 
 	attachEdgesToNodes();
 
 	validateMap();
+
 }
 
 
@@ -22,26 +23,25 @@ void Map::validateMap()
 {
 	resetVisitedNodes();
 
-	visitAllUnvisitedEdgesOfNode(&countriesGraph[0]);
+	visitAllUnvisitedEdgesOfNode(countriesGraph[0]);
 
 	for (unsigned int i = 0; i < countriesGraph.size(); i++)
 	{
-		if (countriesGraph[i].visited == false)
+		if (*countriesGraph[i]->visited == false)
 		{
 			throw INVALID_MAP;
 		}
 	}
 
-	
 }
 
 void Map::visitAllUnvisitedEdgesOfNode(CountryNode * node)
 {
-	node->visited = true;
+	*node->visited = true;
 	auto neighbours = node->neighbouringCountries;
 	for (unsigned int i = 0; i < neighbours.size(); i++)
 	{
-		if (neighbours[i]->visited == false)
+		if (*neighbours[i]->visited == false)
 		{
 			visitAllUnvisitedEdgesOfNode(neighbours[i]);
 		}
@@ -54,11 +54,11 @@ void Map::attachEdgesToNodes()
 {
 	for (unsigned int i = 0; i < countriesGraph.size(); i++)
 	{
-		auto neigbouringCountriesAsStrings = countriesGraph[i].countryInformation.neighbouringCountriesAsStrings;
-		for (unsigned int j = 0; j < neigbouringCountriesAsStrings.size(); j++)
+		auto neigbouringCountriesAsIds = countriesGraph[i]->countryInformation->neighbouringCountriesIds;
+		for (unsigned int j = 0; j < neigbouringCountriesAsIds.size(); j++)
 		{
-			CountryNode * node = getNodeFromGraphByString(neigbouringCountriesAsStrings[j]);
-			countriesGraph[i].neighbouringCountries.push_back(node);
+			CountryNode * node = getNodeFromGraphById(neigbouringCountriesAsIds[j]);
+			countriesGraph[i]->neighbouringCountries.push_back(node);
 		}
 	}
 }
@@ -67,20 +67,35 @@ void Map::resetVisitedNodes()
 {
 	for (unsigned int i = 0; i < countriesGraph.size(); i++)
 	{
-		countriesGraph[i].visited = false;
+		*countriesGraph[i]->visited = false;
 	}
 }
 
-CountryNode * Map::getNodeFromGraphByString(std::string countryName)
+CountryNode * Map::getNodeFromGraphById(int countryId)
 {
 	for (unsigned int i = 0; i < countriesGraph.size(); i++)
 	{
-		if (countriesGraph[i].countryInformation.locationName.compare(countryName) == 0)
+		if (*countriesGraph[i]->countryInformation->countryId == countryId)
 		{
-			return &countriesGraph[i];
+			return countriesGraph[i];
 		}
 	}
 
 	throw 1;
 }
 
+Map::~Map()
+{
+	int * i = new int(0);
+	auto maxsSize = countriesGraph.size();
+	int test = 0;
+	while (test < maxsSize)
+	{
+		delete countriesGraph[test];
+		*i = *i + 1;
+		test = *i;
+	}
+
+	delete i;
+
+}
