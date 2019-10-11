@@ -2,10 +2,34 @@
 #include "DiceDriver.h"
 
 void DiceDriver::DiceTester(){
+	
+	//Testing the history functionality of dice for one player
+	DicesRoller * diceRoller1 = new DicesRoller();
+	DicesPrompt * dicesPrompt = new DicesPrompt();
 
+	int numDice = dicesPrompt->getRolledNumberOfDice();
+	diceRoller1->roll(numDice);
+	diceRoller1->showRollHistory();
+
+	numDice = dicesPrompt->getRolledNumberOfDice();
+	diceRoller1->roll(numDice);
+	diceRoller1->showRollHistory();
+
+	numDice = dicesPrompt->getRolledNumberOfDice();
+	diceRoller1->roll(numDice);
+	diceRoller1->showRollHistory();
+
+	numDice = dicesPrompt->getRolledNumberOfDice();
+	diceRoller1->roll(numDice);
+	diceRoller1->showRollHistory();
+
+	delete diceRoller1;
+	delete dicesPrompt;
+
+
+	//Testing the history in case if we have two different players.
 	DicesRoller * diceRoller1 = new DicesRoller();
 	DicesRoller * diceRoller2 = new DicesRoller();
-
 	DicesPrompt * dicesPrompt = new DicesPrompt();
 
 	int numDice = dicesPrompt->getRolledNumberOfDice();
@@ -16,9 +40,11 @@ void DiceDriver::DiceTester(){
 	diceRoller2->roll(numDice);
 	diceRoller2->showRollHistory();
 
+	
 	delete diceRoller1;
 	delete diceRoller2;
 	delete dicesPrompt;
+
 
 
 	/*Testing the "fairness" of the Dice

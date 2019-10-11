@@ -44,11 +44,22 @@ void Player::fortify()
 	cout << "Executing the fortify() method" << endl;
 }
 
-DicesRoller Player::getDice()
+DicesRoller* Player::getDice()
 {
-	return *dice;
+	return dice;
+}
+
+int  Player::numberOfArmies()
+{
+	int armies = this->numberOfArmies;
+	return armies;
 }
 
 HandOfCards* Player::getCard() {
 	return hand;
 }
+
+//vector<CountryNode*>* Player::getListOfCountries()
+//{
+//	return ;
+//}
