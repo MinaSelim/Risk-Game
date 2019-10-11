@@ -49,9 +49,9 @@ DicesRoller* Player::getDice()
 	return dice;
 }
 
-int  Player::numberOfArmies()
+int  Player::getNumberOfArmies()
 {
-	int armies = this->numberOfArmies;
+	int armies = *this->numberOfArmies;
 	return armies;
 }
 

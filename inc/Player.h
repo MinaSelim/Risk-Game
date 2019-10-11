@@ -24,7 +24,7 @@ public:
 	void attack();
 	void fortify();
 	DicesRoller* getDice();
-	int numberOfArmies();
+	int getNumberOfArmies();
 	HandOfCards* getCard();
 	//vector<CountryNode*>* getListOfCountries();
 };

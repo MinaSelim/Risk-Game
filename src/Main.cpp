@@ -7,10 +7,8 @@
 #include "PlayerDriver.h"
 int main()
 {
-	// Map map = MapLoader::loadMap("./InvalidWorld.map");
-	DiceDriver * diceTest = new DiceDriver();
-	diceTest->DiceTester();
-	PlayerDriver * playerTest = new  PlayerDriver();
-	playerTest->PlayerTester();
+	MapDriver::MapTester();
+	DiceDriver::DiceTester();
+	PlayerDriver::PlayerTester();
 }
 

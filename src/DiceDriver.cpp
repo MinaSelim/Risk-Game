@@ -28,11 +28,11 @@ void DiceDriver::DiceTester(){
 
 
 	//Testing the history in case if we have two different players.
-	DicesRoller * diceRoller1 = new DicesRoller();
+	diceRoller1 = new DicesRoller();
 	DicesRoller * diceRoller2 = new DicesRoller();
-	DicesPrompt * dicesPrompt = new DicesPrompt();
+	dicesPrompt = new DicesPrompt();
 
-	int numDice = dicesPrompt->getRolledNumberOfDice();
+	numDice = dicesPrompt->getRolledNumberOfDice();
 	diceRoller1->roll(numDice);
 	diceRoller1->showRollHistory();
 

@@ -12,6 +12,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\Cards.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Dice.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\ErrorCodes.h">
+      <Filter>Include</Filter>
+    </ClInclude>
     <ClInclude Include="inc\Map.h">
       <Filter>Include</Filter>
     </ClInclude>
@@ -22,12 +31,6 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="inc\Utility.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\Dice.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\ErrorCodes.h">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="inc\DiceDriver.h">
@@ -44,19 +47,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Player.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Source.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Utility.cpp">
+    <ClCompile Include="src\Cards.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\Dice.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DiceDriver.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\Main.cpp">
@@ -66,15 +60,24 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\MapLoader.cpp">
-      <Filter>Drivers</Filter>
+      <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\MapDriver.cpp">
-      <Filter>Drivers</Filter>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utility.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\MapLoaderDriver.cpp">
       <Filter>Drivers</Filter>
     </ClCompile>
     <ClCompile Include="src\PlayerDriver.cpp">
+      <Filter>Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DiceDriver.cpp">
+      <Filter>Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapDriver.cpp">
       <Filter>Drivers</Filter>
     </ClCompile>
   </ItemGroup>
