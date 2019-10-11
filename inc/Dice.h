@@ -1,7 +1,5 @@
 #pragma once
 #include <vector>
-//todo
-//write contructor/destructor
 class DicesRoller
 {
 private:

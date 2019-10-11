@@ -36,8 +36,8 @@ void DiceDriver::DiceTester(){
 	diceRoller1->roll(numDice);
 	diceRoller1->showRollHistory();
 
-	numDice = dicesPrompt->getRolledNumberOfDice();
-	diceRoller2->roll(numDice);
+	int numDice1 = dicesPrompt->getRolledNumberOfDice();
+	diceRoller2->roll(numDice1);
 	diceRoller2->showRollHistory();
 
 	
@@ -52,16 +52,16 @@ void DiceDriver::DiceTester(){
 	Assuming "fair" dice will be more or less split evenly between the face values of the dice [1-6]*/
 
 
-	//DicesRoller * diceRoller3 = new DicesRoller;
-	//int numDice = 3; //we will ignore the prompt because we are rolling many times, setting the dice to 3 will provide us more data
+	DicesRoller * diceRoller3 = new DicesRoller;
+	int numDice2 = 3; //we will ignore the prompt because we are rolling many times, setting the dice to 3 will provide us more data
 
-	//for (unsigned int i = 0; i < 1000; i++) 
-	//{
-	//	diceRoller3->roll(numDice);
-	//}
+	for (unsigned int i = 0; i < 1000; i++) 
+	{
+		diceRoller3->roll(numDice2);
+	}
 
-	//diceRoller3->showRollHistory();
-	//
-	//delete diceRoller3;
+	diceRoller3->showRollHistory();
+	
+	delete diceRoller3;
 
 }

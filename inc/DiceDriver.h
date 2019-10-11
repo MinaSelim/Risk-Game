@@ -1,7 +1,7 @@
 #pragma once
 
-class DiceDriver
+namespace DiceDriver
 {
-public:
+
 	void DiceTester();
-};
+}
