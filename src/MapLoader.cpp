@@ -1,17 +1,11 @@
-
 #include "MapLoader.h"
 #include "Utility.h"
-
 #include <iostream>
 #include <fstream>
 #include <cstring>
-
 #include <algorithm>
 
-
-
 //#define Logging
-
 Map * MapLoader::loadMap(std::string fileName)
 {
 	std::ifstream mapFile(fileName);
@@ -162,7 +156,7 @@ void MapLoader::createBordersInformation(char * bordersInformation, std::vector<
 }
 
 void MapLoader::pushNeighbouringCountry(std::vector<CountryInformation*>  countries, int id, std::vector<int> neighbouringIds) {
-	for (int i = 0; i < countries.size(); i++) {
+	for (unsigned int i = 0; i < countries.size(); i++) {
 		if (*countries[i]->countryId == id) {
 			countries[i]->neighbouringCountriesIds = neighbouringIds;
 			break;

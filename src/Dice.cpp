@@ -7,6 +7,7 @@
 
 using namespace std;
 
+//To create an object od the dice which belongs to every player and it contains the history of their rolling.
 DicesRoller::DicesRoller() 
 {
 	this->rollHistory = new vector<int*>{new int (0),new int(0),new int (0),new int(0),new int(0), new int (0) };
@@ -22,8 +23,6 @@ DicesRoller::~DicesRoller()
 	}
 	rollHistory->clear();
 	delete totalDiceRolled;
-	//delete[] rollHistory;
-	//delete totalDiceRolled;
 }
 
 // returns number of dice/number rolled on each dice, in a sorted container
@@ -56,8 +55,8 @@ vector<int> DicesRoller::roll(int numDice) {
 //to be called within roll function
 void DicesRoller::addToRollHistory(vector <int> roll) 
 {
-	//auto& rollRef = rollHistory;
-	
+	//Increasingt the number of times a dice face (1,2,3,4,5 or 6) has 
+	//Came up to include them in the history vector
 	for (unsigned int i = 0; i < roll.size(); i++)
 	{
 		cout << *(*rollHistory)[0] +1<< endl;
@@ -98,7 +97,6 @@ void DicesRoller::addToRollHistory(vector <int> roll)
 void DicesRoller::showRollHistory() 
 {
 	auto& totalDiceRef = *totalDiceRolled;
-	//auto& rollRef = *rollHistory;
 	
 	std::cout << "total rolls: " << totalDiceRef <<" \n";
 
@@ -113,28 +111,20 @@ void DicesRoller::showRollHistory()
 	}
 }
 
-void DicesRoller::increaseValue()
-{
-
-	
-}
-
 int DicesRoller::getValueAt(int index)
 {
 	cout << *this->rollHistory->at(index) << endl;
 	return *this->rollHistory->at(index);
 }
 
-//Are these even necessary for this class?
 DicesPrompt::DicesPrompt()
 {
-	
 }
 
 DicesPrompt::~DicesPrompt()
 {
-	
 }
+
 //IO for getting number of dice to roll
 int DicesPrompt::getRolledNumberOfDice()
 {
@@ -147,7 +137,8 @@ int DicesPrompt::getRolledNumberOfDice()
 	{
 		throw INVALID_DICEROLL;
 	}
-
 	return numDice;
 }
+
+
 

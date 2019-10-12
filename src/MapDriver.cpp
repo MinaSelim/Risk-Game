@@ -3,6 +3,7 @@
 #include "MapLoader.h"
 #include <iostream>
 
+
 void MapDriver::MapTester() {
 
 	Map * map = MapLoader::loadMap("./worldNew.map");

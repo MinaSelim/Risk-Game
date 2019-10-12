@@ -21,7 +21,7 @@ void Utility::safeDelete(void * ptr)
 
 bool Utility::vectorContains(const std::vector<int> & vector, int num)
 {
-	for (int i = 0; i < vector.size(); i++)
+	for (unsigned int i = 0; i < vector.size(); i++)
 	{
 		if (vector[i] == num)
 		{

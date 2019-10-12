@@ -8,19 +8,19 @@ private:
 	int * totalDiceRolled;
 public:
 	DicesRoller();
+	~DicesRoller();
 	std::vector<int> roll(int numDice);
 	void addToRollHistory(std::vector <int> roll);
 	void showRollHistory();
-	void increaseValue();
 	int getValueAt(int index);
-	~DicesRoller();
 };
 
 class DicesPrompt
 {
 public:
 	DicesPrompt();
-	int getRolledNumberOfDice();
 	~DicesPrompt();
+
+	int getRolledNumberOfDice();
 };
 

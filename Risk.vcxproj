@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Cards.h" />
+    <ClInclude Include="inc\CardsDriver.h" />
     <ClInclude Include="inc\Dice.h" />
     <ClInclude Include="inc\DiceDriver.h" />
     <ClInclude Include="inc\ErrorCodes.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="inc\Utility.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="inc\CardsDriver.cpp" />
     <ClCompile Include="src\Cards.cpp" />
     <ClCompile Include="src\Dice.cpp" />
     <ClCompile Include="src\DiceDriver.cpp" />

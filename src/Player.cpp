@@ -7,11 +7,11 @@ using namespace std;
 
 Player::Player()
 {
-	this->playerName	 = new string();
-	this->countries		 = new vector<CountryNode*>();
-	this->numberOfArmies = new int(0);
-	this->dice			 = new DicesRoller();
-	this->hand			 = new HandOfCards();
+	this->playerName	  = new string();
+	this->countries		  = new vector<CountryNode*>();
+	this->numberOfArmies  = new int(0);
+	this->dice			  = new DicesRoller();
+	this->hand			  = new HandOfCards();
 }
 
 Player::Player(string playerName, vector<CountryNode*> countries)
@@ -26,7 +26,16 @@ Player::Player(string playerName, vector<CountryNode*> countries)
 Player::~Player()
 {
 	delete playerName;
-	delete countries;
+	playerName = NULL;
+	delete numberOfArmies;
+	numberOfArmies = NULL;
+	delete dice;
+	delete hand;
+	for (unsigned int i = 0; i < countries->size(); i++) 
+	{
+		delete (*countries)[i];
+	}
+	countries->clear();
 }
 
 void Player::reinforce()
@@ -49,17 +58,31 @@ DicesRoller* Player::getDice()
 	return dice;
 }
 
-int  Player::getNumberOfArmies()
+HandOfCards* Player::getHandOfCards() 
+{
+	return hand;
+}
+
+string Player::getPlayerName()
+{
+	return *this->playerName;
+}
+
+int Player::getNumberOfArmies()
 {
 	int armies = *this->numberOfArmies;
 	return armies;
 }
 
-HandOfCards* Player::getCard() {
-	return hand;
+void Player::setNumberOfArmies(int value)
+{
+	*this->numberOfArmies = value;
 }
 
-//vector<CountryNode*>* Player::getListOfCountries()
-//{
-//	return ;
-//}
+void Player::printListOfCountries()
+{
+	for (unsigned int i = 0; i < this->countries->size(); i++) 
+	{
+		cout << "Country " << i << " " << (*countries)[i]->countryInformation->getCountryName() << endl;
+	}
+}

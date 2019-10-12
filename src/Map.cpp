@@ -9,6 +9,12 @@ CountryInformation::CountryInformation(int id, int x, int y, int contId, std::st
 {
 }
 
+
+string CountryInformation::getCountryName()
+{
+	return *this->countryName;
+}
+
 CountryInformation::~CountryInformation()
 {
 	Utility::safeDelete(countryId);
@@ -81,7 +87,7 @@ void Map::validateMap()
 void Map::validateContinents()
 {
 	std::vector<int> continentsIds;
-	for (int i = 0; i < countriesGraph->size(); i++)
+	for (unsigned int i = 0; i < countriesGraph->size(); i++)
 	{
 		auto continentId = *(*countriesGraph)[i]->countryInformation->continentId;
 		if (!Utility::vectorContains(continentsIds, continentId))
@@ -90,7 +96,7 @@ void Map::validateContinents()
 		}
 	}
 
-	for (int i = 0; i < continentsIds.size(); i++)
+	for (unsigned int i = 0; i < continentsIds.size(); i++)
 	{
 		CountryNode * node = getNodeInContinent(continentsIds[i]);
 		visitAllUnvisitedEdgesOfNodeInContinent(node, continentsIds[i]);
@@ -158,7 +164,7 @@ void Map::resetVisitedNodes()
 
 CountryNode * Map::getNodeInContinent(int continentId)
 {
-	for (auto i = 0; i < countriesGraph->size(); i++) 
+	for (unsigned int i = 0; i < countriesGraph->size(); i++) 
 	{
 		if (*(*countriesGraph)[i]->countryInformation->continentId == continentId)
 		{
@@ -182,11 +188,20 @@ CountryNode * Map::getNodeFromGraphById(int countryId)
 	throw 1;
 }
 
+int Map::getNumberOfCountriesInMap()
+{
+	int numberOfCountries = 0;
+	for (unsigned int i = 0; i < this->countriesGraph->size(); i++) {
+		numberOfCountries += 1;
+	}
+	return numberOfCountries;
+}
+
 Map::~Map()
 {
 	int * i = new int(0);
 	auto maxsSize = countriesGraph->size();
-	int test = 0;
+	unsigned int test = 0;
 	while (test < maxsSize)
 	{
 		delete (*countriesGraph)[test];

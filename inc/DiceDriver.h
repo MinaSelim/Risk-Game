@@ -2,6 +2,5 @@
 
 namespace DiceDriver
 {
-
 	void DiceTester();
 }

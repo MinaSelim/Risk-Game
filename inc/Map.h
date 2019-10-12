@@ -1,11 +1,13 @@
 #pragma once
-#include<vector>
+#include <vector>
+#include <string>
 
+using namespace std;
 
 struct ContinentInformation {
-	std::string * continentName;
+	string * continentName;
 	int * continentId;
-	ContinentInformation(std::string name, int id);
+	ContinentInformation(string name, int id);
 	~ContinentInformation();
 };
 
@@ -14,16 +16,17 @@ struct CountryInformation {
 	int *xCoordinate;
 	int *yCoordinate;
 	int *continentId;
-	//std::string continentName;
-	std::string *countryName;
-	std::vector<int> neighbouringCountriesIds;
-	CountryInformation(int id, int x, int y, int contId, std::string countName, std::vector<int> neigboursIds);
+	//string continentName;
+	string *countryName;
+	vector<int> neighbouringCountriesIds;
+	CountryInformation(int id, int x, int y, int contId, string countName, vector<int> neigboursIds);
+	string getCountryName();
 	virtual ~CountryInformation();
 };
 
 struct CountryNode {
 	CountryInformation * countryInformation;
-	std::vector<CountryNode*> neighbouringCountries;
+	vector<CountryNode*> neighbouringCountries;
 	bool * visited;
 	CountryNode(CountryInformation * info);
 	~CountryNode();
@@ -33,10 +36,11 @@ struct CountryNode {
 class Map {
 
 private:
-	std::vector<CountryNode*> *countriesGraph;
+	vector<CountryNode*> *countriesGraph;
 
 public:
-	Map(std::vector<CountryInformation*> countries);
+	Map(vector<CountryInformation*> countries);
+	int getNumberOfCountriesInMap();
 	virtual ~Map();
 private:
 	void validateMap();
@@ -47,5 +51,4 @@ private:
 	void resetVisitedNodes();
 	CountryNode* getNodeInContinent(int continentId);
 	CountryNode* getNodeFromGraphById(int countryId);
-
 };

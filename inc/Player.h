@@ -23,8 +23,10 @@ public:
 	void reinforce();
 	void attack();
 	void fortify();
-	DicesRoller* getDice();
+	void printListOfCountries();
+	void setNumberOfArmies(int value);
 	int getNumberOfArmies();
-	HandOfCards* getCard();
-	//vector<CountryNode*>* getListOfCountries();
+	DicesRoller* getDice();
+	HandOfCards* getHandOfCards();
+	string getPlayerName();
 };
