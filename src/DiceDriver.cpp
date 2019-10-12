@@ -55,7 +55,7 @@ void DiceDriver::DiceTester(){
 	DicesRoller * diceRoller3 = new DicesRoller;
 	int numDice2 = 3; //we will ignore the prompt because we are rolling many times, setting the dice to 3 will provide us more data
 
-	for (unsigned int i = 0; i < 1000; i++) 
+	for (unsigned int i = 0; i < 100; i++) 
 	{
 		diceRoller3->roll(numDice2);
 	}

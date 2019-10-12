@@ -6,11 +6,12 @@
 
 void PlayerDriver::PlayerTester()
 {
-	//Ask mina, how can we create a list of countries ??
-	//vector<CountryNode*>* countries = new vector<CountryNode*>();
-	
-	Player* player			  = new Player();
 	Map * map = MapLoader::loadMap("./worldNew.map");
+	auto mapNode = map->getFirstNode();
+	std::vector<CountryNode*> countries;
+	countries.push_back(mapNode);
+	countries.push_back(mapNode->neighbouringCountries[0]);
+	Player* player = new Player("Hambersoom", countries);
 	DicesPrompt * dicesPrompt = new DicesPrompt();
 	Deck* deck = new Deck(map->getNumberOfCountriesInMap());
 

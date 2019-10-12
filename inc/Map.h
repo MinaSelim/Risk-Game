@@ -41,6 +41,7 @@ private:
 public:
 	Map(vector<CountryInformation*> countries);
 	int getNumberOfCountriesInMap();
+	CountryNode* getFirstNode();
 	virtual ~Map();
 private:
 	void validateMap();

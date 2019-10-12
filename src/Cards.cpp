@@ -1,5 +1,5 @@
 #include <vector>
-#include "..\inc\Cards.h"
+#include "Cards.h"
 #include <iostream>
 #include <string>
 #include <cstdlib>

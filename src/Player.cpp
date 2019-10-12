@@ -31,10 +31,7 @@ Player::~Player()
 	numberOfArmies = NULL;
 	delete dice;
 	delete hand;
-	for (unsigned int i = 0; i < countries->size(); i++) 
-	{
-		delete (*countries)[i];
-	}
+
 	countries->clear();
 }
 

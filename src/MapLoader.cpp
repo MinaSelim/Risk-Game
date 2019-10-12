@@ -56,7 +56,7 @@ Map * MapLoader::loadMap(std::string fileName)
 	return map;
 }
 
-void MapLoader::seekFileStreamToLine(std::ifstream & inputStream, std::string lineContent)
+void MapLoader::seekFileStreamToLine(std::ifstream & inputStream, std::string lineContent) //seeks to a certain line in the file
 {
 	std::streamsize  count = 400;
 	char nextLine[400];
@@ -131,7 +131,8 @@ ContinentInformation * MapLoader::createContinentInformation(char * continentInf
 	return info;
 }
 
-void MapLoader::createBordersInformation(char * bordersInformation, std::vector<CountryInformation*>  countries)
+// This function attaches borders ids to the countryInfo
+void MapLoader::createBordersInformation(char * bordersInformation, std::vector<CountryInformation*>  countries) 
 {
 	char * token = nullptr;
 	char * context = nullptr;

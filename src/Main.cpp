@@ -1,13 +1,15 @@
 #include <iostream>
 #include "MapDriver.h"
+#include "MapLoaderDriver.h"
 #include "DiceDriver.h"
 #include "PlayerDriver.h"
 #include "CardsDriver.h"
 int main()
 {
-	//MapDriver::MapTester();
-	//DiceDriver::DiceTester();
-	//PlayerDriver::PlayerTester();
+	MapDriver::MapTester();
+	MapLoaderDriver::MapTester();
+	DiceDriver::DiceTester();
+	PlayerDriver::PlayerTester();
 	CardsDriver::CardsTester();
 }
 
