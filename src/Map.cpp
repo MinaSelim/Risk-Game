@@ -9,6 +9,12 @@ CountryInformation::CountryInformation(int id, int x, int y, int contId, std::st
 {
 }
 
+
+string CountryInformation::getCountryName()
+{
+	return *this->countryName;
+}
+
 CountryInformation::~CountryInformation()
 {
 	Utility::safeDelete(countryId);
@@ -65,7 +71,7 @@ void Map::validateMap()
 
 	visitAllUnvisitedEdgesOfNode((*countriesGraph)[0]);
 
-	for (unsigned int i = 0; i < countriesGraph->size(); i++)
+	for (unsigned int i = 0; i < countriesGraph->size(); i++) // If a node is unvisited, It means that the map is invalid
 	{
 		if (*(*countriesGraph)[i]->visited == false)
 		{
@@ -81,7 +87,7 @@ void Map::validateMap()
 void Map::validateContinents()
 {
 	std::vector<int> continentsIds;
-	for (int i = 0; i < countriesGraph->size(); i++)
+	for (unsigned int i = 0; i < countriesGraph->size(); i++) 
 	{
 		auto continentId = *(*countriesGraph)[i]->countryInformation->continentId;
 		if (!Utility::vectorContains(continentsIds, continentId))
@@ -90,12 +96,13 @@ void Map::validateContinents()
 		}
 	}
 
-	for (int i = 0; i < continentsIds.size(); i++)
+	// This for loop goes through each continents, and tries to visit all the nodes inside that continent
+	for (unsigned int i = 0; i < continentsIds.size(); i++) 
 	{
 		CountryNode * node = getNodeInContinent(continentsIds[i]);
 		visitAllUnvisitedEdgesOfNodeInContinent(node, continentsIds[i]);
 
-		for (unsigned int j = 0; j < countriesGraph->size(); j++)
+		for (unsigned int j = 0; j < countriesGraph->size(); j++) // Checks if all the nodes in the continent have been visited
 		{
 			if (*(*countriesGraph)[j]->visited == false && *(*countriesGraph)[j]->countryInformation->continentId == continentsIds[i])
 			{
@@ -103,11 +110,12 @@ void Map::validateContinents()
 			}
 		}
 
-		resetVisitedNodes();
+		resetVisitedNodes(); // reset the nodes for the next test
 	}
 
 }
 
+//simple graph travelling algorithm (limited by continent)
 void Map::visitAllUnvisitedEdgesOfNodeInContinent(CountryNode * node, int continent)
 {
 	*node->visited = true;
@@ -135,6 +143,7 @@ void Map::visitAllUnvisitedEdgesOfNode(CountryNode * node)
 
 }
 
+// attaches all the edges to the nodes
 void Map::attachEdgesToNodes()
 {
 	for (unsigned int i = 0; i < countriesGraph->size(); i++)
@@ -158,7 +167,7 @@ void Map::resetVisitedNodes()
 
 CountryNode * Map::getNodeInContinent(int continentId)
 {
-	for (auto i = 0; i < countriesGraph->size(); i++) 
+	for (unsigned int i = 0; i < countriesGraph->size(); i++) 
 	{
 		if (*(*countriesGraph)[i]->countryInformation->continentId == continentId)
 		{
@@ -182,11 +191,25 @@ CountryNode * Map::getNodeFromGraphById(int countryId)
 	throw 1;
 }
 
+int Map::getNumberOfCountriesInMap()
+{
+	int numberOfCountries = 0;
+	for (unsigned int i = 0; i < this->countriesGraph->size(); i++) {
+		numberOfCountries += 1;
+	}
+	return numberOfCountries;
+}
+
+CountryNode * Map::getFirstNode()
+{
+	return (*countriesGraph)[0];
+}
+
 Map::~Map()
 {
 	int * i = new int(0);
 	auto maxsSize = countriesGraph->size();
-	int test = 0;
+	unsigned int test = 0;
 	while (test < maxsSize)
 	{
 		delete (*countriesGraph)[test];

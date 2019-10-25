@@ -1,17 +1,11 @@
-
 #include "MapLoader.h"
 #include "Utility.h"
-
 #include <iostream>
 #include <fstream>
 #include <cstring>
-
 #include <algorithm>
 
-
-
 //#define Logging
-
 Map * MapLoader::loadMap(std::string fileName)
 {
 	std::ifstream mapFile(fileName);
@@ -62,7 +56,7 @@ Map * MapLoader::loadMap(std::string fileName)
 	return map;
 }
 
-void MapLoader::seekFileStreamToLine(std::ifstream & inputStream, std::string lineContent)
+void MapLoader::seekFileStreamToLine(std::ifstream & inputStream, std::string lineContent) //seeks to a certain line in the file
 {
 	std::streamsize  count = 400;
 	char nextLine[400];
@@ -137,7 +131,8 @@ ContinentInformation * MapLoader::createContinentInformation(char * continentInf
 	return info;
 }
 
-void MapLoader::createBordersInformation(char * bordersInformation, std::vector<CountryInformation*>  countries)
+// This function attaches borders ids to the countryInfo
+void MapLoader::createBordersInformation(char * bordersInformation, std::vector<CountryInformation*>  countries) 
 {
 	char * token = nullptr;
 	char * context = nullptr;
@@ -162,7 +157,7 @@ void MapLoader::createBordersInformation(char * bordersInformation, std::vector<
 }
 
 void MapLoader::pushNeighbouringCountry(std::vector<CountryInformation*>  countries, int id, std::vector<int> neighbouringIds) {
-	for (int i = 0; i < countries.size(); i++) {
+	for (unsigned int i = 0; i < countries.size(); i++) {
 		if (*countries[i]->countryId == id) {
 			countries[i]->neighbouringCountriesIds = neighbouringIds;
 			break;
