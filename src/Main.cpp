@@ -6,10 +6,10 @@
 #include "CardsDriver.h"
 int main()
 {
-	MapDriver::MapTester();
-	MapLoaderDriver::MapTester();
-	DiceDriver::DiceTester();
-	PlayerDriver::PlayerTester();
+	//MapDriver::MapTester();
+	//MapLoaderDriver::MapTester();
+	//DiceDriver::DiceTester();
+	//PlayerDriver::PlayerTester();
 	CardsDriver::CardsTester();
 }
 

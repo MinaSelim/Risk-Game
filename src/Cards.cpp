@@ -8,10 +8,7 @@
 
 using namespace std;
 
-Card::Card()
-{
-	this->cardtype = new string("N/A");
-}
+Card::Card(): cardtype(new string("N/A")){}
 
 Card::Card(CardType type)
 {
@@ -31,26 +28,13 @@ Card::Card(CardType type)
 	}
 }
 
-string Card::getCard()
-{
-	return *this->cardtype;
-}
-
-void Card::setCard(string newCard)
-{
-	*cardtype = newCard;
-}
-
 Card::~Card()
 {
 	delete cardtype;
 }
 
 //Functions related to the Deck Class:
-Deck::Deck()
-{
-	 this->deck = new vector<Card*>();
-}
+Deck::Deck() : deck(new vector<Card*>()){}
 
 //Constructiing a deck of equal numbers of cards for each type:
 Deck::Deck(int numberOfCountries)
@@ -92,15 +76,13 @@ Deck::~Deck()
 }
 
 //Drawing a card randmonly from the deck 
-Card* Deck::draw()
+string Deck::draw()
 {
 	if (this->deck->size() > 0) {
 		int choosenCard = getRandomInt(0, deck->size() - 1);
  		string newValue = (*deck)[choosenCard]->getCard();
-		Card *card = new Card();
-		card->setCard(newValue);
 		(*deck).erase((*deck).begin() + (choosenCard));
-		return card;
+		return newValue;
 	}
 	else {
 		return NULL;
@@ -165,16 +147,22 @@ HandOfCards::~HandOfCards()
 		delete it->second;
 	}
 	playersCards->clear();
+	playersCards = NULL;
 }
 
 
 //The player can use this method the pick a card from the deck
 void HandOfCards::pickACard(Deck * deck)
 {
-	Card * card = deck->draw();
-	
+	string  cardValue = deck->draw();
+
+	Card * card = new Card();
+	card->setCard(cardValue);
+
 	//Increating the value of the card type that has been drawn from the deck
 	this->AddByOneValueOfCardType(card->getCard());
+	delete card;
+	card = NULL;
 }
 
 //This will increase the value of a card type (parameter type) in the player's hand by one:
@@ -207,9 +195,6 @@ int HandOfCards::getNumberOfCards(string key) {
 	return value;
 }
 
-
-
-
 //The Player can exchange between the cards they have and armies
 int HandOfCards::exchange()
 {
@@ -228,7 +213,6 @@ int HandOfCards::exchange()
 	{
 		userInput = userInputMethod();
 	}
-	
 	
 	if (userInput.compare("yes") == 0) {
 		for (auto it = this->playersCards->begin(); it != this->playersCards->end(); ++it) 
