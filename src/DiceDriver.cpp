@@ -2,7 +2,7 @@
 #include "DiceDriver.h"
 
 void DiceDriver::DiceTester(){
-	
+
 	//Testing the history functionality of dice for one player
 	DicesRoller * diceRoller1 = new DicesRoller();
 	DicesPrompt * dicesPrompt = new DicesPrompt();
