@@ -4,6 +4,7 @@
 #include "Dice.h"
 #include "Map.h"
 #include "MapLoader.h"
+#include <map>
 namespace PlayerDriver {
 
 	void PlayerTester();

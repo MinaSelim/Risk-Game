@@ -7,6 +7,8 @@
 #include "Player.h"
 
 using namespace std;
+using Utility::userConfirmation;
+
 
 Card::Card(): cardtype(new string("N/A")){}
 
@@ -203,6 +205,7 @@ int HandOfCards::exchange()
 	numberOfArmies					  = nextTurnNumberOfArmies;
 	int numberOfCardsInHand		      = this->getTotalNumberOfCards();
 	string userInput				  = "yes";
+	string question					  = "Do you want to exchange your cards with some armies(yes/no):";
 
 	//Represent the number of the types of cards that it has more than 0 cards in hand
 	int numberOfTypesValid			  = 0;
@@ -211,7 +214,7 @@ int HandOfCards::exchange()
 	//The player have the options of exchaging or not if they have more than 5 cards
 	if (numberOfCardsInHand < 5) 
 	{
-		userInput = userInputMethod();
+		userInput = userConfirmation(question);
 	}
 	
 	if (userInput.compare("yes") == 0) {
@@ -267,17 +270,6 @@ int HandOfCards::exchange()
 		
 }
 
-//Method to take the input of the user for the exchange method:
-string HandOfCards::userInputMethod()
-{
-	string userInput = "";
-	do {
-		cout << "Do you want to exchange your cards with some armies (yes/no): ";
-		cin >> userInput;
-	} while (!userInput.compare("yes") == 0 && !userInput.compare("no") == 0);
-	return userInput;
-
-}
 //To get the total number of cards in player's hand:
 int HandOfCards::getTotalNumberOfCards()
 {

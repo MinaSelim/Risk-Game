@@ -24,6 +24,7 @@
     <ClInclude Include="inc\Dice.h" />
     <ClInclude Include="inc\DiceDriver.h" />
     <ClInclude Include="inc\ErrorCodes.h" />
+    <ClInclude Include="inc\GameEngine.h" />
     <ClInclude Include="inc\Map.h" />
     <ClInclude Include="inc\MapDriver.h" />
     <ClInclude Include="inc\MapLoader.h" />
@@ -37,6 +38,7 @@
     <ClCompile Include="src\Cards.cpp" />
     <ClCompile Include="src\Dice.cpp" />
     <ClCompile Include="src\DiceDriver.cpp" />
+    <ClCompile Include="src\GameEngine.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Map.cpp" />
     <ClCompile Include="src\MapDriver.cpp" />

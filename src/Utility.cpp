@@ -1,7 +1,9 @@
 #include "Utility.h"
-
+#include <iostream>
 #include <sstream> 
 #include "Utility.h"
+
+using namespace std;
 
 int Utility::convertCStringToNumber(const char * string)
 {
@@ -30,4 +32,14 @@ bool Utility::vectorContains(const std::vector<int> & vector, int num)
 	}
 
 	return false;
+}
+
+string Utility::userConfirmation(string question)
+{
+	string userInput = "";
+	do {
+		cout << question << endl;
+		cin >> userInput;
+	} while (!userInput.compare("yes") == 0 && !userInput.compare("no") == 0);
+	return userInput;
 }
