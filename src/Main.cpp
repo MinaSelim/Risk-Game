@@ -4,12 +4,14 @@
 #include "DiceDriver.h"
 #include "PlayerDriver.h"
 #include "CardsDriver.h"
+#include "GameEngine.h"
 int main()
 {
-	MapDriver::MapTester();
-	MapLoaderDriver::MapTester();
-	DiceDriver::DiceTester();
+	//GameEngine e;
+	//MapDriver::MapTester();
+	//MapLoaderDriver::MapTester();
+	//DiceDriver::DiceTester();
 	PlayerDriver::PlayerTester();
-	CardsDriver::CardsTester();
+	//CardsDriver::CardsTester();
 }
 

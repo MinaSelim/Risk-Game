@@ -48,6 +48,9 @@
     <ClInclude Include="inc\CardsDriver.h">
       <Filter>Drivers</Filter>
     </ClInclude>
+    <ClInclude Include="inc\GameEngine.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cards.cpp">
@@ -85,6 +88,9 @@
     </ClCompile>
     <ClCompile Include="inc\CardsDriver.cpp">
       <Filter>Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameEngine.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

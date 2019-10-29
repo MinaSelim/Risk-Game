@@ -2,6 +2,7 @@
 #include <vector>
 #include <new>
 #include <map>
+#include "Utility.h"
 using namespace std;
 enum  CardType
 {
@@ -19,8 +20,8 @@ public:
 	Card();
 	Card(CardType type);
 	~Card();
-	string getCard();
-	void setCard(string card);
+	inline string getCard()const { return *this->cardtype; };
+	inline void setCard(string card) { *cardtype = card; };
 };
 
 class Deck {
@@ -32,7 +33,7 @@ public:
 	Deck();
 	Deck(int numberOfCountries);
 	~Deck();
-	Card* draw();
+	string draw();
 	void showDeck();
 	int getRandomInt(int min, int max);
 	int getSize();

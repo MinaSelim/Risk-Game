@@ -20,7 +20,7 @@ void MapDriver::MapTester() {
 	}
 
 	try {
-		map = MapLoader::loadMap("./InterconnectedInvalidWorld.map");
+		map = MapLoader::loadMap("./InterconnectedInvalorld.map");
 		delete map;
 	}
 	catch (int a)

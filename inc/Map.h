@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include  <new>
 
 using namespace std;
 
@@ -24,9 +25,24 @@ struct CountryInformation {
 	virtual ~CountryInformation();
 };
 
+class PlayerNode {
+private:
+	string * playerName;
+	int * numOfArmies;
+public:
+	PlayerNode();
+	PlayerNode(string name, int armies);
+	~PlayerNode();
+	inline int getNumberOfArmies() { return *numOfArmies; };
+	inline string getPlayerName() { return *playerName; };
+	inline void setNumberOfArmies(int number) { *numOfArmies = number; };
+	inline void setPlayerName(string name) { *playerName = name; };
+};
+
 struct CountryNode {
 	CountryInformation * countryInformation;
 	vector<CountryNode*> neighbouringCountries;
+	PlayerNode * playerInfo;
 	bool * visited;
 	CountryNode(CountryInformation * info);
 	~CountryNode();
@@ -53,3 +69,5 @@ private:
 	CountryNode* getNodeInContinent(int continentId);
 	CountryNode* getNodeFromGraphById(int countryId);
 };
+
+

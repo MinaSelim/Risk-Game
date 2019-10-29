@@ -38,8 +38,10 @@ ContinentInformation::~ContinentInformation()
 }
 
 
+
+
 CountryNode::CountryNode(CountryInformation * info) :
-	countryInformation(info), visited(new bool(false)), neighbouringCountries(0)
+	countryInformation(info), visited(new bool(false)), neighbouringCountries(0), playerInfo(new PlayerNode())
 {
 }
 
@@ -205,6 +207,7 @@ CountryNode * Map::getFirstNode()
 	return (*countriesGraph)[0];
 }
 
+
 Map::~Map()
 {
 	int * i = new int(0);
@@ -220,4 +223,20 @@ Map::~Map()
 	delete countriesGraph;
 	delete i;
 
+}
+
+PlayerNode::PlayerNode(): playerName(new string("No one")), numOfArmies(new int(0))
+{
+}
+
+PlayerNode::PlayerNode(string name, int armies): playerName(new string(name)), numOfArmies(new int(armies))
+{
+}
+
+PlayerNode::~PlayerNode()
+{
+	delete playerName;
+	playerName = NULL;
+	delete numOfArmies;
+	numOfArmies = NULL;
 }
