@@ -7,7 +7,8 @@
 #include "GameEngine.h"
 int main()
 {
-	//GameEngine e;
+	GameEngine e;
+	std::vector<std::string> files = FileIO::readDirectory("maps");
 	//MapDriver::MapTester();
 	//MapLoaderDriver::MapTester();
 	//DiceDriver::DiceTester();

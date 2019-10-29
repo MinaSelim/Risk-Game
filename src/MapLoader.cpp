@@ -1,5 +1,6 @@
 #include "MapLoader.h"
 #include "Utility.h"
+#include "ErrorCodes.h"
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -8,6 +9,11 @@
 //#define Logging
 Map * MapLoader::loadMap(std::string fileName)
 {
+	if (!Utility::fileExist(fileName))
+	{
+		throw FILE_DOES_NOT_EXIST;
+	}
+	
 	std::ifstream mapFile(fileName);
 	seekFileStreamToLine(mapFile, "[continents]");
 	std::vector<ContinentInformation*> continents;
@@ -56,112 +62,116 @@ Map * MapLoader::loadMap(std::string fileName)
 	return map;
 }
 
-void MapLoader::seekFileStreamToLine(std::ifstream & inputStream, std::string lineContent) //seeks to a certain line in the file
+namespace
 {
-	std::streamsize  count = 400;
-	char nextLine[400];
-
-	while (!inputStream.eof())
+	void seekFileStreamToLine(std::ifstream & inputStream, std::string lineContent) //seeks to a certain line in the file
 	{
-		inputStream.getline(nextLine, count);
+		std::streamsize  count = 400;
+		char nextLine[400];
 
-		if (!lineContent.compare(nextLine))
+		while (!inputStream.eof())
 		{
-			return;
+			inputStream.getline(nextLine, count);
+
+			if (!lineContent.compare(nextLine))
+			{
+				return;
+			}
 		}
 	}
-}
 
-CountryInformation * MapLoader::createCountryInformation(char * countryInfo)
-{
-	char * token = nullptr;
-	char * context = nullptr;
-	char delim[] = " ";
-
-	token = strtok_s(countryInfo, delim, &context);
-	int countryId = Utility::convertCStringToNumber(token);
-
-	token = strtok_s(nullptr, delim, &context);
-	std::string countryName = token;
-
-	token = strtok_s(nullptr, delim, &context);
-	int continentId = Utility::convertCStringToNumber(token);
-
-	token = strtok_s(nullptr, delim, &context);
-	int xCoordinate = Utility::convertCStringToNumber(token);
-
-	token = strtok_s(nullptr, delim, &context);
-	int yCoordinate = Utility::convertCStringToNumber(token);
-
-	std::vector<int> neighboursId;
-
-	token = strtok_s(nullptr, delim, &context);
-	CountryInformation * info = new CountryInformation(countryId, xCoordinate, yCoordinate, continentId, countryName, neighboursId);
-
-	while (token != nullptr)
+	CountryInformation * createCountryInformation(char * countryInfo)
 	{
+		char * token = nullptr;
+		char * context = nullptr;
+		char delim[] = " ";
+
+		token = strtok_s(countryInfo, delim, &context);
+		int countryId = Utility::convertCStringToNumber(token);
+
 		token = strtok_s(nullptr, delim, &context);
+		std::string countryName = token;
+
+		token = strtok_s(nullptr, delim, &context);
+		int continentId = Utility::convertCStringToNumber(token);
+
+		token = strtok_s(nullptr, delim, &context);
+		int xCoordinate = Utility::convertCStringToNumber(token);
+
+		token = strtok_s(nullptr, delim, &context);
+		int yCoordinate = Utility::convertCStringToNumber(token);
+
+		std::vector<int> neighboursId;
+
+		token = strtok_s(nullptr, delim, &context);
+		CountryInformation * info = new CountryInformation(countryId, xCoordinate, yCoordinate, continentId, countryName, neighboursId);
+
+		while (token != nullptr)
+		{
+			token = strtok_s(nullptr, delim, &context);
+
+		}
+
+		return info;
+
 
 	}
 
-	return info;
-
-
-}
-
-ContinentInformation * MapLoader::createContinentInformation(char * continentInfo)
-{
-	char * token = nullptr;
-	char * context = nullptr;
-	char delim[] = " ";
-
-	token = strtok_s(continentInfo, delim, &context);
-	std::string continentName = token;
-
-	token = strtok_s(nullptr, delim, &context);
-	int continentId = Utility::convertCStringToNumber(token);
-
-	ContinentInformation * info = new ContinentInformation(continentName, continentId);
-
-	while (token != nullptr)
+	ContinentInformation * createContinentInformation(char * continentInfo)
 	{
+		char * token = nullptr;
+		char * context = nullptr;
+		char delim[] = " ";
+
+		token = strtok_s(continentInfo, delim, &context);
+		std::string continentName = token;
+
 		token = strtok_s(nullptr, delim, &context);
+		int continentId = Utility::convertCStringToNumber(token);
+
+		ContinentInformation * info = new ContinentInformation(continentName, continentId);
+
+		while (token != nullptr)
+		{
+			token = strtok_s(nullptr, delim, &context);
+		}
+
+		return info;
 	}
 
-	return info;
-}
-
-// This function attaches borders ids to the countryInfo
-void MapLoader::createBordersInformation(char * bordersInformation, std::vector<CountryInformation*>  countries) 
-{
-	char * token = nullptr;
-	char * context = nullptr;
-	char delim[] = " ";
-	int countryId;
-	std::vector<int> neighbouringIds;
-
-	token = strtok_s(bordersInformation, delim, &context);
-	countryId = Utility::convertCStringToNumber(token);
-
-	token = strtok_s(nullptr, delim, &context);
-
-	while (token != nullptr)
+	// This function attaches borders ids to the countryInfo
+	void createBordersInformation(char * bordersInformation, std::vector<CountryInformation*>  countries)
 	{
-		neighbouringIds.push_back(Utility::convertCStringToNumber(token));
+		char * token = nullptr;
+		char * context = nullptr;
+		char delim[] = " ";
+		int countryId;
+		std::vector<int> neighbouringIds;
+
+		token = strtok_s(bordersInformation, delim, &context);
+		countryId = Utility::convertCStringToNumber(token);
+
 		token = strtok_s(nullptr, delim, &context);
-	}
+
+		while (token != nullptr)
+		{
+			neighbouringIds.push_back(Utility::convertCStringToNumber(token));
+			token = strtok_s(nullptr, delim, &context);
+		}
 		pushNeighbouringCountry(countries, countryId, neighbouringIds);
 
 
-	return;
-}
+		return;
+	}
 
-void MapLoader::pushNeighbouringCountry(std::vector<CountryInformation*>  countries, int id, std::vector<int> neighbouringIds) {
-	for (unsigned int i = 0; i < countries.size(); i++) {
-		if (*countries[i]->countryId == id) {
-			countries[i]->neighbouringCountriesIds = neighbouringIds;
-			break;
+	void pushNeighbouringCountry(std::vector<CountryInformation*>  countries, int id, std::vector<int> neighbouringIds) {
+		for (unsigned int i = 0; i < countries.size(); i++) {
+			if (*countries[i]->countryId == id) {
+				countries[i]->neighbouringCountriesIds = neighbouringIds;
+				break;
+			}
 		}
 	}
-}
 
+
+}
