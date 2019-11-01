@@ -8,7 +8,7 @@ class Player;
 
 struct ContinentInformation {
 	string * continentName;
-	int * continentId;
+	int * controlValue;
 	ContinentInformation(string name, int id);
 	~ContinentInformation();
 };
@@ -64,6 +64,9 @@ public:
 	CountryNode* getFirstNode();
 	vector<CountryNode*>   getCountriesGraph();
 	virtual ~Map();
+	std::vector<int> getContinentIds();
+	bool checkUserContinents(int continentId, string playerName);
+	CountryNode* getNodeFromGraphById(int countryId);
 private:
 	void validateMap();
 	void validateContinents();
@@ -72,7 +75,6 @@ private:
 	void attachEdgesToNodes();
 	void resetVisitedNodes();
 	CountryNode* getNodeInContinent(int continentId);
-	CountryNode* getNodeFromGraphById(int countryId);
 };
 
 

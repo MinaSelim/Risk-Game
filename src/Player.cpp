@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Player.h"
+
 #include <iostream>
 
 using namespace std;
@@ -12,13 +13,13 @@ Player::Player() :playerName(new string("Player")), countries (new vector<Countr
 {
 }
 
-Player::Player(string playerName) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
-numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()) 
+Player::Player(string playerName, Map & map) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
+numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(&map)
 {
 }
 
-Player::Player(string playerName, vector<CountryNode*> * listOfCountries) : playerName(new string(playerName)), countries(listOfCountries),
-numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()) 
+Player::Player(string playerName, vector<CountryNode*> * listOfCountries, Map & map) : playerName(new string(playerName)), countries(listOfCountries),
+numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()) , map(&map)
 {
 }
 
@@ -272,12 +273,58 @@ void Player::addCountryOwnerShip(CountryNode * node, int numOfArmies)
 void Player::reinforce()
 {
 	cout << "Executing the reinforce method" << endl;
+
+	int countriesToBePlaced = countries->size() / 3;
+	if (countriesToBePlaced < 3) {
+		countriesToBePlaced = 3;
+	}
+
+	cout << "User has " << countries->size() << " countries, this will give him ";
+	cout << countriesToBePlaced << " armies. The user now has ";
+	setNumberOfArmies(countriesToBePlaced + getNumberOfArmies());
+
+	cout << getNumberOfArmies() << " armies." << endl;
+
+	int userContinents = getUserContinents();
+	
+	cout << "User has " << userContinents
+		<< " this will give him"
+		<< "x armies"
+		<< ". User now has "
+		<< getNumberOfArmies();
+
+	int cardsExchangeArmies = hand->exchange();
+	setNumberOfArmies(cardsExchangeArmies + getNumberOfArmies());
+
+	cout << "User got " << cardsExchangeArmies 
+		<< " armies from exchanging cards " 
+		<< ". User now has " 
+		<< getNumberOfArmies();
+
 }
+
+// Check how many continents user pocess all its countries 
+int Player::getUserContinents() 
+{
+	vector<CountryNode> *continentsOwned = new vector<CountryNode>();;
+	std::vector<int> continentIds = map->getContinentIds();
+
+	for (int i = 0; i < continentIds.size(); i++) {
+		if (map->checkUserContinents(continentIds[i], *playerName)) {
+			continentsOwned->push_back(*map->getNodeFromGraphById(continentIds[i]));
+		}
+	}
+
+	for (unsigned i = 0; i < continentsOwned->size(); i++) {
+		
+	}
+	return 0;
+}
+
 
 //Attack Part:
 void Player::attack()
-{
+{	
 	cout << "Executing the attack method" << endl;
 }
 
-	

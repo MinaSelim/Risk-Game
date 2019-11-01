@@ -127,9 +127,9 @@ namespace
 		std::string continentName = token;
 
 		token = strtok_s(nullptr, delim, &context);
-		int continentId = Utility::convertCStringToNumber(token);
+	int controlValue = Utility::convertCStringToNumber(token);
 
-		ContinentInformation * info = new ContinentInformation(continentName, continentId);
+	ContinentInformation * info = new ContinentInformation(continentName, controlValue);
 
 		while (token != nullptr)
 		{

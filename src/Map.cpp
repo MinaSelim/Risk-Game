@@ -37,15 +37,15 @@ CountryInformation::~CountryInformation()
 }
 
 
-ContinentInformation::ContinentInformation(std::string name, int id) :
-	continentName(new std::string(name)), continentId(new int(id))
+ContinentInformation::ContinentInformation(std::string name, int cv) :
+	continentName(new std::string(name)), controlValue(new int(cv))
 {
 }
 
 ContinentInformation::~ContinentInformation()
 {
 	Utility::safeDelete(continentName);
-	Utility::safeDelete(continentId);
+	Utility::safeDelete(controlValue);
 }
 
 
@@ -119,15 +119,7 @@ void Map::validateMap()
 
 void Map::validateContinents()
 {
-	std::vector<int> continentsIds;
-	for (unsigned int i = 0; i < countriesGraph->size(); i++) 
-	{
-		auto continentId = *(*countriesGraph)[i]->countryInformation->continentId;
-		if (!Utility::vectorContains(continentsIds, continentId))
-		{
-			continentsIds.push_back(continentId);
-		}
-	}
+	std::vector<int> continentsIds = getContinentIds();
 
 	// This for loop goes through each continents, and tries to visit all the nodes inside that continent
 	for (unsigned int i = 0; i < continentsIds.size(); i++) 
@@ -146,6 +138,31 @@ void Map::validateContinents()
 		resetVisitedNodes(); // reset the nodes for the next test
 	}
 
+}
+
+vector<int> Map::getContinentIds() 
+{
+	vector<int> continentsIds;
+	for (unsigned int i = 0; i < countriesGraph->size(); i++)
+	{
+		auto continentId = *(*countriesGraph)[i]->countryInformation->continentId;
+		if (!Utility::vectorContains(continentsIds, continentId))
+		{
+			continentsIds.push_back({ continentId });
+		}
+	}
+	return continentsIds;
+}
+
+bool Map::checkUserContinents(int continentId, string playerName)
+{
+	for (unsigned int i = 0; i < countriesGraph->size(); i++) {
+		if (*(*countriesGraph)[i]->countryInformation->continentId == continentId &&
+			!(*countriesGraph)[i]->playerInfo->getPlayerName().compare(playerName)) {
+			return false;
+		}
+	}
+	return true;
 }
 
 //simple graph travelling algorithm (limited by continent)
