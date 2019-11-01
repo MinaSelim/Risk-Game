@@ -6,7 +6,7 @@
 
 void PlayerDriver::PlayerTester()
 {
-	Map * map = MapLoader::loadMap("./maps/worldNew.map");
+	/*	Map * map = MapLoader::loadMap("./maps/worldNew.map");
 	auto mapNode = map->getFirstNode();
 	std::vector<CountryNode*> countries;
 	std::vector<CountryNode*> * kok = new std::vector< CountryNode*>();
@@ -24,8 +24,8 @@ void PlayerDriver::PlayerTester()
 	Deck* deck = new Deck(map->getNumberOfCountriesInMap());*/
 
 	//Testing the functionality of the three methods:
-	player->attack();
-	player->fortify();
-	player->reinforce();
+	//player->attack();
+	//player->fortify();
+	//player->reinforce();
 
 }

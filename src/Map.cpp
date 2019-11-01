@@ -1,12 +1,23 @@
 #include "Map.h"
 #include "ErrorCodes.h"
 #include "Utility.h"
+#include "Player.h"
 #include <new>
 
 CountryInformation::CountryInformation(int id, int x, int y, int contId, std::string countName, std::vector<int> neigboursIds) :
 	countryId(new int(id)), xCoordinate(new int(x)), yCoordinate(new int(y)),
 	continentId(new int(contId)), countryName(new std::string(countName)), neighbouringCountriesIds(neigboursIds)
 {
+}
+
+CountryInformation::CountryInformation(CountryInformation & info) :
+	countryId(new int(*info.countryId)), xCoordinate(new int(*info.xCoordinate)), yCoordinate(new int(*info.yCoordinate)),
+	continentId(new int(*info.continentId)), countryName(new std::string(*info.countryName))
+{
+	for (unsigned int i = 0; i < info.neighbouringCountriesIds.size(); i++)
+	{
+		neighbouringCountriesIds.push_back(info.neighbouringCountriesIds[i]);
+	}
 }
 
 
@@ -45,6 +56,11 @@ CountryNode::CountryNode(CountryInformation * info) :
 {
 }
 
+CountryNode::CountryNode(CountryNode & node):
+	countryInformation(new CountryInformation(*node.countryInformation)), visited(new bool(*node.visited)), neighbouringCountries(0), playerInfo(new PlayerNode())
+{
+}
+
 CountryNode::~CountryNode()
 {
 	Utility::safeDelete(countryInformation);
@@ -64,6 +80,21 @@ Map::Map(std::vector<CountryInformation*> countries)
 
 	validateMap();
 
+}
+
+Map::Map(Map & map)
+{
+	countriesGraph = new std::vector<CountryNode*>();
+	for (unsigned int i = 0; i < map.countriesGraph->size(); i++)
+	{
+		CountryNode * node = new CountryNode(*(*map.countriesGraph)[i]);
+		countriesGraph->push_back(node);
+	}
+
+	attachEdgesToNodes();
+
+	validateMap();
+	
 }
 
 
@@ -207,6 +238,17 @@ CountryNode * Map::getFirstNode()
 	return (*countriesGraph)[0];
 }
 
+vector<CountryNode*> Map::getCountriesGraph()
+{
+	std::vector<CountryNode*> vect;
+	for (unsigned int i = 0; i < countriesGraph->size(); i++)
+	{
+		vect.push_back((*countriesGraph)[i]);
+	}
+
+	return vect;
+}
+
 
 Map::~Map()
 {
@@ -225,18 +267,28 @@ Map::~Map()
 
 }
 
-PlayerNode::PlayerNode(): playerName(new string("No one")), numOfArmies(new int(0))
+PlayerNode::PlayerNode(): player(nullptr), numOfArmies(new int(0))
 {
 }
 
-PlayerNode::PlayerNode(string name, int armies): playerName(new string(name)), numOfArmies(new int(armies))
+
+PlayerNode::PlayerNode(Player * player, int armies): player(player), numOfArmies(new int(armies))
 {
 }
 
 PlayerNode::~PlayerNode()
 {
-	delete playerName;
-	playerName = NULL;
 	delete numOfArmies;
-	numOfArmies = NULL;
+	numOfArmies = nullptr;
+}
+
+Player * PlayerNode::getPlayer()
+{
+	return player;
+}
+
+void PlayerNode::assignPlayer(Player * playerToSet)
+{
+
+	player = playerToSet;
 }

@@ -6,12 +6,14 @@
 
 void MapDriver::MapTester() {
 
-	Map * map = MapLoader::loadMap("./worldNew.map");
+	Map * map = MapLoader::loadMap("./maps/worldNew.map");
+
+	Map * map2 = new Map(*map);
 
 	delete map;
 
 	try {
-		map = MapLoader::loadMap("./InvalidWorld.map");
+		map = MapLoader::loadMap("./maps/InvalidWorld.map");
 		delete map;
 	}
 	catch (int a)
@@ -20,11 +22,13 @@ void MapDriver::MapTester() {
 	}
 
 	try {
-		map = MapLoader::loadMap("./InterconnectedInvalorld.map");
+		map = MapLoader::loadMap("./maps/InterconnectedInvalorld.map");
 		delete map;
 	}
 	catch (int a)
 	{
 		std::cout << a;
 	}
+
+	delete map2;
 }

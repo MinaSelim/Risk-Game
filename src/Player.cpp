@@ -251,6 +251,23 @@ void Player::setNumberOfArmyAtCountry(CountryNode & country, int armies)
 }
 
 
+
+void Player::addCountryOwnerShip(CountryNode * node, int numOfArmies)
+{
+	if (node->playerInfo)
+	{
+		//add code to remove country
+	}
+
+	
+	node->playerInfo->setNumberOfArmies(numOfArmies);
+	node->playerInfo->assignPlayer(this);
+
+	countries->push_back(node);
+
+}
+
+
 //Reinforce Part:
 void Player::reinforce()
 {

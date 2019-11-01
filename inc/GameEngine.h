@@ -24,8 +24,14 @@ private:
 
 public:
 	GameEngine();
+	void startGame();
+private:
+
+	void setupGame();
+	void mainLoop();
 	void chooseMap();
-	int selectPlayersNumber(); 
+	bool gameWon();
+	int selectPlayersNumber();
 };
 
 namespace FileIO

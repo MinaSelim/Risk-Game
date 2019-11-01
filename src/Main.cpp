@@ -8,11 +8,12 @@
 int main()
 {
 	GameEngine e;
-	std::vector<std::string> files = FileIO::readDirectory("maps");
+	e.startGame();
+	//std::vector<std::string> files = FileIO::readDirectory("maps");
 	//MapDriver::MapTester();
 	//MapLoaderDriver::MapTester();
 	//DiceDriver::DiceTester();
-	PlayerDriver::PlayerTester();
+	//PlayerDriver::PlayerTester();
 	//CardsDriver::CardsTester();
 }
 
