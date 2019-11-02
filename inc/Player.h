@@ -48,5 +48,5 @@ public:
 	inline string getPlayerName() { return *playerName; };
 	inline void setNumberOfArmies(int value) { *numberOfArmies = value; };
 	inline int getNumberOfArmies() { return *numberOfArmies; };
-	inline void setMap(Map & map) { map = map; };
+	inline void setMap(Map * mapToSet) { map = mapToSet; };
 };

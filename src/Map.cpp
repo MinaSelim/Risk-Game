@@ -156,7 +156,7 @@ bool Map::checkUserContinents(int continentId, string playerName)
 {
 	for (unsigned int i = 0; i < countriesGraph->size(); i++) {
 		if (*(*countriesGraph)[i]->countryInformation->continentId == continentId &&
-			!(*countriesGraph)[i]->playerInfo->getPlayer()->getPlayerName().compare(playerName)) {
+			(*countriesGraph)[i]->playerInfo->getPlayer()->getPlayerName().compare(playerName)) {
 			return false;
 		}
 	}
@@ -271,6 +271,9 @@ int Map::getContinentControlValue(int continentId)
 			return *continentsInfo[i]->controlValue;
 		}
 	}
+
+	//TODO: throw proper error code
+	throw -1;
 }
 
 

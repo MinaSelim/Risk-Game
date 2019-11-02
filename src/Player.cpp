@@ -310,7 +310,7 @@ int Player::getUserContinents()
 	std::vector<int> continentsIdOwned;
 	std::vector<int> continentIds = map->getContinentIds();
 
-	for (int i = 0; i < continentIds.size(); i++) {
+	for (unsigned int i = 0; i < continentIds.size(); i++) {
 		if (map->checkUserContinents(continentIds[i], *playerName)) {
 			continentsIdOwned.push_back(continentIds[i]);
 		}
