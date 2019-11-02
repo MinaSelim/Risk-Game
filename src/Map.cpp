@@ -37,8 +37,8 @@ CountryInformation::~CountryInformation()
 }
 
 
-ContinentInformation::ContinentInformation(std::string name, int cv) :
-	continentName(new std::string(name)), controlValue(new int(cv))
+ContinentInformation::ContinentInformation(std::string name, int cv, int id) :
+	continentName(new std::string(name)), controlValue(new int(cv)), continentId(new int(id))
 {
 }
 
@@ -56,7 +56,7 @@ CountryNode::CountryNode(CountryInformation * info) :
 {
 }
 
-CountryNode::CountryNode(CountryNode & node):
+CountryNode::CountryNode(const CountryNode & node):
 	countryInformation(new CountryInformation(*node.countryInformation)), visited(new bool(*node.visited)), neighbouringCountries(0), playerInfo(new PlayerNode())
 {
 }
@@ -67,7 +67,7 @@ CountryNode::~CountryNode()
 	Utility::safeDelete(visited);
 }
 
-Map::Map(std::vector<CountryInformation*> countries)
+Map::Map(std::vector<CountryInformation*> countries, std::vector<ContinentInformation*> continents)
 {
 	countriesGraph = new std::vector<CountryNode*>();
 	for (unsigned int i = 0; i < countries.size(); i++)
@@ -76,8 +76,8 @@ Map::Map(std::vector<CountryInformation*> countries)
 		countriesGraph->push_back(node);
 	}
 
+	continentsInfo = continents;
 	attachEdgesToNodes();
-
 	validateMap();
 
 }
@@ -92,9 +92,7 @@ Map::Map(Map & map)
 	}
 
 	attachEdgesToNodes();
-
 	validateMap();
-	
 }
 
 
@@ -158,7 +156,7 @@ bool Map::checkUserContinents(int continentId, string playerName)
 {
 	for (unsigned int i = 0; i < countriesGraph->size(); i++) {
 		if (*(*countriesGraph)[i]->countryInformation->continentId == continentId &&
-			!(*countriesGraph)[i]->playerInfo->getPlayerName().compare(playerName)) {
+			!(*countriesGraph)[i]->playerInfo->getPlayer()->getPlayerName().compare(playerName)) {
 			return false;
 		}
 	}
@@ -264,6 +262,15 @@ vector<CountryNode*> Map::getCountriesGraph()
 	}
 
 	return vect;
+}
+
+int Map::getContinentControlValue(int continentId)
+{
+	for (unsigned i = 0; i < continentsInfo.size(); i++) {
+		if (*continentsInfo[i]->continentId == continentId) {
+			return *continentsInfo[i]->controlValue;
+		}
+	}
 }
 
 

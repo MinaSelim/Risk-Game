@@ -13,13 +13,13 @@ Player::Player() :playerName(new string("Player")), countries (new vector<Countr
 {
 }
 
-Player::Player(string playerName, Map & map) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
-numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(&map)
+Player::Player(string playerName, Map * map) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
+numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(map)
 {
 }
 
-Player::Player(string playerName, vector<CountryNode*> * listOfCountries, Map & map) : playerName(new string(playerName)), countries(listOfCountries),
-numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()) , map(&map)
+Player::Player(string playerName, vector<CountryNode*> * listOfCountries, Map * map) : playerName(new string(playerName)), countries(listOfCountries),
+numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()) , map(map)
 {
 }
 
@@ -306,19 +306,20 @@ void Player::reinforce()
 // Check how many continents user pocess all its countries 
 int Player::getUserContinents() 
 {
-	vector<CountryNode> *continentsOwned = new vector<CountryNode>();;
+	int armies = 0;
+	std::vector<int> continentsIdOwned;
 	std::vector<int> continentIds = map->getContinentIds();
 
 	for (int i = 0; i < continentIds.size(); i++) {
 		if (map->checkUserContinents(continentIds[i], *playerName)) {
-			continentsOwned->push_back(*map->getNodeFromGraphById(continentIds[i]));
+			continentsIdOwned.push_back(continentIds[i]);
 		}
 	}
 
-	for (unsigned i = 0; i < continentsOwned->size(); i++) {
-		
+	for (unsigned i = 0; i < continentsIdOwned.size(); i++) {
+		armies += map->getContinentControlValue(continentsIdOwned[i] - 1);
 	}
-	return 0;
+	return armies;
 }
 
 

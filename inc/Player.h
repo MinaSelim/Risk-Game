@@ -20,8 +20,8 @@ private:
 
 public:
 	Player();
-	Player(string playerName, Map & map);
-	Player(string playerName, vector<CountryNode*>* listOfCountries, Map & map);
+	Player(string playerName, Map * map);
+	Player(string playerName, vector<CountryNode*>* listOfCountries, Map * map);
 	~Player();
 	int getNumberOfArmyAtCountry(const string& countryName);
 	void setNumberOfArmyAtCountry(CountryNode & country, int armies);
