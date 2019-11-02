@@ -312,16 +312,16 @@ CountryNode * Player::chooseAttackingCountry(CountryNode & chosenCountry)
 	return (*countries)[value];
 }
 
-CountryNode * Player::chooseCountryToAttack(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToAttack)
-{
-	int value = -1;
-	do {
-		cout << "Which one of your countries will attack?" << endl;
-		printListOfCountryAdjacentEnemies(chosenAttackingCountry);
-	} while (value == -1);
-
-	return (*countries)[value];
-}
+//CountryNode * Player::chooseCountryToAttack(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToAttack)
+//{
+//	int value = -1;
+//	do {
+//		cout << "Which one of your countries will attack?" << endl;
+//		printListOfCountryAdjacentEnemies(chosenAttackingCountry);
+//	} while (value == -1);
+//
+//	return (*countries)[value];
+//}
 
 //Attack Part:
 void Player::attack()
@@ -334,10 +334,10 @@ void Player::attack()
 			vector<int> neightboursIds;
 			CountryInformation * temp = new CountryInformation(1, 1, 1, 2, "city", neightboursIds);
 			CountryNode * chosenCountryToAttack = new CountryNode(temp);
-			CountryNode * chosenCountryToBeAttacked = new CountryNode(temp);
+			//CountryNode * chosenCountryToBeAttacked = new CountryNode(temp);
 			printListOfAllCountriesEnemies();
 			chosenCountryToAttack = chooseAttackingCountry(*chosenCountryToAttack);
-			chosenCountryToBeAttacked = chooseCountryToAttack(*chosenCountryToBeAttacked);
+			//chosenCountryToBeAttacked = chooseCountryToAttack(*chosenCountryToAttack, *chosenCountryToBeAttacked);
 		}
 		else
 		{

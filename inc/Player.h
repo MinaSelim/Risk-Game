@@ -29,7 +29,6 @@ public:
 	void printListOfCountryAdjacentEnemies(CountryNode & country);
 	bool isEnemy(CountryNode & country);
 
-	CountryNode * chooseAttackingCountry(CountryNode & chosenCountry);
 	CountryNode * chooseAttackingCountry(CountryNode & attackingCountry);
 	CountryNode * chooseCountryToAttack(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToAttack);
 	
