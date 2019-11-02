@@ -41,7 +41,8 @@ public:
 	void printListOfCountryNeighbors(CountryNode & country);
 	void printListOfPlayersCountryNeighbors(CountryNode& country);
 
-	int getUserContinents();
+	int getArmiesAccordingToContinents();
+	void placeArmiesOnCountries();
 
 	inline DicesRoller* getDice()  { return dice; };
 	inline HandOfCards* getHandOfCards() { return hand; };
