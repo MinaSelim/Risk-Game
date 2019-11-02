@@ -25,6 +25,15 @@ public:
 	int getNumberOfArmyAtCountry(const string& countryName);
 	void setNumberOfArmyAtCountry(CountryNode & country, int armies);
 
+	void printListOfAllCountriesEnemies();
+	void printListOfCountryAdjacentEnemies(CountryNode & country);
+	bool isEnemy(CountryNode & country);
+
+	CountryNode * chooseAttackingCountry(CountryNode & chosenCountry);
+	CountryNode * chooseAttackingCountry(CountryNode & attackingCountry);
+	CountryNode * chooseCountryToAttack(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToAttack);
+	
+
 	void reinforce();
 	void attack();
 	void fortify();
