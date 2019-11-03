@@ -88,9 +88,10 @@ void Player::fortify()
 			//The repeat is to be used in case the player chooses a country and none of its neighbors belong to the player.
 			//Thus they can't fortify and we give them the option or choosing again
 			bool repeat = false;
-			CountryInformation * temp = new CountryInformation(1, 1, 1, 2, "city", neightboursIds);
-			CountryNode * chosenCountry = new CountryNode(temp);
-			CountryNode * chosenNeighborCountry = new CountryNode(temp);
+			//CountryInformation * temp = new CountryInformation(1, 1, 1, 2, "city", neightboursIds);
+			//CountryInformation * temp2 = new CountryInformation(1, 1, 1, 2, "city", neightboursIds);
+			CountryNode * chosenCountry;
+			CountryNode * chosenNeighborCountry;
 
 			do {
 				//Giving the the opportunity for the player to choose the country:
@@ -100,17 +101,11 @@ void Player::fortify()
 				chosenNeighborCountry = choosingNeighboringCountry(chosenNeighborCountry, chosenCountry, repeat);
 
 				//This method will move the army from one country to its chosen neighbor: 
-				if (!repeat) {
+				if (!repeat ) {
 					armyManipulationFortify(chosenNeighborCountry, chosenCountry);
 				}
 			} while (repeat);
 
-			delete temp;
-			temp = NULL;
-			delete chosenCountry;
-			chosenCountry = NULL;
-			delete chosenNeighborCountry;
-			chosenNeighborCountry = NULL;
 		}
 	}
 	else {
@@ -190,6 +185,7 @@ CountryNode * Player::choosingNeighboringCountry(CountryNode * chosenNeighborCou
 			printListOfPlayersCountryNeighbors(*chosenCountry);
 			cin >> *chosenNeighborCountry->countryInformation->countryName;
 			value = inListOfCountries(chosenNeighborCountry, true);
+			return (*countries)[value];
 		}
 		else
 		{
@@ -199,7 +195,7 @@ CountryNode * Player::choosingNeighboringCountry(CountryNode * chosenNeighborCou
 		}
 	} while (value == -1 && !repeat);
 
-	return (*countries)[value];
+	return chosenNeighborCountry;
 }
 
 //This method will verify is the country is one of the countries the player is rulling.
