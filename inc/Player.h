@@ -33,6 +33,10 @@ public:
 	CountryNode * chooseAttackingCountry(CountryNode & attackingCountry);
 	CountryNode * chooseCountryToBeAttacked(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToAttack);
 	int inListOfEnemyCountries(CountryNode * attackingCountry, CountryNode * chosenCountryToBeAttacked, bool modifyChosenCountryToBeAttacked);
+
+	void attackSequence(CountryNode * attackingCountry, CountryNode * countryToBeAttacked);
+
+	DicesRoller getPlayerDicesRoller(CountryNode * country);
 	
 
 	void reinforce();

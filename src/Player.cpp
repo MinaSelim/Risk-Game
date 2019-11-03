@@ -282,7 +282,7 @@ void Player::printListOfCountryAdjacentEnemies(CountryNode & country)
 	}
 }
 
-//this method returns a list of all the countries enemies
+//this method returns a list of all the countries neighbours that are enemies
 vector <CountryNode*> Player::getAdjacentEnemies(CountryNode & country)
 {
 	vector <CountryNode*> listOfEnemies;
@@ -325,11 +325,17 @@ CountryNode * Player::chooseAttackingCountry(CountryNode & chosenCountry)
 		printListOfCountries();
 		cin >> *chosenCountry.countryInformation->countryName;
 		value = inListOfCountries(&chosenCountry, true);
+		//if the country has less than 2 armies reset value to -1, since you need minimum 2 armies to attack
+		if (getNumberOfArmyAtCountry(*chosenCountry.countryInformation->countryName) < 2)
+		{
+			cout << "You need a minimum of 2 armies to attack, please select a different country" << endl;
+			value = -1;
+		}
 	} while (value == -1);
 
 	return (*countries)[value];
 }
-
+//this method will ask the user to pick a country to attack
 CountryNode * Player::chooseCountryToBeAttacked(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToBeAttacked)
 {
 	int value = -1;
@@ -365,6 +371,51 @@ int Player::inListOfEnemyCountries(CountryNode * attackingCountry, CountryNode *
 	}
 	return indexAt;
 }
+//this method handles the attacking sequence, player can either anihilate, roll, retreat
+//when an army takes over another country, transfer troops to conquered country
+void Player::attackSequence(CountryNode * attackingCountry, CountryNode * defendingCountry)
+{	
+	//get armies for attacker and defender
+	int attackerArmies = getNumberOfArmyAtCountry(*attackingCountry->countryInformation->countryName);
+	int defenderArmies = getNumberOfArmyAtCountry(*defendingCountry->countryInformation->countryName);
+
+	cout << attackerArmies << endl;
+	cout << defenderArmies << endl;
+	//ask user if they want to:
+	//anihilate: keep rolling until they beat their oponent or have 1 army left
+	//roll: roll once
+	//retreat: stop attacking this country, go back and prompt to attack a different country
+
+	cout << attackingCountry->countryInformation->countryName << " is going to attack " << defendingCountry->countryInformation->countryName << endl;
+	bool repeat = true;
+	do
+	{
+		string question = "will you: Annihilate, Roll or Retreat?";
+		if (userConfirmation(question).compare("annihilate") == 0)
+		{
+
+		}
+		if (userConfirmation(question).compare("roll") == 0)
+		{
+
+		}
+		if (userConfirmation(question).compare("retreat") == 0)
+		{
+
+		}
+
+	} while (repeat);
+	
+
+	
+	
+}
+
+DicesRoller Player::getPlayerDicesRoller(CountryNode * country) 
+{
+	string countryName = country->playerInfo->getPlayerName;
+	
+}
 //Attack Part:
 void Player::attack()
 {
@@ -375,11 +426,12 @@ void Player::attack()
 			//temp is just so it follows constructor format
 			vector<int> neightboursIds;
 			CountryInformation * temp = new CountryInformation(1, 1, 1, 2, "city", neightboursIds);
-			CountryNode * chosenCountryToAttack = new CountryNode(temp);
-			CountryNode * chosenCountryToBeAttacked = new CountryNode(temp);
+			CountryNode * attackingCountry = new CountryNode(temp);
+			CountryNode * defendingCountry = new CountryNode(temp);
 			printListOfAllCountriesEnemies();
-			chosenCountryToAttack = chooseAttackingCountry(*chosenCountryToAttack);
-			chosenCountryToBeAttacked = chooseCountryToBeAttacked(*chosenCountryToAttack, *chosenCountryToBeAttacked);
+			attackingCountry = chooseAttackingCountry(*attackingCountry);
+			defendingCountry = chooseCountryToBeAttacked(*attackingCountry, *defendingCountry);
+			attackSequence(attackingCountry, defendingCountry);
 		}
 		else
 		{

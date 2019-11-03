@@ -24,8 +24,8 @@ void PlayerDriver::PlayerTester()
 	patrickCountries->push_back(mapNode->neighbouringCountries[2]);
 	Player* player2 = new Player("Patrick", patrickCountries);
 	patrickCountries->at(0)->playerInfo->setPlayerName("Patrick");
-	patrickCountries->at(0)->playerInfo->setNumberOfArmies(10);
-	patrickCountries->at(1)->playerInfo->setNumberOfArmies(12);
+	patrickCountries->at(0)->playerInfo->setNumberOfArmies(1);
+	patrickCountries->at(1)->playerInfo->setNumberOfArmies(2);
 	patrickCountries->at(1)->playerInfo->setPlayerName("Patrick");
 
 	cout << "Player 2 turn to fortify" << endl;
