@@ -27,10 +27,12 @@ public:
 
 	void printListOfAllCountriesEnemies();
 	void printListOfCountryAdjacentEnemies(CountryNode & country);
+	vector<CountryNode*> getAdjacentEnemies(CountryNode & country);
 	bool isEnemy(CountryNode & country);
 
 	CountryNode * chooseAttackingCountry(CountryNode & attackingCountry);
-	CountryNode * chooseCountryToAttack(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToAttack);
+	CountryNode * chooseCountryToBeAttacked(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToAttack);
+	int inListOfEnemyCountries(CountryNode * attackingCountry, CountryNode * chosenCountryToBeAttacked, bool modifyChosenCountryToBeAttacked);
 	
 
 	void reinforce();

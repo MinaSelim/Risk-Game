@@ -261,7 +261,7 @@ void Player::printListOfAllCountriesEnemies()
 	}
 }
 
-//Prints the countries that are neighbours AND enemies (country doesnt belong to player)
+//Prints the countries that are neighbours and enemies with number of armies (country doesnt belong to player)
 void Player::printListOfCountryAdjacentEnemies(CountryNode & country)
 {
 	int countEnemies = 0;
@@ -282,6 +282,24 @@ void Player::printListOfCountryAdjacentEnemies(CountryNode & country)
 	}
 }
 
+//this method returns a list of all the countries enemies
+vector <CountryNode*> Player::getAdjacentEnemies(CountryNode & country)
+{
+	vector <CountryNode*> listOfEnemies;
+
+	for (unsigned int i = 0; i < country.neighbouringCountries.size(); i++)
+	{
+		if (isEnemy(*country.neighbouringCountries[i]))
+		{
+			listOfEnemies.push_back(country.neighbouringCountries[i]);
+			
+		}
+
+	}
+	return listOfEnemies;
+	
+}
+
 
 //returns true if the country is an enemy country, false if not
 bool Player::isEnemy(CountryNode & country)
@@ -298,7 +316,7 @@ bool Player::isEnemy(CountryNode & country)
 	return isEnemy;
 }
 
-//chooses the attacking country (modified one of Hamsbroom's methods)
+//chooses the attacking country (modified one of Hamsbroom's methods cause it's basically the same logic)
 CountryNode * Player::chooseAttackingCountry(CountryNode & chosenCountry)
 {
 	int value = -1;
@@ -312,17 +330,41 @@ CountryNode * Player::chooseAttackingCountry(CountryNode & chosenCountry)
 	return (*countries)[value];
 }
 
-//CountryNode * Player::chooseCountryToAttack(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToAttack)
-//{
-//	int value = -1;
-//	do {
-//		cout << "Which one of your countries will attack?" << endl;
-//		printListOfCountryAdjacentEnemies(chosenAttackingCountry);
-//	} while (value == -1);
-//
-//	return (*countries)[value];
-//}
+CountryNode * Player::chooseCountryToBeAttacked(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToBeAttacked)
+{
+	int value = -1;
+	do {
+		cout << "Which country will be attacked?" << endl;
+		printListOfCountryAdjacentEnemies(chosenAttackingCountry);
+		cin >> *chosenCountryToBeAttacked.countryInformation->countryName;
+		value = inListOfEnemyCountries(&chosenAttackingCountry, &chosenCountryToBeAttacked, true);
+	} while (value == -1);
 
+	return (*countries)[value];
+}
+
+//This method will verify if the country is in the list of enemy countries adjacent to the other ones
+int Player::inListOfEnemyCountries(CountryNode * attackingCountry, CountryNode * chosenCountryToBeAttacked, bool modifyChosenCountryToBeAttacked)
+{	
+	vector <CountryNode*> enemies = getAdjacentEnemies(*attackingCountry);
+
+	int indexAt = -1;
+	string countryName = *chosenCountryToBeAttacked->countryInformation->countryName;
+	for (unsigned int i = 0; i < enemies.size(); ++i)
+	{
+		
+		if ((enemies)[i]->countryInformation->countryName->compare(countryName) == 0)
+		{
+			indexAt = i;
+			if (modifyChosenCountryToBeAttacked)
+			{
+				chosenCountryToBeAttacked = (*countries)[i];
+			}
+			break;
+		}
+	}
+	return indexAt;
+}
 //Attack Part:
 void Player::attack()
 {
@@ -334,10 +376,10 @@ void Player::attack()
 			vector<int> neightboursIds;
 			CountryInformation * temp = new CountryInformation(1, 1, 1, 2, "city", neightboursIds);
 			CountryNode * chosenCountryToAttack = new CountryNode(temp);
-			//CountryNode * chosenCountryToBeAttacked = new CountryNode(temp);
+			CountryNode * chosenCountryToBeAttacked = new CountryNode(temp);
 			printListOfAllCountriesEnemies();
 			chosenCountryToAttack = chooseAttackingCountry(*chosenCountryToAttack);
-			//chosenCountryToBeAttacked = chooseCountryToAttack(*chosenCountryToAttack, *chosenCountryToBeAttacked);
+			chosenCountryToBeAttacked = chooseCountryToBeAttacked(*chosenCountryToAttack, *chosenCountryToBeAttacked);
 		}
 		else
 		{
