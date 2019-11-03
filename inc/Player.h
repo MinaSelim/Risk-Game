@@ -31,10 +31,10 @@ public:
 	void attack();
 	void fortify();
 
-	CountryNode * choosingCountry(CountryNode & chosenCountry);
-	CountryNode * choosingNeighboringCountry(CountryNode * chosenNeighborCountry, CountryNode * chosenCountry, bool & repeat);
+	string choosingCountry();
+	string choosingNeighboringCountry(CountryNode * chosenCountry, bool & repeat);
 	void armyManipulationFortify(CountryNode * chosenNeighborCountry, CountryNode * chosenCountry);
-	int inListOfCountries(CountryNode * chosenCoutnry, bool modifyChoosenCountry);
+	bool inListOfCountries(string countryName);
 	bool hasANeighbor(CountryNode & country);
 
 	void printListOfCountries();

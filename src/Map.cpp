@@ -239,6 +239,20 @@ CountryNode * Map::getNodeFromGraphById(int countryId)
 	throw 1;
 }
 
+
+
+CountryNode * Map::getNodeFromGraphByName(string countryName)
+{
+	for (unsigned int i = 0; i < countriesGraph->size(); i++)
+	{
+		if ((*countriesGraph)[i]->countryInformation->countryName->compare(countryName) == 0)
+		{
+			return (*countriesGraph)[i];
+		}
+	}
+	throw 1;
+}
+
 int Map::getNumberOfCountriesInMap()
 {
 	int numberOfCountries = 0;

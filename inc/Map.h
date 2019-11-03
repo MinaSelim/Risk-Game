@@ -62,6 +62,7 @@ private:
 public:
 	Map(vector<CountryInformation*> countries, vector<ContinentInformation*> continents);
 	Map(Map & map);
+	CountryNode * getNodeFromGraphByName(string countryName);
 	int getNumberOfCountriesInMap();
 	CountryNode* getFirstNode();
 	vector<CountryNode*> getCountriesGraph();
