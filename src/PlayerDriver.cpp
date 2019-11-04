@@ -12,7 +12,7 @@ void PlayerDriver::PlayerTester()
 	std::vector<CountryNode*> * kok = new std::vector< CountryNode*>();
 	kok->push_back(mapNode);
 	kok->push_back(mapNode->neighbouringCountries[0]);
-	Player* player = new Player("Hambrsoom", kok);
+	Player* player = new Player("Hambrsoom", kok, *map);
 	kok->at(0)->playerInfo->setPlayerName("Hambrsoom");
 	kok->at(0)->playerInfo->setNumberOfArmies(12);
 	kok->at(1)->playerInfo->setNumberOfArmies(4);

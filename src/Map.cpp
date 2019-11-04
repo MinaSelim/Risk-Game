@@ -37,15 +37,15 @@ CountryInformation::~CountryInformation()
 }
 
 
-ContinentInformation::ContinentInformation(std::string name, int id) :
-	continentName(new std::string(name)), continentId(new int(id))
+ContinentInformation::ContinentInformation(std::string name, int cv, int id) :
+	continentName(new std::string(name)), controlValue(new int(cv)), continentId(new int(id))
 {
 }
 
 ContinentInformation::~ContinentInformation()
 {
 	Utility::safeDelete(continentName);
-	Utility::safeDelete(continentId);
+	Utility::safeDelete(controlValue);
 }
 
 
@@ -56,7 +56,7 @@ CountryNode::CountryNode(CountryInformation * info) :
 {
 }
 
-CountryNode::CountryNode(CountryNode & node):
+CountryNode::CountryNode(const CountryNode & node):
 	countryInformation(new CountryInformation(*node.countryInformation)), visited(new bool(*node.visited)), neighbouringCountries(0), playerInfo(new PlayerNode())
 {
 }
@@ -67,7 +67,7 @@ CountryNode::~CountryNode()
 	Utility::safeDelete(visited);
 }
 
-Map::Map(std::vector<CountryInformation*> countries)
+Map::Map(std::vector<CountryInformation*> countries, std::vector<ContinentInformation*> continents)
 {
 	countriesGraph = new std::vector<CountryNode*>();
 	for (unsigned int i = 0; i < countries.size(); i++)
@@ -76,8 +76,8 @@ Map::Map(std::vector<CountryInformation*> countries)
 		countriesGraph->push_back(node);
 	}
 
+	continentsInfo = continents;
 	attachEdgesToNodes();
-
 	validateMap();
 
 }
@@ -92,9 +92,7 @@ Map::Map(Map & map)
 	}
 
 	attachEdgesToNodes();
-
 	validateMap();
-	
 }
 
 
@@ -119,15 +117,7 @@ void Map::validateMap()
 
 void Map::validateContinents()
 {
-	std::vector<int> continentsIds;
-	for (unsigned int i = 0; i < countriesGraph->size(); i++) 
-	{
-		auto continentId = *(*countriesGraph)[i]->countryInformation->continentId;
-		if (!Utility::vectorContains(continentsIds, continentId))
-		{
-			continentsIds.push_back(continentId);
-		}
-	}
+	std::vector<int> continentsIds = getContinentIds();
 
 	// This for loop goes through each continents, and tries to visit all the nodes inside that continent
 	for (unsigned int i = 0; i < continentsIds.size(); i++) 
@@ -146,6 +136,31 @@ void Map::validateContinents()
 		resetVisitedNodes(); // reset the nodes for the next test
 	}
 
+}
+
+vector<int> Map::getContinentIds() 
+{
+	vector<int> continentsIds;
+	for (unsigned int i = 0; i < countriesGraph->size(); i++)
+	{
+		auto continentId = *(*countriesGraph)[i]->countryInformation->continentId;
+		if (!Utility::vectorContains(continentsIds, continentId))
+		{
+			continentsIds.push_back({ continentId });
+		}
+	}
+	return continentsIds;
+}
+
+bool Map::checkUserContinents(int continentId, string playerName)
+{
+	for (unsigned int i = 0; i < countriesGraph->size(); i++) {
+		if (*(*countriesGraph)[i]->countryInformation->continentId == continentId &&
+			(*countriesGraph)[i]->playerInfo->getPlayer()->getPlayerName().compare(playerName)) {
+			return false;
+		}
+	}
+	return true;
 }
 
 //simple graph travelling algorithm (limited by continent)
@@ -224,6 +239,20 @@ CountryNode * Map::getNodeFromGraphById(int countryId)
 	throw 1;
 }
 
+
+
+CountryNode * Map::getNodeFromGraphByName(string countryName)
+{
+	for (unsigned int i = 0; i < countriesGraph->size(); i++)
+	{
+		if ((*countriesGraph)[i]->countryInformation->countryName->compare(countryName) == 0)
+		{
+			return (*countriesGraph)[i];
+		}
+	}
+	return nullptr;
+}
+
 int Map::getNumberOfCountriesInMap()
 {
 	int numberOfCountries = 0;
@@ -247,6 +276,18 @@ vector<CountryNode*> Map::getCountriesGraph()
 	}
 
 	return vect;
+}
+
+int Map::getContinentControlValue(int continentId)
+{
+	for (unsigned i = 0; i < continentsInfo.size(); i++) {
+		if (*continentsInfo[i]->continentId == continentId) {
+			return *continentsInfo[i]->controlValue;
+		}
+	}
+
+	//TODO: throw proper error code
+	throw -1;
 }
 
 
