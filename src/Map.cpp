@@ -250,7 +250,7 @@ CountryNode * Map::getNodeFromGraphByName(string countryName)
 			return (*countriesGraph)[i];
 		}
 	}
-	throw 1;
+	return nullptr;
 }
 
 int Map::getNumberOfCountriesInMap()
