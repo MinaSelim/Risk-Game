@@ -21,6 +21,6 @@ public:
 	DicesPrompt();
 	~DicesPrompt();
 
-	int getRolledNumberOfDice();
+	int getRolledNumberOfDice(bool attack, int armies);
 };
 

@@ -34,7 +34,6 @@ vector<int> DicesRoller::roll(int numDice) {
 	totalDiceRef = totalDiceRef + numDice;
 	
 	//make some random values between 1-6 and insert them in vector
-	cout << "You rolled the following: \n";
 
 	for (int i = 0; i < numDice; i++) 
 	{
@@ -43,10 +42,11 @@ vector<int> DicesRoller::roll(int numDice) {
 		rolledValues.insert(rolledValues.begin(), r);
 		cout << "[" << r << "] ";
 	}
-	std::cout << "\n";
+	cout << "\n";
 
 	sort(rolledValues.begin(), rolledValues.end());
-
+	//sorts high to low for compare wise
+	reverse(rolledValues.begin(), rolledValues.end());
 	addToRollHistory(rolledValues);
 
 	return rolledValues;
@@ -59,34 +59,25 @@ void DicesRoller::addToRollHistory(vector <int> roll)
 	//Came up to include them in the history vector
 	for (unsigned int i = 0; i < roll.size(); i++)
 	{
-		cout << *(*rollHistory)[0] +1<< endl;
-		getValueAt(1);
 		switch (roll[i]) 
 		{
-			
 			case 1: 
 				*(*rollHistory)[0]+=1;
-				cout << *(*rollHistory)[0] << endl;
 				break;
 			case 2: 
 				*(*rollHistory)[1]+=1;
-				cout << *(*rollHistory)[1] << endl;
 				break;
 			case 3:
 				*(*rollHistory)[2]+=1;
-				cout << *(*rollHistory)[2] << endl;
 				break;
 			case 4:
 				*(*rollHistory)[3]+=1;
-				cout << *(*rollHistory)[3] << endl;
 				break;
 			case 5:
 				*(*rollHistory)[4]+=1;
-				cout << *(*rollHistory)[4] << endl;
 				break;
 			case 6:
 				*(*rollHistory)[5]+=1;
-				cout << *(*rollHistory)[5] << endl;
 				break;
 
 		}
@@ -126,17 +117,24 @@ DicesPrompt::~DicesPrompt()
 }
 
 //IO for getting number of dice to roll
-int DicesPrompt::getRolledNumberOfDice()
+int DicesPrompt::getRolledNumberOfDice(bool attack, int armies)
 {
 	int numDice = 0;
+	int maxDice = 0;
 
-	cout << "How many dice will you roll?[1-3]: ";
-	cin >> numDice;
+	//if the player is attacking or defending the maximum number of dice changes
+	if (attack)
+		maxDice = 3;
+	else
+		maxDice = 2;
 
-	if (numDice > 3 || numDice < 1) 
+	do
 	{
-		throw INVALID_DICEROLL;
-	}
+		cout << "How many dice will you roll? ";
+		cin >> numDice;
+
+	} while (numDice > maxDice || numDice < 1 || numDice > (armies -1));
+	
 	return numDice;
 }
 
