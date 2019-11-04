@@ -580,16 +580,21 @@ void Player::attackSequence(CountryNode * attackingCountry, CountryNode * defend
 		cout << question << endl;
 		cin >> userInput;
 
-	} while (!userInput.compare("roll") == 0 && !userInput.compare("retreat"));
+	} while (!userInput.compare("roll") == 0 && !userInput.compare("retreat") == 0);
 		
 	if (userInput.compare("roll") == 0)
 	{
 		rollingSequence(attackingCountry, defendingCountry);
+		if (attackingCountry->playerInfo->getPlayer()->playerName->compare(*(defendingCountry->playerInfo->getPlayer()->playerName)) != 0
+			&& attackingCountry->playerInfo->getNumberOfArmies() != 1)
+		{
+			attackSequence(attackingCountry, defendingCountry);
+		}
 	}
 	if (userInput.compare("retreat") == 0)
 	{
 		cout << "You have retreated." << endl;
-		exit(0);
+		return;
 	}
 }
 
