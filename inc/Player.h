@@ -29,12 +29,13 @@ public:
 
 	void printListOfAllCountriesEnemies();
 	void printListOfCountryAdjacentEnemies(CountryNode & country);
-	vector<CountryNode*> getAdjacentEnemies(CountryNode & country);
-	bool isEnemy(CountryNode & country);
+	//vector<CountryNode*> getAdjacentEnemies(CountryNode & country);
+	bool isEnemy(string country);
 
 	string chooseAttackingCountry();
-	CountryNode * chooseCountryToBeAttacked(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToAttack);
-	int inListOfEnemyCountries(CountryNode * attackingCountry, CountryNode * chosenCountryToBeAttacked, bool modifyChosenCountryToBeAttacked);
+	string chooseCountryToBeAttacked(string chosenAttackingCountry);
+	//int inListOfEnemyCountries(CountryNode * attackingCountry, string chosenCountryToBeAttacked);
+	bool isEnemyNeighbor(CountryNode & country, string enemyNeighbor);
 
 	void rollingSequence(CountryNode * attackingCountry, CountryNode * defendingCountry);
 

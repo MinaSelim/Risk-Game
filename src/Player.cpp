@@ -268,6 +268,7 @@ void Player::printListOfAllCountriesEnemies()
 		
 		printListOfCountryAdjacentEnemies(*(*countries)[i]);
 	}
+	cout << "\n" << endl;
 }
 
 //Prints the countries that are neighbours and enemies with number of armies (country doesnt belong to player)
@@ -277,13 +278,14 @@ void Player::printListOfCountryAdjacentEnemies(CountryNode & country)
 
 	for (unsigned int i = 0; i < country.neighbouringCountries.size(); i++)
 	{
-		if (isEnemy(*country.neighbouringCountries[i]))
+		if (isEnemy(country.neighbouringCountries[i]->countryInformation->getCountryName()))
 		{
 			cout << *country.neighbouringCountries[i]->countryInformation->countryName << " (" << country.neighbouringCountries[i]->playerInfo->getNumberOfArmies() << ")" << endl;
 			countEnemies++;
 		}
 		
 	}
+	cout << "\n" << endl;
 
 	if (countEnemies == 0) 
 	{
@@ -291,24 +293,6 @@ void Player::printListOfCountryAdjacentEnemies(CountryNode & country)
 	}
 }
 
-//this method returns a list of all the countries neighbours that are enemies
-vector <CountryNode*> Player::getAdjacentEnemies(CountryNode & country)
-{
-	cout << "Executing the reinforce method" << endl;
-	vector <CountryNode*> listOfEnemies;
-
-	for (unsigned int i = 0; i < country.neighbouringCountries.size(); i++)
-	{
-		if (isEnemy(*country.neighbouringCountries[i]))
-		{
-			listOfEnemies.push_back(country.neighbouringCountries[i]);
-
-		}
-
-	}
-	return listOfEnemies;
-
-}
 
 void Player::addCountryOwnerShip(CountryNode * node, int numOfArmies)
 {
@@ -317,21 +301,19 @@ void Player::addCountryOwnerShip(CountryNode * node, int numOfArmies)
 		//add code to remove country
 	}
 
-	
 	node->playerInfo->setNumberOfArmies(numOfArmies);
 	node->playerInfo->assignPlayer(this);
 
 	countries->push_back(node);
-
 }
 
 //returns true if the country is an enemy country, false if not
-bool Player::isEnemy(CountryNode & country)
+bool Player::isEnemy(string country)
 {
 	bool isEnemy = true;
 	for (unsigned int i = 0; i < countries->size(); i++)
 	{
-		if ((*countries)[i]->countryInformation->countryName->compare(*country.countryInformation->countryName) == 0)
+		if ((*countries)[i]->countryInformation->countryName->compare(country) == 0)
 		{
 			//if the country passed is in the player country list then it is not an enemy
 			isEnemy = false;
@@ -344,36 +326,66 @@ bool Player::isEnemy(CountryNode & country)
 string Player::chooseAttackingCountry()
 {
 	string chosenCountry ="N/A";
-	int value = -1;
+	bool value = false;
 	do {
 		cout << "Which one of your countries will Attack? " << endl;
 		printListOfCountries();
 		cin >> chosenCountry;
 		value = inListOfCountries(chosenCountry);
 		//if the country has less than 2 armies reset value to -1, since you need minimum 2 armies to attack
-		if (getNumberOfArmyAtCountry(*chosenCountry.countryInformation->countryName) < 2)
-		{
-			cout << "You need a minimum of 2 armies to attack, please select a different country" << endl;
-			value = -1;
+		if (!value) {
+			cout << "The inserted country Name doesn't exist in the list of countries. Please Try again: \n\n" << endl;
 		}
-	} while (value == -1);
+		if (value) {
+			if (getNumberOfArmyAtCountry(chosenCountry) < 2)
+			{
+				cout << "You need a minimum of 2 armies to attack, please select a different country" << endl;
+				value = true;
+			}
+		}
+		
+	} while (!value);
 
-	return (*countries)[value];
+	return chosenCountry;
 }
 //this method will ask the user to pick a country to attack
-CountryNode * Player::chooseCountryToBeAttacked(CountryNode & chosenAttackingCountry, CountryNode & chosenCountryToBeAttacked)
+string Player::chooseCountryToBeAttacked(string chosenAttackingCountry)
 {
-	int value = -1;
+	string chosenCountryToBeAttacked;
+	bool value = false;
 	do {
 		cout << "Which country will be attacked?" << endl;
-		printListOfCountryAdjacentEnemies(chosenAttackingCountry);
-		cin >> *chosenCountryToBeAttacked.countryInformation->countryName;
-		value = inListOfEnemyCountries(&chosenAttackingCountry, &chosenCountryToBeAttacked, true);
-	} while (value == -1);
+		printListOfCountryAdjacentEnemies(*map->getNodeFromGraphByName(chosenAttackingCountry));
+		cin >> chosenCountryToBeAttacked;
+		value = isEnemy(chosenCountryToBeAttacked);
+		if (value) {
+			value = isEnemyNeighbor(*map->getNodeFromGraphByName(chosenAttackingCountry), chosenCountryToBeAttacked);
+		}
+		
+		//value = inListOfEnemyCountries(map->getNodeFromGraphByName(chosenAttackingCountry), chosenCountryToBeAttacked);
+	} while (!value);
 
-	vector <CountryNode*> enemies = getAdjacentEnemies(chosenAttackingCountry);
 
-	return enemies[value];
+		return chosenCountryToBeAttacked;
+
+}
+
+//this will verify if enemyNeighbor is actually an enemy of a country 
+bool Player::isEnemyNeighbor(CountryNode & country, string enemyNeighbor)
+{
+	for (unsigned int i = 0; i < country.neighbouringCountries.size(); i++)
+	{
+		if (country.neighbouringCountries[i]->countryInformation->getCountryName().compare(enemyNeighbor)==0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+
+void Player::reinforce()
+{
 
 	cout << endl << "Executing the reinforce method" << endl;
 
@@ -432,53 +444,8 @@ void Player::placeArmiesOnCountries() {
 	setNumberOfArmies(getNumberOfArmies() - chosenArmyNumber);
 }
 
-// Check how many continents the user owns and return the cnotrol-value of that continent
-int Player::getArmiesAccordingToContinents()
-{
-	int armies = 0;
-	std::vector<int> continentsIdOwned;
-	std::vector<int> continentIds = map->getContinentIds();
-
-	// Checking how many continents user owns
-	for (unsigned int i = 0; i < continentIds.size(); i++) {
-		if (map->checkUserContinents(continentIds[i], *playerName)) {
-			continentsIdOwned.push_back(continentIds[i]);
-		}
-	}
-
-	cout << endl << "Player has " << continentsIdOwned.size() << " continents" << endl;
-
-	for (unsigned i = 0; i < continentsIdOwned.size(); i++) {
-		armies += map->getContinentControlValue(continentsIdOwned[i] - 1);
-	}
-	return armies;
-}
-
-//This method will verify if the country is in the list of enemy countries adjacent to the other ones
-int Player::inListOfEnemyCountries(CountryNode * attackingCountry, CountryNode * chosenCountryToBeAttacked, bool modifyChosenCountryToBeAttacked)
-{	
-	vector <CountryNode*> enemies = getAdjacentEnemies(*attackingCountry);
-
-	int indexAt = -1;
-	string countryName = *chosenCountryToBeAttacked->countryInformation->countryName;
-	for (unsigned int i = 0; i < enemies.size(); ++i)
-	{
-		
-		if ((enemies)[i]->countryInformation->countryName->compare(countryName) == 0)
-		{
-			indexAt = i;
-			if (modifyChosenCountryToBeAttacked)
-			{
-				chosenCountryToBeAttacked = enemies[i];
-			}
-			break;
-		}
-	}
-	return indexAt;
-}
 //this method handles the attacking sequence, player can either anihilate, roll, retreat
 //when an army takes over another country, transfer troops to conquered country
-
 void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defendingCountry)
 {
 	Player * defender = defendingCountry->playerInfo->getPlayer();
@@ -591,6 +558,7 @@ void Player::attackSequence(CountryNode * attackingCountry, CountryNode * defend
 	}
 }
 
+//The method will return the number of armies a player deserves according to the number of contitents they rule.
 int Player::getArmiesAccordingToContinents()
 {
 	int armies = 0;
@@ -624,13 +592,12 @@ void Player::attack()
 			if (userConfirmation(question).compare("yes") == 0)
 			{
 				//temp is just so it follows constructor format
-				vector<int> neightboursIds;
 				string attackingCountry;
 				string defendingCountry;
 				printListOfAllCountriesEnemies();
 				attackingCountry = chooseAttackingCountry();
-				defendingCountry = chooseCountryToBeAttacked(*attackingCountry, *defendingCountry);
-				attackSequence(attackingCountry, defendingCountry);
+				defendingCountry = chooseCountryToBeAttacked(attackingCountry);
+				attackSequence(map->getNodeFromGraphByName(attackingCountry),map->getNodeFromGraphByName(defendingCountry));
 			}
 			else if (userConfirmation(question).compare("no") == 0)
 			{

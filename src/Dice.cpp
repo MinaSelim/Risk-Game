@@ -123,17 +123,46 @@ int DicesPrompt::getRolledNumberOfDice(bool attack, int armies)
 	int maxDice = 0;
 
 	//if the player is attacking or defending the maximum number of dice changes
+
 	if (attack)
-		maxDice = 3;
-	else
-		maxDice = 2;
-
-	do
 	{
-		cout << "How many dice will you roll? ";
-		cin >> numDice;
+		maxDice = 3;
+		do
+		{
+			cout << "How many dice will you roll? ";
+			cin >> numDice;
 
-	} while (numDice > maxDice || numDice < 1 || numDice > (armies -1));
+			if (numDice > maxDice || numDice < 1) 
+			{
+				cout << "Cannot roll more than 3 dice or less than 1" << endl;
+			}
+			if (numDice > (armies - 1))
+			{
+				cout << "Cannot roll more than one dice because you have only two arrmies and you need to leave at least one behind" << endl;
+			}
+
+		} while (numDice > maxDice || numDice < 1 || numDice >(armies - 1));
+	}
+	else
+	{
+		maxDice = 2;
+		do
+		{
+			cout << "How many dice will you roll? ";
+			cin >> numDice;
+
+			if (numDice > maxDice || numDice < 1)
+			{
+				cout << "Cannot roll more than 2 dice or less than 1" << endl;
+			}
+			if (numDice > armies)
+			{
+				cout << "Cannot roll more dice than armies you own" << endl;
+			}
+
+		} while (numDice > maxDice || numDice < 1 || numDice > armies );
+	}
+	
 	
 	return numDice;
 }
