@@ -499,7 +499,7 @@ void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defen
 	
 	cout << "Defender choose the number of dice you will roll: " << endl;
 	//get number of dice to roll for defender, max 2, or armies - 1
-	defenderNumDice = dicesPrompt->getRolledNumberOfDice(false, attackerArmies);
+	defenderNumDice = dicesPrompt->getRolledNumberOfDice(false, defenderArmies);
 	
 	//attacker rolls (maximum of 3 dice)
 	cout << "Attacker rolls the following:" << endl;
@@ -627,7 +627,7 @@ void Player::attack()
 				printListOfAllCountriesEnemies();
 				attackingCountry = chooseAttackingCountry();
 				defendingCountry = chooseCountryToBeAttacked(attackingCountry);
-				if (defendingCountry.compare("cancel") != 0);
+				if (defendingCountry.compare("cancel") != 0)
 				{
 					attackSequence(map->getNodeFromGraphByName(attackingCountry), map->getNodeFromGraphByName(defendingCountry));
 				}
