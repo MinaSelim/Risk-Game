@@ -40,7 +40,7 @@ void PlayerDriver::PlayerTester()
 
 	//Normally Testing fortify:
 	player->fortify();
-	
+
 	//Will call the reinforce method and try to use the cards which will fail because the player doesn't have any yet:
 	player->reinforce();
 	player->getHandOfCards()->pickACard(deck);
@@ -51,11 +51,9 @@ void PlayerDriver::PlayerTester()
 	player->getHandOfCards()->pickACard(deck);
 	player->getHandOfCards()->pickACard(deck);
 
-	//The player will be able to exchange cards:
+	//The player will be able to exchange cards forcibly because they have 5 cards
 	player->reinforce();
 
 	player->attack();
-
-
-
+	player->printListOfCountries();
 }

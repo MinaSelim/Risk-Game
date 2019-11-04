@@ -85,6 +85,13 @@ void GameEngine::startGame()
 	mainLoop();
 }
 
+void GameEngine::assignTheWorldToAPlayer() {
+	auto countryGraphShallowCopy = map->getCountriesGraph();
+	for (unsigned int i = 0; i < countryGraphShallowCopy.size(); i++)
+	{
+		(*listOfPlayers)[0]->addCountryOwnerShip(countryGraphShallowCopy[i], 1);
+	}
+}
 
 void GameEngine::setupGame()
 {
@@ -140,7 +147,7 @@ void GameEngine::mainLoop()
 		currentPlayer = (++currentPlayer) % listOfPlayers->size();
 	}
 
-	cout << "The winner is " << (*listOfPlayers)[currentPlayer]->getPlayerName();
+	cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName();
 	
 }
 

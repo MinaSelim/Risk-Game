@@ -3,9 +3,12 @@
 #include "PlayerDriver.h"
 int main()
 {
-	/*GameEngine e;
-	e.startGame();*/
+	GameEngine e;
+	//e.startGame();
+	e.setupGame();
+	e.assignTheWorldToAPlayer();
+	e.mainLoop();
 
-	PlayerDriver::PlayerTester();
+	//PlayerDriver::PlayerTester();
 }
 

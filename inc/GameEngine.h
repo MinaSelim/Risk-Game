@@ -24,13 +24,13 @@ private:
 
 public:
 	GameEngine();
+	bool gameWon();
 	void startGame();
-private:
-
+	void assignTheWorldToAPlayer();
 	void setupGame();
 	void mainLoop();
+private:
 	void chooseMap();
-	bool gameWon();
 	int selectPlayersNumber();
 };
 
