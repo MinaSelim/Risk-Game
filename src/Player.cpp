@@ -458,6 +458,9 @@ void Player::transferDefeatedCountry(CountryNode * attackingCountry, CountryNode
 	//update attacking country after army transfer
 	attackingCountry->playerInfo->setNumberOfArmies(attackerArmies);
 
+	//add new country to player country list
+	
+	//?? how to disconnect country from old player
 }
 
 void Player::attackSequence(CountryNode * attackingCountry, CountryNode * defendingCountry)
