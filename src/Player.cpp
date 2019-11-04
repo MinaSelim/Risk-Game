@@ -476,7 +476,7 @@ void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defen
 void Player::transferDefeatedCountry(CountryNode * attackingCountry, CountryNode * defendingCountry)
 {
 	int attackerArmies = attackingCountry->playerInfo->getNumberOfArmies();
-	string attackingPlayerName = attackingCountry->playerInfo->getPlayer();
+	Player * attackPlayer = attackingCountry->playerInfo->getPlayer;
 	string attackingCountryName = *attackingCountry->countryInformation->countryName;
 	int numArmiesToTransfer = 0;
 	do
@@ -486,7 +486,7 @@ void Player::transferDefeatedCountry(CountryNode * attackingCountry, CountryNode
 	} while (numArmiesToTransfer < 0 || numArmiesToTransfer > attackerArmies - 1);
 
 	//update defending country with player name and number of armies
-	defendingCountry->playerInfo->setPlayerName(attackingPlayerName);
+	defendingCountry->playerInfo->assignPlayer(attackPlayer);
 	defendingCountry->playerInfo->setNumberOfArmies(numArmiesToTransfer);
 
 	attackerArmies = attackerArmies - numArmiesToTransfer;
