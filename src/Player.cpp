@@ -599,7 +599,7 @@ void Player::attack()
 				defendingCountry = chooseCountryToBeAttacked(attackingCountry);
 				attackSequence(map->getNodeFromGraphByName(attackingCountry),map->getNodeFromGraphByName(defendingCountry));
 			}
-			else if (userConfirmation(question).compare("no") == 0)
+			else
 			{
 				repeat = false;
 			}
