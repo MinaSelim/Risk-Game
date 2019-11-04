@@ -27,6 +27,24 @@ public:
 	void setNumberOfArmyAtCountry(CountryNode & country, int armies);
 	void addCountryOwnerShip(CountryNode * node, int numOfArmies);
 
+	void printListOfAllCountriesEnemies();
+	void printListOfCountryAdjacentEnemies(CountryNode & country);
+	//vector<CountryNode*> getAdjacentEnemies(CountryNode & country);
+	bool isEnemy(string country);
+
+	string chooseAttackingCountry();
+	string chooseCountryToBeAttacked(string chosenAttackingCountry);
+	//int inListOfEnemyCountries(CountryNode * attackingCountry, string chosenCountryToBeAttacked);
+	bool isEnemyNeighbor(CountryNode & country, string enemyNeighbor);
+
+	void rollingSequence(CountryNode * attackingCountry, CountryNode * defendingCountry);
+
+	void transferDefeatedCountry(CountryNode * attackingCountry, CountryNode * defendingCountry);
+	void attackSequence(CountryNode * attackingCountry, CountryNode * countryToBeAttacked);
+
+	
+	
+
 	void reinforce();
 	void attack();
 	void fortify();

@@ -17,42 +17,26 @@ void PlayerDriver::PlayerTester()
 	kok->at(0)->playerInfo->setNumberOfArmies(12);
 	kok->at(1)->playerInfo->setNumberOfArmies(4);
 	kok->at(1)->playerInfo->setPlayerName("Hambrsoom");
-	Player* player2 = new Player();
-	player2->fortify();
 
-	DicesPrompt * dicesPrompt = new DicesPrompt();
-	Deck* deck = new Deck(map->getNumberOfCountriesInMap());
-
+	std::vector<CountryNode*> *  patrickCountries = new std::vector< CountryNode*>();
 	
-	cout << "The deck has " << deck->getSize() << " " << " cards" << endl;
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	cout << "The deck is left with " << deck->getSize() << " " << " cards" << endl;
+	patrickCountries->push_back(mapNode->neighbouringCountries[1]);
+	patrickCountries->push_back(mapNode->neighbouringCountries[2]);
+	Player* player2 = new Player("Patrick", patrickCountries);
+	patrickCountries->at(0)->playerInfo->setPlayerName("Patrick");
+	patrickCountries->at(0)->playerInfo->setNumberOfArmies(10);
+	patrickCountries->at(1)->playerInfo->setNumberOfArmies(20);
+	patrickCountries->at(1)->playerInfo->setPlayerName("Patrick");
 
-	
-	cout << "The deck has " << deck->getSize() << " " << " cards" << endl;
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	cout << "The deck is left with " << deck->getSize() << " " << " cards" << endl;
+	cout << "Player 2 turn to fortify" << endl;
+	player2->attack();
 
-	
-	cout << "The deck has " << deck->getSize() << " " << " cards" << endl;
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	player->getHandOfCards()->pickACard(deck);
-	cout << "The deck is left with " << deck->getSize() << " " << " cards" << endl;
-
+<<<<<<< HEAD
+	/*DicesPrompt * dicesPrompt = new DicesPrompt();
+	Deck* deck = new Deck(map->getNumberOfCountriesInMap());*/
 	//Testing the functionality of the three methods:
 	//player->attack();
 	//player->fortify();
 	//player->reinforce();
-	*/
+
 }

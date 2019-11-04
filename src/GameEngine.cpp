@@ -101,7 +101,7 @@ void GameEngine::setupGame()
 	while (countryGraphShallowCopy.size())
 	{
 		int randomCountry = rand() % countryGraphShallowCopy.size();
-		(*listOfPlayers)[currentPlayer]->addCountryOwnerShip(countryGraphShallowCopy[randomCountry], 1);
+		(*listOfPlayers)[currentPlayer]->addCountryOwnerShip(countryGraphShallowCopy[randomCountry], 2);
 
 		countryGraphShallowCopy.erase(countryGraphShallowCopy.begin() + randomCountry);
 

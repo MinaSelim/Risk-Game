@@ -32,6 +32,7 @@ class PlayerNode {
 private:
 	Player * player;
 	int * numOfArmies;
+	
 public:
 	PlayerNode();
 	PlayerNode(Player * player, int armies);
