@@ -26,6 +26,7 @@
     <ClInclude Include="inc\Map.h" />
     <ClInclude Include="inc\MapLoader.h" />
     <ClInclude Include="inc\Player.h" />
+    <ClInclude Include="inc\PlayerDriver.h" />
     <ClInclude Include="inc\Utility.h" />
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +37,7 @@
     <ClCompile Include="src\Map.cpp" />
     <ClCompile Include="src\MapLoader.cpp" />
     <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\PlayerDriver.cpp" />
     <ClCompile Include="src\Utility.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

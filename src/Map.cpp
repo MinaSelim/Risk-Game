@@ -155,6 +155,9 @@ vector<int> Map::getContinentIds()
 bool Map::checkUserContinents(int continentId, string playerName)
 {
 	for (unsigned int i = 0; i < countriesGraph->size(); i++) {
+		if ((*countriesGraph)[i]->playerInfo->getPlayer() == nullptr) {
+			return false;
+		}
 		if (*(*countriesGraph)[i]->countryInformation->continentId == continentId &&
 			(*countriesGraph)[i]->playerInfo->getPlayer()->getPlayerName().compare(playerName)) {
 			return false;

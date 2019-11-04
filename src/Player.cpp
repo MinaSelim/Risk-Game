@@ -407,32 +407,37 @@ bool Player::isEnemyNeighbor(CountryNode & country, string enemyNeighbor)
 
 void Player::reinforce()
 {
+	if (countries->size() != 0) {
+		cout << endl << "Executing the reinforce method" << endl;
 
-	cout << endl << "Executing the reinforce method" << endl;
+		int countriesToBePlaced = countries->size() / 3;
+		if (countriesToBePlaced < 3) {
+			countriesToBePlaced = 3;
+		}
+		setNumberOfArmies(countriesToBePlaced + getNumberOfArmies());
 
-	int countriesToBePlaced = countries->size() / 3;
-	if (countriesToBePlaced < 3) {
-		countriesToBePlaced = 3;
+		cout << "Player " << getPlayerName() << " has " << countries->size() << " countries, this will give him "
+			<< countriesToBePlaced << " armies. The user now has " << getNumberOfArmies() << " armies." << endl;
+
+		int armiesContinents = getArmiesAccordingToContinents();
+		setNumberOfArmies(armiesContinents + getNumberOfArmies());
+		cout << "Player " << getPlayerName() << " will get " << armiesContinents << " from his continents" << endl;
+
+		int cardsExchangeArmies = hand->exchange();
+		setNumberOfArmies(cardsExchangeArmies + getNumberOfArmies());
+
+		cout << "Player " << getPlayerName() << " acquired " << cardsExchangeArmies << " armies from exchanging cards " << ". User now has "
+			<< getNumberOfArmies() << endl;
+
+		do {
+			placeArmiesOnCountries();
+		} while (getNumberOfArmies() > 0);
 	}
-	setNumberOfArmies(countriesToBePlaced + getNumberOfArmies());
-
-	cout << "Player" << getPlayerName() << " has " << countries->size() << " countries, this will give him "
-		<< countriesToBePlaced << " armies. The user now has " << getNumberOfArmies() << " armies." << endl;
-
-	int armiesContinents = getArmiesAccordingToContinents();
-	setNumberOfArmies(armiesContinents + getNumberOfArmies());
-	cout << "Player" << getPlayerName() << " will get " << armiesContinents << " from his continents" << endl;
-
-	int cardsExchangeArmies = hand->exchange();
-	setNumberOfArmies(cardsExchangeArmies + getNumberOfArmies());
-
-	cout << "Player" << getPlayerName() << " acquired " << cardsExchangeArmies << " armies from exchanging cards " << ". User now has "
-		<< getNumberOfArmies() << endl;
-
-	do {
-		placeArmiesOnCountries();
-	} while (getNumberOfArmies() > 0);
-
+	else
+	{
+		cout << "You don't have any country to reinforce" << endl;
+	}
+	
 }
 
 
@@ -499,7 +504,7 @@ void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defen
 	
 	cout << "Defender choose the number of dice you will roll: " << endl;
 	//get number of dice to roll for defender, max 2, or armies - 1
-	defenderNumDice = dicesPrompt->getRolledNumberOfDice(false, defenderArmies);
+	defenderNumDice = dicesPrompt->getRolledNumberOfDice(false, attackerArmies);
 	
 	//attacker rolls (maximum of 3 dice)
 	cout << "Attacker rolls the following:" << endl;
@@ -638,7 +643,10 @@ void Player::attack()
 			}
 
 		} while (repeat);
-		
+	}
+	else 
+	{
+		cout << "You don't have any country to attack another one" << endl;
 	}
 }
 
