@@ -31,6 +31,7 @@ void PlayerDriver::PlayerTester()
 	cout << "Player 2 turn to fortify" << endl;
 	player2->attack();
 
+<<<<<<< HEAD
 	/*DicesPrompt * dicesPrompt = new DicesPrompt();
 	Deck* deck = new Deck(map->getNumberOfCountriesInMap());*/
 	//Testing the functionality of the three methods:
