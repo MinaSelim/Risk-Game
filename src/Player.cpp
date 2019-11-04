@@ -312,25 +312,6 @@ void Player::addCountryOwnerShip(CountryNode * node, int numOfArmies)
 
 }
 
-
-//Reinforce Part:
-void Player::reinforce()
-{
-	vector <CountryNode*> listOfEnemies;
-
-	for (unsigned int i = 0; i < country.neighbouringCountries.size(); i++)
-	{
-		if (isEnemy(*country.neighbouringCountries[i]))
-		{
-			listOfEnemies.push_back(country.neighbouringCountries[i]);
-			
-		}
-
-	}
-	return listOfEnemies;
-	
-}
-
 //returns true if the country is an enemy country, false if not
 bool Player::isEnemy(CountryNode & country)
 {
@@ -408,15 +389,12 @@ int Player::inListOfEnemyCountries(CountryNode * attackingCountry, CountryNode *
 
 void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defendingCountry)
 {
-	DicesRoller * defenderDice = new DicesRoller();
+	Player * defender = defendingCountry->playerInfo->getPlayer();
 	DicesPrompt * dicesPrompt = new DicesPrompt();
 
 	//get armies for attacker and defender
-
 	int attackerArmies = attackingCountry->playerInfo->getNumberOfArmies();
 	int defenderArmies = defendingCountry->playerInfo->getNumberOfArmies();
-	
-
 	cout << "Attacker has " << attackerArmies << " armies." << endl;
 	cout << "Defender has " << defenderArmies << " armies." << endl;
 
@@ -440,7 +418,7 @@ void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defen
 
 	//defender rolls (maximum of 2 dice)
 	cout << "Defender rolls the following:" << endl;
-	defenderRoll = defenderDice->roll(defenderNumDice);
+	defenderRoll = defender->dice->roll(defenderNumDice);
 	
 	//compare dice
 	//since they are sorted we compare the pairs
@@ -468,7 +446,6 @@ void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defen
 		transferDefeatedCountry(attackingCountry, defendingCountry);
 	}
 
-	delete defenderDice;
 	delete dicesPrompt;
 }
 
@@ -476,26 +453,20 @@ void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defen
 void Player::transferDefeatedCountry(CountryNode * attackingCountry, CountryNode * defendingCountry)
 {
 	int attackerArmies = attackingCountry->playerInfo->getNumberOfArmies();
-	Player * attackPlayer = attackingCountry->playerInfo->getPlayer;
-	string attackingCountryName = *attackingCountry->countryInformation->countryName;
+	string defendingCountryName = *defendingCountry->countryInformation->countryName;
 	int numArmiesToTransfer = 0;
 	do
 	{
-		cout << "How many armies will you transfer to " << attackingCountryName << " select between 1 - " << (attackerArmies - 1) << endl;
+		cout << "How many armies will you transfer to " << defendingCountryName << " select between 1 - " << (attackerArmies - 1) << endl;
 		cin >> numArmiesToTransfer;
 	} while (numArmiesToTransfer < 0 || numArmiesToTransfer > attackerArmies - 1);
 
-	//update defending country with player name and number of armies
-	defendingCountry->playerInfo->assignPlayer(attackPlayer);
-	defendingCountry->playerInfo->setNumberOfArmies(numArmiesToTransfer);
-
-	attackerArmies = attackerArmies - numArmiesToTransfer;
 	//update attacking country after army transfer
+	attackerArmies = attackerArmies - numArmiesToTransfer;
 	attackingCountry->playerInfo->setNumberOfArmies(attackerArmies);
-
 	//add new country to player country list
+	addCountryOwnerShip(defendingCountry, numArmiesToTransfer);
 	
-	//?? how to disconnect country from old player
 }
 
 void Player::attackSequence(CountryNode * attackingCountry, CountryNode * defendingCountry)

@@ -45,7 +45,7 @@ vector<int> DicesRoller::roll(int numDice) {
 	cout << "\n";
 
 	sort(rolledValues.begin(), rolledValues.end());
-	//sorts high to low for compare wise
+	//sorts high to low for compare wise pairs
 	reverse(rolledValues.begin(), rolledValues.end());
 	addToRollHistory(rolledValues);
 
