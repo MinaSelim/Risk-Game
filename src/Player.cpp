@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Player.h"
+#include "ErrorCodes.h"
 #include <iostream>
 
 using namespace std;
@@ -296,9 +297,24 @@ void Player::printListOfCountryAdjacentEnemies(CountryNode & country)
 
 void Player::addCountryOwnerShip(CountryNode * node, int numOfArmies)
 {
-	if (node->playerInfo)
+	if (node->playerInfo->getPlayer())
 	{
-		//add code to remove country
+		auto playerCountries = node->playerInfo->getPlayer()->countries;
+		int index = -1;
+		for (unsigned int i = 0; i < playerCountries->size(); i++)
+		{
+			if ((*playerCountries)[i]->countryInformation->countryId == node->countryInformation->countryId)
+			{
+				index = i; 
+				break;
+			}
+		}
+
+		if (index == -1)
+			throw ERROR;
+
+		playerCountries->erase(playerCountries->begin() + index);
+
 	}
 
 	node->playerInfo->setNumberOfArmies(numOfArmies);
@@ -354,12 +370,17 @@ string Player::chooseCountryToBeAttacked(string chosenAttackingCountry)
 	string chosenCountryToBeAttacked;
 	bool value = false;
 	do {
-		cout << "Which country will be attacked?" << endl;
+		cout << "Which country will be attacked? (type cancel to cancel attack)" << endl;
 		printListOfCountryAdjacentEnemies(*map->getNodeFromGraphByName(chosenAttackingCountry));
 		cin >> chosenCountryToBeAttacked;
 		value = isEnemy(chosenCountryToBeAttacked);
 		if (value) {
 			value = isEnemyNeighbor(*map->getNodeFromGraphByName(chosenAttackingCountry), chosenCountryToBeAttacked);
+		}
+
+		if (chosenCountryToBeAttacked.compare("cancel") == 0)
+		{
+			return "cancel";
 		}
 		
 		//value = inListOfEnemyCountries(map->getNodeFromGraphByName(chosenAttackingCountry), chosenCountryToBeAttacked);
@@ -422,8 +443,17 @@ void Player::placeArmiesOnCountries() {
 	string chosenCountry = "N/A";
 	chosenCountry = choosingCountry();
 
-	cout << "Choose how many armies you wish to place (Between 1 - " << getNumberOfArmies() << ")" << endl;
-	cin >> chosenArmyNumber;
+	if (getNumberOfArmies() == 1)
+	{
+		chosenArmyNumber = 1;
+	}
+	else
+	{
+		cout << "Choose how many armies you wish to place (Between 1 - " << getNumberOfArmies() << ")" << endl;
+		cin >> chosenArmyNumber;
+	}
+
+
 
 	while (chosenArmyNumber < 1 || getNumberOfArmies() < chosenArmyNumber) {
 		cout << "You don't have enough armies please choose again: ";
@@ -597,9 +627,12 @@ void Player::attack()
 				printListOfAllCountriesEnemies();
 				attackingCountry = chooseAttackingCountry();
 				defendingCountry = chooseCountryToBeAttacked(attackingCountry);
-				attackSequence(map->getNodeFromGraphByName(attackingCountry),map->getNodeFromGraphByName(defendingCountry));
+				if (defendingCountry.compare("cancel") != 0);
+				{
+					attackSequence(map->getNodeFromGraphByName(attackingCountry), map->getNodeFromGraphByName(defendingCountry));
+				}
 			}
-			else if (userConfirmation(question).compare("no") == 0)
+			else
 			{
 				repeat = false;
 			}

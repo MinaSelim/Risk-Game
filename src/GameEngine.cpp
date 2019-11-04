@@ -88,12 +88,6 @@ void GameEngine::startGame()
 
 void GameEngine::setupGame()
 {
-	const int MAX_INITIAL_NUMBER_OF_TROOPS = 40;
-	int initialNumberOfTroops = MAX_INITIAL_NUMBER_OF_TROOPS - ((listOfPlayers->size() - 2) * 5);
-	for (unsigned int i = 0; i < listOfPlayers->size(); i++)
-	{
-		(*listOfPlayers)[i]->setNumberOfArmies(initialNumberOfTroops);
-	}
 
 	int currentPlayer = rand() % listOfPlayers->size();
 	auto countryGraphShallowCopy = map->getCountriesGraph();
@@ -101,7 +95,7 @@ void GameEngine::setupGame()
 	while (countryGraphShallowCopy.size())
 	{
 		int randomCountry = rand() % countryGraphShallowCopy.size();
-		(*listOfPlayers)[currentPlayer]->addCountryOwnerShip(countryGraphShallowCopy[randomCountry], 2);
+		(*listOfPlayers)[currentPlayer]->addCountryOwnerShip(countryGraphShallowCopy[randomCountry], 1);
 
 		countryGraphShallowCopy.erase(countryGraphShallowCopy.begin() + randomCountry);
 
@@ -112,8 +106,23 @@ void GameEngine::setupGame()
 	{
 		cout << "player " << i << endl;
 		(*listOfPlayers)[i]->printListOfCountries();
+		cout << endl;
 	}
 
+	const int MAX_INITIAL_NUMBER_OF_TROOPS = 5;
+	int troopsLeftToPlace = MAX_INITIAL_NUMBER_OF_TROOPS - ((listOfPlayers->size() - 2) * 5); //formula to calculate number of initial troops
+
+	while (troopsLeftToPlace > 0)
+	{
+		std::cout << "Troops left to place : " << troopsLeftToPlace <<endl; 
+		for (unsigned int i = 0; i < listOfPlayers->size(); i++)
+		{
+			(*listOfPlayers)[i]->setNumberOfArmies(1);
+			(*listOfPlayers)[i]->placeArmiesOnCountries();
+		}
+
+		troopsLeftToPlace--;
+	}
 }
 
 void GameEngine::mainLoop()
