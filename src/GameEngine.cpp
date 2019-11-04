@@ -23,7 +23,7 @@ GameEngine::GameEngine()
 
 }
 
-void GameEngine::chooseMap()
+void GameEngine::chooseMap() // Function that lets the users select a map
 {
 	std::vector<string> mapsNames = FileIO::readDirectory(MAPS_DIRECTORY);
 	std::cout << "Select a map: \n";
@@ -39,7 +39,7 @@ void GameEngine::chooseMap()
 	}
 	catch (int /*i*/)
 	{
-		cout << "You selected an Invalid map, please try a different map";
+		cout << "You selected an Invalid map, please try a different map"; // It means the map in invalid
 		chooseMap();
 	}
 
@@ -50,7 +50,7 @@ bool GameEngine::gameWon()
 	auto countryGraph = map->getCountriesGraph();
 
 	auto firstNode = map->getFirstNode();
-	for (unsigned int i = 1; i < countryGraph.size(); i++)
+	for (unsigned int i = 1; i < countryGraph.size(); i++) //Checks if one player owns all the countries
 	{
 		if (countryGraph[i]->playerInfo->getPlayer()->getPlayerName().compare(firstNode->playerInfo->getPlayer()->getPlayerName()))
 		{
@@ -62,7 +62,7 @@ bool GameEngine::gameWon()
 }
 
 
-int GameEngine::selectPlayersNumber()
+int GameEngine::selectPlayersNumber() //Selection for number of players
 {
 	int userInput = 0;
 	do {
@@ -79,13 +79,14 @@ int GameEngine::selectPlayersNumber()
 	return userInput;
 }
 
-void GameEngine::startGame()
+void GameEngine::startGame() //Starts the game
 {
 	setupGame();
 	mainLoop();
 }
 
-void GameEngine::assignTheWorldToAPlayer() {
+void GameEngine::assignTheWorldToAPlayer()// A testing Function that assigns the entire world to a player
+{
 	auto countryGraphShallowCopy = map->getCountriesGraph();
 	for (unsigned int i = 0; i < countryGraphShallowCopy.size(); i++)
 	{
@@ -99,6 +100,7 @@ void GameEngine::setupGame()
 	int currentPlayer = rand() % listOfPlayers->size();
 	auto countryGraphShallowCopy = map->getCountriesGraph();
 
+	//This loop randomly assigns countries to players.
 	while (countryGraphShallowCopy.size())
 	{
 		int randomCountry = rand() % countryGraphShallowCopy.size();
@@ -109,6 +111,7 @@ void GameEngine::setupGame()
 		currentPlayer = (++currentPlayer) % listOfPlayers->size();
 	}
 
+	//This prints the new values
 	for (unsigned int i = 0; i < listOfPlayers->size(); i++)
 	{
 		cout << "player " << i << endl;
@@ -116,7 +119,7 @@ void GameEngine::setupGame()
 		cout << endl;
 	}
 
-	const int MAX_INITIAL_NUMBER_OF_TROOPS = 5;
+	const int MAX_INITIAL_NUMBER_OF_TROOPS = 40;
 	int troopsLeftToPlace = MAX_INITIAL_NUMBER_OF_TROOPS - ((listOfPlayers->size() - 2) * 5); //formula to calculate number of initial troops
 
 	while (troopsLeftToPlace > 0)
@@ -132,7 +135,7 @@ void GameEngine::setupGame()
 	}
 }
 
-void GameEngine::mainLoop()
+void GameEngine::mainLoop() // main game loop, runs until the game ends
 {
 	int currentPlayer = rand() % listOfPlayers->size();
 	while (true)
@@ -153,7 +156,7 @@ void GameEngine::mainLoop()
 
 std::vector<string> FileIO::readDirectory(const std::string& directoryName)
 {
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__) // This is windows only Compatible code
 	std::vector<string> directoryVector;
 	std::string pattern(directoryName);
 	pattern.append("\\*");
@@ -169,6 +172,7 @@ std::vector<string> FileIO::readDirectory(const std::string& directoryName)
 		} while (FindNextFile(hFind, &data) != 0);
 FindClose(hFind);
 	}
+	//The #else contains untested code for Linux
 #else
 	std::vector<string> directoryVector;
 	DIR* dirp = opendir(directoryName.c_str());
