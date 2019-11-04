@@ -9,7 +9,7 @@ namespace MapLoader {
 namespace {
 	void seekFileStreamToLine(std::ifstream & inputStream, std::string lineContent);
 	CountryInformation * createCountryInformation(char * countryInfo);
-	ContinentInformation * createContinentInformation(char * continentInfo);
+	ContinentInformation * createContinentInformation(char * continentInfo, int continentId);
 	void createBordersInformation(char * bordersInfo, std::vector<CountryInformation*>  countries);
 	void pushNeighbouringCountry(std::vector<CountryInformation*> countries, int id, std::vector<int> neighbouringIds);
 }

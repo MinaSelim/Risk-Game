@@ -23,6 +23,8 @@ Map * MapLoader::loadMap(std::string fileName)
 	std::streamsize  count = 400;
 	char nextLine[400];
 
+	int continentId = 0;
+
 	while (!mapFile.eof())
 	{
 		mapFile.getline(nextLine, count);
@@ -33,8 +35,9 @@ Map * MapLoader::loadMap(std::string fileName)
 		mapFile.getline(nextLine, count);
 
 		while (std::string("[countries]").compare(nextLine)) {
+			continentId++;
 			if (std::string("").compare(nextLine)) {
-				continents.push_back(createContinentInformation(nextLine));
+				continents.push_back(createContinentInformation(nextLine, continentId));
 			}
 			mapFile.getline(nextLine, count);
 		}
@@ -58,7 +61,7 @@ Map * MapLoader::loadMap(std::string fileName)
 		}
 	}
 
-	Map * map = new Map(countries);
+	Map * map = new Map(countries, continents);
 	return map;
 }
 
@@ -117,7 +120,7 @@ namespace
 
 	}
 
-	ContinentInformation * createContinentInformation(char * continentInfo)
+	ContinentInformation * createContinentInformation(char * continentInfo, int id)
 	{
 		char * token = nullptr;
 		char * context = nullptr;
@@ -127,9 +130,9 @@ namespace
 		std::string continentName = token;
 
 		token = strtok_s(nullptr, delim, &context);
-		int continentId = Utility::convertCStringToNumber(token);
+	int controlValue = Utility::convertCStringToNumber(token);
 
-		ContinentInformation * info = new ContinentInformation(continentName, continentId);
+	ContinentInformation * info = new ContinentInformation(continentName, controlValue, id);
 
 		while (token != nullptr)
 		{

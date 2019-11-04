@@ -12,13 +12,13 @@ Player::Player() :playerName(new string("Player")), countries (new vector<Countr
 {
 }
 
-Player::Player(string playerName) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
-numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()) 
+Player::Player(string playerName, Map * map) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
+numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(map)
 {
 }
 
-Player::Player(string playerName, vector<CountryNode*> * listOfCountries) : playerName(new string(playerName)), countries(listOfCountries),
-numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()) 
+Player::Player(string playerName, vector<CountryNode*> * listOfCountries, Map * map) : playerName(new string(playerName)), countries(listOfCountries),
+numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(map)
 {
 }
 
@@ -65,7 +65,7 @@ void Player::armyManipulationFortify(CountryNode * chosenNeighborCountry, Countr
 		setNumberOfArmyAtCountry(*chosenNeighborCountry, numOfArmiesAtNeighboringCountry + numOfMovingArmies);
 
 		cout << "The number of Armies at " << *chosenCountry->countryInformation->countryName << " is " << getNumberOfArmyAtCountry(*chosenCountry->countryInformation->countryName) << endl;
-		cout << "The number of Armies at " << *chosenNeighborCountry->countryInformation->countryName << " is " << getNumberOfArmyAtCountry(*chosenNeighborCountry->countryInformation->countryName) << endl;
+		cout << "The number of Armies at " << *chosenNeighborCountry->countryInformation->countryName << " is " << getNumberOfArmyAtCountry(*chosenNeighborCountry->countryInformation->countryName) <<"\n" << endl;
 	}
 	else
 	{
@@ -74,46 +74,51 @@ void Player::armyManipulationFortify(CountryNode * chosenNeighborCountry, Countr
 	
 }
 
+
+
 void Player::fortify()
 {
 	//if the player doesn't have any countries.
 	if (countries->size() != 0) {
+		cout << "Executing the Fortify Method:\n" << endl;
 		string question = "Would you like to fortify your position (yes/no): ";
 		if (userConfirmation(question).compare("yes") == 0) 
 		{
-			vector<int> neightboursIds;
 			//The repeat is to be used in case the player chooses a country and none of its neighbors belong to the player.
 			//Thus they can't fortify and we give them the option or choosing again
 			bool repeat = false;
-			CountryInformation * temp = new CountryInformation(1, 1, 1, 2, "city", neightboursIds);
-			CountryNode * chosenCountry = new CountryNode(temp);
-			CountryNode * chosenNeighborCountry = new CountryNode(temp);
-
+			bool proceed = false;
+			string chosenCountry;
+			string chosenNeighborCountry;
 			do {
 				//Giving the the opportunity for the player to choose the country:
-				chosenCountry = choosingCountry(*chosenCountry);
-
-				//Then, they choose to which neighbor they want to transport their army: 
-				chosenNeighborCountry = choosingNeighboringCountry(chosenNeighborCountry, chosenCountry, repeat);
+				chosenCountry = choosingCountry();
+				repeat = false;
+				if (map->getNodeFromGraphByName(chosenCountry)->playerInfo->getNumberOfArmies() <= 1) {
+					cout << "\n The choosen Country Doesn't have enough army to move. Please Try with a different country" << endl;
+					repeat = true;
+				}
+				else {
+					//Then, they choose to which neighbor they want to transport their army: 
+					chosenNeighborCountry = choosingNeighboringCountry(map->getNodeFromGraphByName(chosenCountry), repeat);
+					if (!repeat) {
+						proceed = true;
+					}
+				}
 
 				//This method will move the army from one country to its chosen neighbor: 
-				if (!repeat) {
-					armyManipulationFortify(chosenNeighborCountry, chosenCountry);
+				if (proceed) {
+					armyManipulationFortify(map->getNodeFromGraphByName(chosenNeighborCountry), map->getNodeFromGraphByName(chosenCountry));
+					repeat = false;
 				}
 			} while (repeat);
-			
-			delete temp;
-			temp = NULL;
-			delete chosenCountry;
-			chosenCountry = NULL;
-			delete chosenNeighborCountry;
-			chosenNeighborCountry = NULL;
 		}
 	}
 	else {
 		cout << "You don't have any country to fortify" << endl;
 	}
 }
+
 
 //The purpose of the function is to print the list of countries that a player is ruling
 //And the number of arrmies they have on each country
@@ -124,6 +129,7 @@ void Player::printListOfCountries()
 		cout << *(*countries)[i]->countryInformation->countryName << " has " << (*countries)[i]->playerInfo->getNumberOfArmies() << " armies." << endl;
 	}
 }
+
 
 //The purpose of this method is basically to print the list of neighbor countries for a country
 void Player::printListOfCountryNeighbors(CountryNode & country)
@@ -139,7 +145,7 @@ void Player::printListOfPlayersCountryNeighbors(CountryNode & country)
 {
 	for (unsigned int i = 0; i < country.neighbouringCountries.size(); i++) 
 	{
-		if (inListOfCountries(country.neighbouringCountries[i], false)>-1) 
+		if (inListOfCountries(country.neighbouringCountries[i]->countryInformation->getCountryName()))
 		{
 			cout << *country.neighbouringCountries[i]->countryInformation->countryName << endl;
 		}		
@@ -151,7 +157,7 @@ bool Player::hasANeighbor(CountryNode & country)
 {
 	for (unsigned int i = 0; i < country.neighbouringCountries.size(); i++) 
 	{
-		if (inListOfCountries(country.neighbouringCountries[i], false) > -1)
+		if (inListOfCountries(country.neighbouringCountries[i]->countryInformation->getCountryName()))
 		{
 			return true;
 		}
@@ -160,61 +166,68 @@ bool Player::hasANeighbor(CountryNode & country)
 }
 
 //This method will handle the I/O with the user regarding the country the player wants to fortify.
-CountryNode * Player::choosingCountry(CountryNode & chosenCountry)
+string Player::choosingCountry()
 {
-	int value = -1;
+	string inputCountryName = "N/A";
+	bool value = false;
 	do {
-		cout << "Which one of your countries want to choose to fortify: " << endl;
+		cout << "Which one of your countries you wish to choose: " << endl;
 		printListOfCountries();
-		cin >> *chosenCountry.countryInformation->countryName;
-		value = inListOfCountries(&chosenCountry, true);
-	} while (value == -1);
+		cin >> inputCountryName;
+		value = inListOfCountries(inputCountryName);
 
-	return (*countries)[value];
+		if (!value) {
+			cout << "The inserted country Name doesn't exist in the list of countries. Please Try again: \n\n" << endl;
+		}
+	} while (!value);
+
+	return inputCountryName;
 }
 
 //This method will handle the I/O with the user regarding with which country the player wants to complete the 
 //fortify
-CountryNode * Player::choosingNeighboringCountry(CountryNode * chosenNeighborCountry, CountryNode * chosenCountry, bool & repeat )
+string Player::choosingNeighboringCountry(CountryNode * chosenCountry, bool & repeat)
 {
-	int value = -1;
+	string inputUser="N/A";
+	bool found = false;
 	do {
 		if (hasANeighbor(*chosenCountry)) 
 		{
 			cout << "Which one of your neighbor countries to move your army to: " << endl;
 			printListOfPlayersCountryNeighbors(*chosenCountry);
-			cin >> *chosenNeighborCountry->countryInformation->countryName;
-			value = inListOfCountries(chosenNeighborCountry, true);
+			cin >> inputUser;
+			found = inListOfCountries(inputUser);
+			if (!found) {
+				cout << "The inserted Country Name doesn't exist please try again " << endl;
+				string question = "Would you like to go back to the list of your countries? (yes/no):";
+				if (userConfirmation(question).compare("yes")==0) {
+					found = true;
+					repeat = true;
+				}
+			}
 		}
 		else
 		{
-			cout << "The chosen country doesn't have any neighbor countries which is ruled by the player" << endl;
-			value = -1;
+			cout << "The chosen country doesn't have any neighbor countries which is ruled by the player \n\n" << endl;
+			found = true;
 			repeat = true;
 		}
-	} while (value == -1 && !repeat);
+	} while (!found);
 
-	return (*countries)[value];
+	return inputUser;
 }
 
 //This method will verify is the country is one of the countries the player is rulling.
-int Player::inListOfCountries(CountryNode * chosenCountry, bool modifyChoosenCountry)
+bool Player::inListOfCountries(string countryName)
 {
-	int indexAt = -1;
-	string countryName = *chosenCountry->countryInformation->countryName;
 	for (unsigned int i = 0; i < countries->size(); ++i)
 	{
-		if ((*countries)[i]->countryInformation->countryName->compare(countryName)==0)
+		if ((*countries)[i]->countryInformation->countryName->compare(countryName) == 0)
 		{
-			indexAt = i;
-			if (modifyChoosenCountry) 
-			{
-				chosenCountry = (*countries)[i];
-			}
-			break;
+			return true;
 		}
 	}
-	return indexAt;
+	return false;
 }
 
 //This will get the number of army a player has at countryName
@@ -499,6 +512,27 @@ void Player::attackSequence(CountryNode * attackingCountry, CountryNode * defend
 	}
 }
 
+int Player::getArmiesAccordingToContinents()
+{
+	int armies = 0;
+	std::vector<int> continentsIdOwned;
+	std::vector<int> continentIds = map->getContinentIds();
+
+	// Checking how many continents user owns
+	for (unsigned int i = 0; i < continentIds.size(); i++) {
+		if (map->checkUserContinents(continentIds[i], *playerName)) {
+			continentsIdOwned.push_back(continentIds[i]);
+		}
+	}
+
+	cout << endl << "Player has " << continentsIdOwned.size() << " continents" << endl;
+
+	for (unsigned i = 0; i < continentsIdOwned.size(); i++) {
+		armies += map->getContinentControlValue(continentsIdOwned[i] - 1);
+	}
+	return armies;
+}
+
 
 //Attack Part:
 void Player::attack()
@@ -524,18 +558,5 @@ void Player::attack()
 			{
 				repeat = false;
 			}
-
-		} while (repeat);
-		
-	}
-}
-
-
-//Reinforce Part:
-void Player::reinforce()
-{
-	cout << "Executing the reinforce method" << endl;
-}
-
 
 	
