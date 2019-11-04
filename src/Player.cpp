@@ -281,6 +281,41 @@ void Player::printListOfCountryAdjacentEnemies(CountryNode & country)
 //this method returns a list of all the countries neighbours that are enemies
 vector <CountryNode*> Player::getAdjacentEnemies(CountryNode & country)
 {
+	cout << "Executing the reinforce method" << endl;
+	vector <CountryNode*> listOfEnemies;
+
+	for (unsigned int i = 0; i < country.neighbouringCountries.size(); i++)
+	{
+		if (isEnemy(*country.neighbouringCountries[i]))
+		{
+			listOfEnemies.push_back(country.neighbouringCountries[i]);
+
+		}
+
+	}
+	return listOfEnemies;
+
+}
+
+void Player::addCountryOwnerShip(CountryNode * node, int numOfArmies)
+{
+	if (node->playerInfo)
+	{
+		//add code to remove country
+	}
+
+	
+	node->playerInfo->setNumberOfArmies(numOfArmies);
+	node->playerInfo->assignPlayer(this);
+
+	countries->push_back(node);
+
+}
+
+
+//Reinforce Part:
+void Player::reinforce()
+{
 	vector <CountryNode*> listOfEnemies;
 
 	for (unsigned int i = 0; i < country.neighbouringCountries.size(); i++)
@@ -441,7 +476,7 @@ void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defen
 void Player::transferDefeatedCountry(CountryNode * attackingCountry, CountryNode * defendingCountry)
 {
 	int attackerArmies = attackingCountry->playerInfo->getNumberOfArmies();
-	string attackingPlayerName = attackingCountry->playerInfo->getPlayerName();
+	string attackingPlayerName = attackingCountry->playerInfo->getPlayer();
 	string attackingCountryName = *attackingCountry->countryInformation->countryName;
 	int numArmiesToTransfer = 0;
 	do

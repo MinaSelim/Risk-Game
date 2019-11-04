@@ -24,6 +24,7 @@ public:
 	~Player();
 	int getNumberOfArmyAtCountry(const string& countryName);
 	void setNumberOfArmyAtCountry(CountryNode & country, int armies);
+	void addCountryOwnerShip(CountryNode * node, int numOfArmies);
 
 	void printListOfAllCountriesEnemies();
 	void printListOfCountryAdjacentEnemies(CountryNode & country);

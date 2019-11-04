@@ -7,11 +7,13 @@
 #include "GameEngine.h"
 int main()
 {
-	//GameEngine e;
+	GameEngine e;
+	e.startGame();
+	//std::vector<std::string> files = FileIO::readDirectory("maps");
 	//MapDriver::MapTester();
 	//MapLoaderDriver::MapTester();
 	//DiceDriver::DiceTester();
-	PlayerDriver::PlayerTester();
+	//PlayerDriver::PlayerTester();
 	//CardsDriver::CardsTester();
 }
 

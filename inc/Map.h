@@ -4,6 +4,7 @@
 #include  <new>
 
 using namespace std;
+class Player;
 
 struct ContinentInformation {
 	string * continentName;
@@ -21,23 +22,24 @@ struct CountryInformation {
 	string *countryName;
 	vector<int> neighbouringCountriesIds;
 	CountryInformation(int id, int x, int y, int contId, string countName, vector<int> neigboursIds);
+	CountryInformation(CountryInformation & info);
 	string getCountryName();
 	virtual ~CountryInformation();
 };
 
 class PlayerNode {
 private:
-	string * playerName;
+	Player * player;
 	int * numOfArmies;
 	
 public:
 	PlayerNode();
-	PlayerNode(string name, int armies);
+	PlayerNode(Player * player, int armies);
 	~PlayerNode();
-	inline int getNumberOfArmies() { return *numOfArmies; };
-	inline string getPlayerName() { return *playerName; };
-	inline void setNumberOfArmies(int number) { *numOfArmies = number; };
-	inline void setPlayerName(string name) { *playerName = name; };
+	int getNumberOfArmies() { return *numOfArmies; };
+	Player * getPlayer();
+	void assignPlayer(Player * player);
+	void setNumberOfArmies(int number) { *numOfArmies = number; };
 };
 
 struct CountryNode {
@@ -46,6 +48,7 @@ struct CountryNode {
 	PlayerNode * playerInfo;
 	bool * visited;
 	CountryNode(CountryInformation * info);
+	CountryNode(CountryNode & node);
 	~CountryNode();
 };
 
@@ -57,8 +60,10 @@ private:
 
 public:
 	Map(vector<CountryInformation*> countries);
+	Map(Map & map);
 	int getNumberOfCountriesInMap();
 	CountryNode* getFirstNode();
+	vector<CountryNode*>   getCountriesGraph();
 	virtual ~Map();
 private:
 	void validateMap();
