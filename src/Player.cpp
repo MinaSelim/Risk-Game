@@ -460,7 +460,7 @@ int Player::getArmiesAccordingToContinents()
 
 	// adding armies according to the control-value of each continent
 	for (unsigned i = 0; i < continentsIdOwned.size(); i++) {
-		armies += map->getContinentControlValue(continentsIdOwned[i] - 1);
+		armies += map->getContinentControlValue(continentsIdOwned[i] );
 	}
 	return armies;
 }
@@ -558,7 +558,7 @@ void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defen
 	defendingCountry->playerInfo->setNumberOfArmies(defenderArmies);
 
 	if (defenderArmies == 0)
-	{
+	{	
 		transferDefeatedCountry(attackingCountry, defendingCountry);
 	}
 
