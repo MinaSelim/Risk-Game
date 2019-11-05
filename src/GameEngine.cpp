@@ -156,6 +156,17 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 	
 }
 
+GameEngine::~GameEngine()
+{
+	delete map;
+	for (unsigned int i = 0; i < listOfPlayers->size(); i++)
+	{
+		delete (*listOfPlayers)[i];
+	}
+
+	delete listOfPlayers;
+}
+
 std::vector<string> FileIO::readDirectory(const std::string& directoryName)
 {
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__) // This is windows only Compatible code
