@@ -29,6 +29,7 @@ public:
 	void assignTheWorldToAPlayer();
 	void setupGame();
 	void mainLoop();
+	~GameEngine();
 private:
 	void chooseMap();
 	int selectPlayersNumber();
