@@ -33,23 +33,11 @@
     <ClInclude Include="inc\Utility.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="inc\DiceDriver.h">
-      <Filter>Drivers</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\MapDriver.h">
-      <Filter>Drivers</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\MapLoaderDriver.h">
-      <Filter>Drivers</Filter>
+    <ClInclude Include="inc\GameEngine.h">
+      <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="inc\PlayerDriver.h">
       <Filter>Drivers</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\CardsDriver.h">
-      <Filter>Drivers</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\GameEngine.h">
-      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,23 +62,11 @@
     <ClCompile Include="src\Utility.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\MapLoaderDriver.cpp">
-      <Filter>Drivers</Filter>
+    <ClCompile Include="src\GameEngine.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\PlayerDriver.cpp">
       <Filter>Drivers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\DiceDriver.cpp">
-      <Filter>Drivers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MapDriver.cpp">
-      <Filter>Drivers</Filter>
-    </ClCompile>
-    <ClCompile Include="inc\CardsDriver.cpp">
-      <Filter>Drivers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameEngine.cpp">
-      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

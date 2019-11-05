@@ -145,7 +145,15 @@ int DicesPrompt::getRolledNumberOfDice(bool attack, int armies)
 	}
 	else
 	{
-		maxDice = 2;
+		if (armies >= 2)
+		{
+			maxDice = 2;
+		}
+		else
+		{
+			maxDice = 1;
+		}
+		
 		do
 		{
 			cout << "How many dice will you roll? ";

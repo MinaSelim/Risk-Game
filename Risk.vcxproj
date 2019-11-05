@@ -20,30 +20,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Cards.h" />
-    <ClInclude Include="inc\CardsDriver.h" />
     <ClInclude Include="inc\Dice.h" />
-    <ClInclude Include="inc\DiceDriver.h" />
     <ClInclude Include="inc\ErrorCodes.h" />
     <ClInclude Include="inc\GameEngine.h" />
     <ClInclude Include="inc\Map.h" />
-    <ClInclude Include="inc\MapDriver.h" />
     <ClInclude Include="inc\MapLoader.h" />
-    <ClInclude Include="inc\MapLoaderDriver.h" />
     <ClInclude Include="inc\Player.h" />
     <ClInclude Include="inc\PlayerDriver.h" />
     <ClInclude Include="inc\Utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="inc\CardsDriver.cpp" />
     <ClCompile Include="src\Cards.cpp" />
     <ClCompile Include="src\Dice.cpp" />
-    <ClCompile Include="src\DiceDriver.cpp" />
     <ClCompile Include="src\GameEngine.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Map.cpp" />
-    <ClCompile Include="src\MapDriver.cpp" />
     <ClCompile Include="src\MapLoader.cpp" />
-    <ClCompile Include="src\MapLoaderDriver.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlayerDriver.cpp" />
     <ClCompile Include="src\Utility.cpp" />

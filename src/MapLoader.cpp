@@ -32,7 +32,6 @@ Map * MapLoader::loadMap(std::string fileName)
 #ifdef Logging
 		std::cout << nextLine << std::endl;
 #endif
-		mapFile.getline(nextLine, count);
 
 		while (std::string("[countries]").compare(nextLine)) {
 			continentId++;
