@@ -57,6 +57,10 @@ void PlayerDriver::PlayerTester()
 	//player->attack();
 	//player->printListOfCountries();
 
+	delete deck;
+	//delete player2;
+	delete player;
+
 
 	cout << "Creating player reinforce" << endl;
 	Player* reinforcePlayer = new Player("Reinforce Player", new std::vector< CountryNode*>(), map);
@@ -68,4 +72,6 @@ void PlayerDriver::PlayerTester()
 	}
 
 	reinforcePlayer->reinforce();
+	delete reinforcePlayer;
+	delete map;
 }
