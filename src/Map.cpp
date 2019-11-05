@@ -155,7 +155,7 @@ vector<int> Map::getContinentIds()
 bool Map::checkUserContinents(int continentId, string playerName)
 {
 	for (unsigned int i = 0; i < countriesGraph->size(); i++) {
-		if ((*countriesGraph)[i]->playerInfo->getPlayer() == nullptr) {
+		if ((*countriesGraph)[i]->playerInfo->getPlayer() == nullptr && *(*countriesGraph)[i]->countryInformation->continentId == continentId) {
 			return false;
 		}
 		if (*(*countriesGraph)[i]->countryInformation->continentId == continentId &&
@@ -290,7 +290,7 @@ int Map::getContinentControlValue(int continentId)
 	}
 
 	//TODO: throw proper error code
-	throw -1;
+	throw ERROR;
 }
 
 

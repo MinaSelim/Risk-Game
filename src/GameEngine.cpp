@@ -122,6 +122,8 @@ void GameEngine::setupGame()
 	const int MAX_INITIAL_NUMBER_OF_TROOPS = 40;
 	int troopsLeftToPlace = MAX_INITIAL_NUMBER_OF_TROOPS - ((listOfPlayers->size() - 2) * 5); //formula to calculate number of initial troops
 
+	troopsLeftToPlace = 5;
+
 	while (troopsLeftToPlace > 0)
 	{
 		std::cout << "Troops left to place : " << troopsLeftToPlace <<endl; 
