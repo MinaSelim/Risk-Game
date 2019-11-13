@@ -11,16 +11,25 @@ using Utility::userConfirmation;
 Player::Player() :playerName(new string("Player")), countries(new vector<CountryNode*>()),
 numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards())
 {
+	AttackObserver * ac = new AttackObserver(this);
+	FortifyObserver * fo = new FortifyObserver(this);
+	ReinforceObserver * ro = new ReinforceObserver(this);
 }
 
 Player::Player(string playerName, Map * map) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
 numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(map)
 {
+	AttackObserver  * ac = new AttackObserver(this);
+	FortifyObserver * fo = new FortifyObserver(this);
+	ReinforceObserver * ro = new ReinforceObserver(this);
 }
 
 Player::Player(string playerName, vector<CountryNode*> * listOfCountries, Map * map) : playerName(new string(playerName)), countries(listOfCountries),
 numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(map)
 {
+	AttackObserver  * ac = new AttackObserver(this);
+	FortifyObserver * fo = new FortifyObserver(this);
+	ReinforceObserver * ro = new ReinforceObserver(this);
 }
 
 Player::~Player()
@@ -79,6 +88,7 @@ void Player::armyManipulationFortify(CountryNode * chosenNeighborCountry, Countr
 
 void Player::fortify()
 {
+	notify("fortify");
 	//if the player doesn't have any countries.
 	if (countries->size() != 0) {
 		cout << "Executing the Fortify Method:\n" << endl;
@@ -407,6 +417,7 @@ bool Player::isEnemyNeighbor(CountryNode & country, string enemyNeighbor)
 
 void Player::reinforce()
 {
+	notify("reinforce");
 	if (countries->size() != 0) {
 		cout << endl << "Executing the Reinforce method for player " << getPlayerName() << endl;
 
@@ -623,6 +634,7 @@ void Player::attackSequence(CountryNode * attackingCountry, CountryNode * defend
 //Attack Part:
 void Player::attack()
 {
+	notify("attack");
 	if (countries->size() != 0) {
 		bool repeat = true;
 		do
@@ -652,5 +664,7 @@ void Player::attack()
 	{
 		cout << "You don't have any country to attack another one" << endl;
 	}
+
 }
 
+void Player::update(string s) {}

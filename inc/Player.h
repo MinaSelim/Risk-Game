@@ -5,10 +5,11 @@
 #include "Cards.h"
 #include "Dice.h"
 #include "Utility.h"
+#include "GameObservers.h"
 
 using namespace std;
 
-class Player {
+class Player : public Subject {
 	
 private:
 	string * playerName;
@@ -60,4 +61,6 @@ public:
 	void setNumberOfArmies(int value) { *numberOfArmies = value; };
 	int getNumberOfArmies() { return *numberOfArmies; };
 	void setMap(Map * mapToSet) { map = mapToSet; };
+
+	void update(string s) override;
 };

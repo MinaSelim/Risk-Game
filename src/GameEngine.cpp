@@ -20,7 +20,6 @@ GameEngine::GameEngine()
 
 	Deck* deck = new Deck(map->getNumberOfCountriesInMap());
 	cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
-
 }
 
 void GameEngine::chooseMap() // Function that lets the users select a map
@@ -96,7 +95,6 @@ void GameEngine::assignTheWorldToAPlayer()// A testing Function that assigns the
 
 void GameEngine::setupGame()
 {
-
 	int currentPlayer = rand() % listOfPlayers->size();
 	auto countryGraphShallowCopy = map->getCountriesGraph();
 
@@ -197,4 +195,3 @@ FindClose(hFind);
 #endif
 	return directoryVector;
 }
-
