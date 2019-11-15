@@ -15,7 +15,7 @@ GameEngine::GameEngine()
 
 	for (int i = 0; i < numOfPlayers; i++) 
 	{
-		listOfPlayers->push_back(new Player(to_string(i), map));
+		listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Benevolent));
 	}
 
 	Deck* deck = new Deck(map->getNumberOfCountriesInMap());
@@ -122,7 +122,7 @@ void GameEngine::setupGame()
 	const int MAX_INITIAL_NUMBER_OF_TROOPS = 40;
 	int troopsLeftToPlace = MAX_INITIAL_NUMBER_OF_TROOPS - ((listOfPlayers->size() - 2) * 5); //formula to calculate number of initial troops
 
-	troopsLeftToPlace = 5;
+//	troopsLeftToPlace = 5;
 
 	while (troopsLeftToPlace > 0)
 	{
@@ -149,6 +149,7 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 		{
 			break;
 		}
+		(*listOfPlayers)[currentPlayer]->printListOfCountries();
 		currentPlayer = (++currentPlayer) % listOfPlayers->size();
 	}
 

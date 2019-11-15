@@ -11,7 +11,7 @@ void PlayerDriver::PlayerTester()
 
 	//Creating the first player:
 	vector<CountryNode*> * hambrsoomCountries = new std::vector< CountryNode*>();
-	Player* player = new Player("Hambrsoom", hambrsoomCountries, map);
+	Player* player = new Player("Hambrsoom", hambrsoomCountries, map, BehaviourEnum::Human);
 
 	//The fortify, attack and reinforce will tell the player that they can't fortify because they don't have any countries yet
 	//player->fortify();
@@ -63,7 +63,7 @@ void PlayerDriver::PlayerTester()
 
 
 	cout << "Creating player reinforce" << endl;
-	Player* reinforcePlayer = new Player("Reinforce Player", new std::vector< CountryNode*>(), map);
+	Player* reinforcePlayer = new Player("Reinforce Player", new std::vector< CountryNode*>(), map, BehaviourEnum::Human);
 	auto countriesGraph = map->getCountriesGraph();
 	for (unsigned int i = 0; i < countriesGraph.size(); i++) {
 		if (*countriesGraph[i]->countryInformation->continentId == 1) {
