@@ -35,7 +35,8 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 	} while (cin.fail() || choice < 0 || choice >= (int)(mapsNames.size()));
 
 	try {
-		map = MapLoader::loadMap( MAPS_DIRECTORY + mapsNames[choice]);
+		MapLoader mapLoader;
+		map = mapLoader.loadMap( MAPS_DIRECTORY + mapsNames[choice]);
 	}
 	catch (int /*i*/)
 	{
