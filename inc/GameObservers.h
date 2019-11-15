@@ -8,6 +8,7 @@ class GameObservers
 public:
 	virtual void update(string) = 0;
 	~GameObservers();
+	void printMapOwnership(Player * p);
 protected:
 	GameObservers();
 };
@@ -56,3 +57,34 @@ public:
 private:
 	Player * subject;
 };
+
+class ConquerObserver : public GameObservers {
+public:
+	ConquerObserver(Player* p);
+	~ConquerObserver();
+	void update(string) override;
+	Player * getSubject() const { return subject; };
+private:
+	Player * subject;
+};
+
+class EliminationObserver : public GameObservers {
+public:
+	EliminationObserver(Player* p);
+	~EliminationObserver();
+	void update(string) override;
+	Player * getSubject() const { return subject; };
+private:
+	Player * subject;
+};
+
+class WinnerObserver : public GameObservers {
+public:
+	WinnerObserver(Player* p);
+	~WinnerObserver();
+	void update(string) override;
+	Player * getSubject() const { return subject; };
+private:
+	Player * subject;
+};
+

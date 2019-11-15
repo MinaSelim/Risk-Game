@@ -94,3 +94,70 @@ void ReinforceObserver::update(string type)
 	}
 }
 
+ConquerObserver::ConquerObserver(Player* p)
+{
+	subject = p;
+	subject->attach(this);
+}
+
+ConquerObserver::~ConquerObserver()
+{
+	subject->detach(this);
+}
+EliminationObserver::EliminationObserver(Player* p)
+{
+	subject = p;
+	subject->attach(this);
+}
+
+EliminationObserver::~EliminationObserver()
+{
+	subject->detach(this);
+}
+
+WinnerObserver::WinnerObserver(Player* p)
+{
+	subject = p;
+	subject->attach(this);
+}
+
+WinnerObserver ::~WinnerObserver()
+{
+	subject->detach(this);
+}
+
+void ConquerObserver::update(string type)
+{
+	if (type.compare("conquer") == 0) {
+		Player * p = getSubject();
+		cout << endl << endl << "Player " << p->getPlayerName() << " has conquered a country" << endl << endl;
+		
+	}
+}
+
+
+void EliminationObserver::update(string type)
+{
+	if (type.compare("eliminate") == 0) {
+		Player * p = getSubject();
+		cout << endl << endl << "Player " << p->getPlayerName() << " has been Eliminated." << endl << endl;
+		
+	}
+}
+
+void WinnerObserver::update(string type)
+{
+	if (type.compare("win") == 0) {
+		Player * p = getSubject();
+		cout << endl << endl << "Player " << p->getPlayerName() << " has won the game! Congratulations!" << endl << endl;
+		
+	}
+}
+
+void GameObservers::printMapOwnership(Player * p)
+{
+	int playerCountries = p->numberPlayerCountries();
+	int mapCountries = p->numberTotalCountries();
+	double percentageOwnership = 100 * (double)playerCountries / (double)mapCountries;
+	cout << endl << endl << "Player " << p->getPlayerName() << " has " << percentageOwnership << "% of countries on the Map." << endl << endl;
+}

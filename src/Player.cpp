@@ -668,3 +668,13 @@ void Player::attack()
 }
 
 void Player::update(string s) {}
+
+int Player::numberPlayerCountries()
+{
+	return countries->size();
+}
+
+int Player::numberTotalCountries() 
+{
+	return map->getNumberOfCountriesInMap();
+}
