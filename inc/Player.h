@@ -6,8 +6,12 @@
 #include "Dice.h"
 #include "Utility.h"
 #include "GameObservers.h"
+#include "PlayerStrategies.h"
 
 using namespace std;
+
+//Created an enum to figure out the type of the player we want to create	
+enum BehaviourEnum { Human = 0, Aggresive, Benevolent };
 
 class Player {
 	
@@ -18,30 +22,21 @@ private:
 	DicesRoller * dice;
 	Map * map;
 	int * numberOfArmies;
+	BehaviourEnum * currentBehaviourEnum;
+	Behaviour * playerBehaviour;
 
-	void armyManipulationFortify(CountryNode * chosenNeighborCountry, CountryNode * chosenCountry);
-	void attackSequence(CountryNode * attackingCountry, CountryNode * countryToBeAttacked);
-	string chooseAttackingCountry();
-	string chooseCountryToBeAttacked(string chosenAttackingCountry);
-	string choosingCountry();
-	string choosingNeighboringCountry(CountryNode * chosenCountry, bool & repeat);
-	int getNumberOfArmyAtCountry(const string& countryName);
-	bool hasANeighbor(CountryNode & country);
-	bool inListOfCountries(string countryName);
-	bool isEnemy(string country);
-	bool isEnemyNeighbor(CountryNode & country, string enemyNeighbor);
-	void rollingSequence(CountryNode * attackingCountry, CountryNode * defendingCountry);
-	void setNumberOfArmyAtCountry(CountryNode & country, int armies);
-	void transferDefeatedCountry(CountryNode * attackingCountry, CountryNode * defendingCountry);
 
 public:
 	Player();
-	Player(string playerName, Map * map);
-	Player(string playerName, vector<CountryNode*>* listOfCountries, Map * map);
+	Player(string playerName, Map * map, BehaviourEnum behaviour);
+	Player(string playerName, vector<CountryNode*>* listOfCountries, Map * map, BehaviourEnum behaviour);
 	~Player();
+	friend HumanBehaviour;
+	friend BenevolentAIBehaviour;
+	friend AggresiveAIBehaviour;
 	
 	void addCountryOwnerShip(CountryNode * node, int numOfArmies);
-	int  getArmiesAccordingToContinents(); 
+	int  getArmiesAccordingToContinents();
 
 	void reinforce();
 	void attack();
@@ -53,6 +48,7 @@ public:
 	void printListOfPlayersCountryNeighbors(CountryNode& country);
 	void printListOfAllCountriesEnemies();
 	void printListOfCountryAdjacentEnemies(CountryNode & country);
+	bool countryOwnedByPlayer(string countryName);
 
 	void placeArmiesOnCountries();
 
@@ -63,7 +59,23 @@ public:
 	int getNumberOfArmies() { return *numberOfArmies; };
 	vector<int> getContinentsOwnedByPlayer();
 	void setMap(Map * mapToSet) { map = mapToSet; };
-
+	int getNumberOfCountries() { return countries->size(); };
 	int getNumberPlayerCountries();
 	int getNumberTotalCountries();
+private:
+	void armyManipulationFortify(CountryNode * chosenNeighborCountry, CountryNode * chosenCountry, int numOfMovingArmies);
+	void attackSequence(CountryNode * attackingCountry, CountryNode * countryToBeAttacked);
+	string chooseAttackingCountry();
+	string chooseCountryToBeAttacked(string chosenAttackingCountry);
+	string choosingCountry();
+	string choosingNeighboringCountry(CountryNode * chosenCountry, bool & repeat);
+	int getNumberOfArmyAtCountry(const string& countryName);
+	bool hasANeighbor(CountryNode & country);
+	
+	bool isEnemy(string country);
+	bool isEnemyNeighbor(CountryNode & country, string enemyNeighbor);
+	void rollingSequence(CountryNode * attackingCountry, CountryNode * defendingCountry);
+	void setNumberOfArmyAtCountry(CountryNode & country, int armies);
+	void transferDefeatedCountry(CountryNode * attackingCountry, CountryNode * defendingCountry);
+
 };

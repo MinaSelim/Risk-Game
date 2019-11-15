@@ -12,19 +12,17 @@
 
 using namespace std;
 
-GameEngine::GameEngine() : listOfPlayers(new vector<Player*>())
+GameEngine::GameEngine() 
+	: listOfPlayers(new vector<Player*>())
 {
 	cout << "Welcome To the Risk Game" << endl;
 	chooseMap();
 	int numOfPlayers = selectPlayersNumber();
 
 
-	for (int i = 0; i < numOfPlayers; i++) 
-	{
-		listOfPlayers->push_back(new Player(to_string(i), map));
-	}
+	choosePlayerType(numOfPlayers);
 
-	Deck* deck = new Deck(map->getNumberOfCountriesInMap());
+	deck = new Deck(map->getNumberOfCountriesInMap());
 	cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
 
 	
@@ -37,7 +35,6 @@ GameEngine::GameEngine() : listOfPlayers(new vector<Player*>())
  
 }
 
-
 void GameEngine::chooseMap() // Function that lets the users select a map
 {
 	std::vector<string> mapsNames = FileIO::readDirectory(MAPS_DIRECTORY);
@@ -45,6 +42,8 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 	Utility::displayItemsInAVector(mapsNames);
 	int choice = -1;
 	do {
+		cin.clear();
+		cin.ignore(300, '\n');
 		std::cout << "Select a valid number: \n";
 		cin >> choice;	
 	} while (cin.fail() || choice < 0 || choice >= (int)(mapsNames.size()));
@@ -137,6 +136,7 @@ void GameEngine::eliminatePlayer()
 
 void GameEngine::setupGame()
 {
+
 	int currentPlayer = rand() % listOfPlayers->size();
 	auto countryGraphShallowCopy = map->getCountriesGraph();
 
@@ -162,7 +162,7 @@ void GameEngine::setupGame()
 	const int MAX_INITIAL_NUMBER_OF_TROOPS = 40;
 	int troopsLeftToPlace = MAX_INITIAL_NUMBER_OF_TROOPS - ((listOfPlayers->size() - 2) * 5); //formula to calculate number of initial troops
 
-	troopsLeftToPlace = 5;
+//	troopsLeftToPlace = 5;
 
 	while (troopsLeftToPlace > 0)
 	{
@@ -180,7 +180,6 @@ void GameEngine::setupGame()
 void GameEngine::mainLoop() // main game loop, runs until the game ends
 {
 	int currentPlayer = rand() % listOfPlayers->size();
-
 	while (true)
 	{
 		system("CLS");
@@ -202,6 +201,7 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 
 		if (countriesAfterAttack > countriesBeforeAttack)
 		{
+			(*listOfPlayers)[currentPlayer]->getHandOfCards()->pickACard(deck);
 			system("CLS");
 			phase = "conquer ";
 			notify(phase.append(currentPlayerAsString));
@@ -230,9 +230,10 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 			notify(phase.append(currentPlayerAsString));
 			break;
 		}
+		(*listOfPlayers)[currentPlayer]->printListOfCountries();
 		currentPlayer = (++currentPlayer) % listOfPlayers->size();
 	}
-	
+
 	cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName();
 	
 }
@@ -327,6 +328,35 @@ FindClose(hFind);
 	return directoryVector;
 }
 void GameEngine::update(string s) {}
+void GameEngine::choosePlayerType(int numOfPlayers) // Function that lets the users select a map
+{
+	for (int i = 0; i < numOfPlayers; i++)
+	{
+			
+
+		std::vector<string> playerTypes = {"Human", "Aggressive","Benevolent"};
+		std::cout << "Select the type of the player " << i <<" \n";
+		Utility::displayItemsInAVector(playerTypes);
+		int choice = -1;
+		do {
+			cin.clear();
+			cin.ignore(300, '\n');
+			std::cout << "Select a valid number: \n";
+			cin >> choice;
+		} while (cin.fail() || choice < 0 || choice >= (int)(playerTypes.size()));
+
+		if (choice == 0) {
+			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Human));
+		}
+		else if (choice == 1) {
+			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Aggresive));
+		}
+		else {
+			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Benevolent));
+
+		}
+	}
+}
 
 vector <Player*> GameEngine::getListOfPlayers() 
 {
@@ -337,3 +367,5 @@ int GameEngine::getNumberOfPlayers()
 {
 	return listOfPlayers->size();
 }
+
+

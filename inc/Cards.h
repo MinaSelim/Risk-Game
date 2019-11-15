@@ -54,6 +54,8 @@ public:
 	int getNumberOfCards(string key);
 	int exchange();
 	int getTotalNumberOfCards();
+	int verifyExchange();
+	int calculateNumberOfArmiesToExchange(bool possibleExchange, int & nextTurnNumberOfArmies, int & numberOfArmies);
 };
 
 

@@ -22,6 +22,7 @@ class GameEngine : public Subject {
 private:
 	vector <Player*> * listOfPlayers;
 	Map * map;
+	Deck * deck;
 
 public:
 	GameEngine();
@@ -35,6 +36,7 @@ public:
 	vector <Player*> getListOfPlayers();
 	int getNumberOfPlayers();
 	~GameEngine();
+	void choosePlayerType(int numOfPlayers);
 	void update(string s) override;
 private:
 	void chooseMap();
