@@ -14,6 +14,10 @@ numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards())
 	AttackObserver * ac = new AttackObserver(this);
 	FortifyObserver * fo = new FortifyObserver(this);
 	ReinforceObserver * ro = new ReinforceObserver(this);
+	ConquerObserver * co = new ConquerObserver(this);
+	
+
+
 }
 
 Player::Player(string playerName, Map * map) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
@@ -22,6 +26,8 @@ numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), ma
 	AttackObserver  * ac = new AttackObserver(this);
 	FortifyObserver * fo = new FortifyObserver(this);
 	ReinforceObserver * ro = new ReinforceObserver(this);
+	ConquerObserver * co = new ConquerObserver(this);
+	
 }
 
 Player::Player(string playerName, vector<CountryNode*> * listOfCountries, Map * map) : playerName(new string(playerName)), countries(listOfCountries),
@@ -30,6 +36,7 @@ numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), ma
 	AttackObserver  * ac = new AttackObserver(this);
 	FortifyObserver * fo = new FortifyObserver(this);
 	ReinforceObserver * ro = new ReinforceObserver(this);
+	ConquerObserver * co = new ConquerObserver(this);
 }
 
 Player::~Player()
@@ -44,6 +51,7 @@ Player::~Player()
 	dice = NULL;
 	delete hand;
 	hand = NULL;
+	
 }
 
 //This method will ask the user the number of the armies they want to move from one country to another
@@ -579,6 +587,7 @@ void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defen
 //this method handles when a country is defeated and has to transfer ownership to a enemy player
 void Player::transferDefeatedCountry(CountryNode * attackingCountry, CountryNode * defendingCountry)
 {
+	notify("conquer");
 	int attackerArmies = attackingCountry->playerInfo->getNumberOfArmies();
 	string defendingCountryName = *defendingCountry->countryInformation->countryName;
 	int numArmiesToTransfer = 0;

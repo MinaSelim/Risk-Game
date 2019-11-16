@@ -1,5 +1,6 @@
 #pragma once
 #include<list>
+#include "GameEngine.h"
 using namespace std;
 class Player;
 
@@ -8,11 +9,10 @@ class GameObservers
 public:
 	virtual void update(string) = 0;
 	~GameObservers();
-	void printMapOwnership(Player * p);
+	void printMapOwnership(GameEngine * g);
 protected:
 	GameObservers();
 };
-
 
 class Subject : public GameObservers {
 
@@ -60,7 +60,7 @@ private:
 
 class ConquerObserver : public GameObservers {
 public:
-	ConquerObserver(Player* p);
+	ConquerObserver(Player * p);
 	~ConquerObserver();
 	void update(string) override;
 	Player * getSubject() const { return subject; };
@@ -70,21 +70,21 @@ private:
 
 class EliminationObserver : public GameObservers {
 public:
-	EliminationObserver(Player* p);
+	EliminationObserver(GameEngine * g);
 	~EliminationObserver();
 	void update(string) override;
-	Player * getSubject() const { return subject; };
+	GameEngine * getSubject() const { return subject; };
 private:
-	Player * subject;
+	GameEngine * subject;
 };
 
 class WinnerObserver : public GameObservers {
 public:
-	WinnerObserver(Player* p);
+	WinnerObserver(GameEngine * g);
 	~WinnerObserver();
 	void update(string) override;
-	Player * getSubject() const { return subject; };
+	GameEngine * getSubject() const { return subject; };
 private:
-	Player * subject;
+	GameEngine * subject;
 };
 

@@ -2,11 +2,11 @@
 #include "MapLoader.h"
 #include <string>
 #include <cstdlib>
+#include "GameObservers.h"
 
 using namespace std;
 
-GameEngine::GameEngine() 
-	: listOfPlayers(new vector<Player*>())
+GameEngine::GameEngine() : listOfPlayers(new vector<Player*>())
 {
 	cout << "Welcome To the Risk Game" << endl;
 	chooseMap();
@@ -20,6 +20,9 @@ GameEngine::GameEngine()
 
 	Deck* deck = new Deck(map->getNumberOfCountriesInMap());
 	cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
+
+	EliminationObserver * eo = new EliminationObserver(this);
+	WinnerObserver * wo = new WinnerObserver(this);
 }
 
 void GameEngine::chooseMap() // Function that lets the users select a map
@@ -46,6 +49,7 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 
 bool GameEngine::gameWon()
 {
+	notify("win");
 	auto countryGraph = map->getCountriesGraph();
 
 	auto firstNode = map->getFirstNode();
@@ -143,6 +147,11 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 		(*listOfPlayers)[currentPlayer]->reinforce();
 		(*listOfPlayers)[currentPlayer]->attack();
 		(*listOfPlayers)[currentPlayer]->fortify();
+
+		if ((*listOfPlayers)[currentPlayer]->numberTotalCountries == 0)
+		{
+			notify("eliminate");
+		}
 		if (gameWon())
 		{
 			break;
@@ -163,6 +172,7 @@ GameEngine::~GameEngine()
 	}
 
 	delete listOfPlayers;
+	
 }
 
 std::vector<string> FileIO::readDirectory(const std::string& directoryName)
@@ -194,4 +204,10 @@ FindClose(hFind);
 	closedir(dirp);
 #endif
 	return directoryVector;
+}
+void GameEngine::update(string s) {}
+
+vector <Player*> GameEngine::getListOfPlayers() 
+{
+	return * listOfPlayers;
 }

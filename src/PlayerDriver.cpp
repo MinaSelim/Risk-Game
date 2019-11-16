@@ -5,13 +5,13 @@
 using namespace std;
 void PlayerDriver::PlayerTester()
 {
-	Map * map = MapLoader::loadMap("./maps/worldNew.map");
-	Deck* deck = new Deck(map->getNumberOfCountriesInMap());
-	auto mapNode = map->getFirstNode();
+	//Map * map = MapLoader::loadMap("./maps/worldNew.map");
+	//Deck* deck = new Deck(map->getNumberOfCountriesInMap());
+	//auto mapNode = map->getFirstNode();
 
 	//Creating the first player:
-	vector<CountryNode*> * hambrsoomCountries = new std::vector< CountryNode*>();
-	Player* player = new Player("Hambrsoom", hambrsoomCountries, map);
+	//vector<CountryNode*> * hambrsoomCountries = new std::vector< CountryNode*>();
+	//Player* player = new Player("Hambrsoom", hambrsoomCountries, map);
 
 	//The fortify, attack and reinforce will tell the player that they can't fortify because they don't have any countries yet
 	//player->fortify();
@@ -57,21 +57,21 @@ void PlayerDriver::PlayerTester()
 	//player->attack();
 	//player->printListOfCountries();
 
-	delete deck;
+	//delete deck;
 	//delete player2;
-	delete player;
+	//delete player;
 
 
-	cout << "Creating player reinforce" << endl;
-	Player* reinforcePlayer = new Player("Reinforce Player", new std::vector< CountryNode*>(), map);
-	auto countriesGraph = map->getCountriesGraph();
-	for (unsigned int i = 0; i < countriesGraph.size(); i++) {
-		if (*countriesGraph[i]->countryInformation->continentId == 1) {
-			reinforcePlayer->addCountryOwnerShip(countriesGraph[i], 9);
-		}
-	}
+	//cout << "Creating player reinforce" << endl;
+	//Player* reinforcePlayer = new Player("Reinforce Player", new std::vector< CountryNode*>(), map);
+	//auto countriesGraph = map->getCountriesGraph();
+	//for (unsigned int i = 0; i < countriesGraph.size(); i++) {
+	//	if (*countriesGraph[i]->countryInformation->continentId == 1) {
+	//		reinforcePlayer->addCountryOwnerShip(countriesGraph[i], 9);
+	//	}
+	//}
 
-	reinforcePlayer->reinforce();
-	delete reinforcePlayer;
-	delete map;
+	//reinforcePlayer->reinforce();
+	//delete reinforcePlayer;
+	//delete map;
 }

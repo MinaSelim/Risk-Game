@@ -7,6 +7,7 @@
 #include <filesystem>
 #include "Cards.h"
 #include <sys/types.h>
+#include "GameObservers.h"
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #include <windows.h>
 #else
@@ -17,7 +18,7 @@
 
 using namespace std;
 
-class GameEngine {
+class GameEngine : public Subject {
 private:
 	vector <Player*> * listOfPlayers;
 	Map * map;
@@ -29,7 +30,9 @@ public:
 	void assignTheWorldToAPlayer();
 	void setupGame();
 	void mainLoop();
+	vector <Player*> getListOfPlayers();
 	~GameEngine();
+	void update(string s) override;
 private:
 	void chooseMap();
 	int selectPlayersNumber();

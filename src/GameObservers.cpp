@@ -1,11 +1,13 @@
 
 #include "GameObservers.h"
+#include "GameEngine.h"
 #include <iostream>
 #include "Player.h"
 using namespace std;
 
 GameObservers::GameObservers()
 {
+
 }
 
 
@@ -94,7 +96,7 @@ void ReinforceObserver::update(string type)
 	}
 }
 
-ConquerObserver::ConquerObserver(Player* p)
+ConquerObserver::ConquerObserver(Player * p)
 {
 	subject = p;
 	subject->attach(this);
@@ -104,9 +106,10 @@ ConquerObserver::~ConquerObserver()
 {
 	subject->detach(this);
 }
-EliminationObserver::EliminationObserver(Player* p)
+
+EliminationObserver::EliminationObserver(GameEngine* g)
 {
-	subject = p;
+	subject = g;
 	subject->attach(this);
 }
 
@@ -115,9 +118,9 @@ EliminationObserver::~EliminationObserver()
 	subject->detach(this);
 }
 
-WinnerObserver::WinnerObserver(Player* p)
+WinnerObserver::WinnerObserver(GameEngine* g)
 {
-	subject = p;
+	subject = g;
 	subject->attach(this);
 }
 
@@ -130,7 +133,8 @@ void ConquerObserver::update(string type)
 {
 	if (type.compare("conquer") == 0) {
 		Player * p = getSubject();
-		cout << endl << endl << "Player " << p->getPlayerName() << " has conquered a country" << endl << endl;
+		//printMapOwnership(p);
+		cout << endl << endl << "Player " << p->getPlayerName() << " has conquered a country." << endl << endl;
 		
 	}
 }
@@ -139,8 +143,9 @@ void ConquerObserver::update(string type)
 void EliminationObserver::update(string type)
 {
 	if (type.compare("eliminate") == 0) {
-		Player * p = getSubject();
-		cout << endl << endl << "Player " << p->getPlayerName() << " has been Eliminated." << endl << endl;
+		GameEngine * p = getSubject();
+		//printMapOwnership(p);
+		cout << endl << endl << "Player " << " has been Eliminated." << endl << endl;
 		
 	}
 }
@@ -148,16 +153,23 @@ void EliminationObserver::update(string type)
 void WinnerObserver::update(string type)
 {
 	if (type.compare("win") == 0) {
-		Player * p = getSubject();
-		cout << endl << endl << "Player " << p->getPlayerName() << " has won the game! Congratulations!" << endl << endl;
+		GameEngine * g = getSubject();
+		//printMapOwnership(g);
+		cout << endl << endl << "Player "  << " has won the game! Congratulations!" << endl << endl;
 		
 	}
 }
 
-void GameObservers::printMapOwnership(Player * p)
+void GameObservers::printMapOwnership(GameEngine * g)
 {
-	int playerCountries = p->numberPlayerCountries();
-	int mapCountries = p->numberTotalCountries();
-	double percentageOwnership = 100 * (double)playerCountries / (double)mapCountries;
-	cout << endl << endl << "Player " << p->getPlayerName() << " has " << percentageOwnership << "% of countries on the Map." << endl << endl;
+	for (int i = 0; i < g->getListOfPlayers; i++)
+	{
+		Player * p = g->getListOfPlayers[i];
+		int playerCountries = p->numberPlayerCountries();
+		int mapCountries = p->numberTotalCountries();
+		double percentageOwnership = 100 * (double)playerCountries / (double)mapCountries;
+		cout << endl << endl << "Player " << p->getPlayerName() << " has " << percentageOwnership << "% of countries on the Map." << endl << endl;
+	}
+	
+	
 }
