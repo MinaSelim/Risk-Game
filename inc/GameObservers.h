@@ -1,8 +1,8 @@
 #pragma once
 #include<list>
-#include "GameEngine.h"
 using namespace std;
 class Player;
+class GameEngine;
 
 class GameObservers
 {

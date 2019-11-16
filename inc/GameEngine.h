@@ -31,6 +31,7 @@ public:
 	void setupGame();
 	void mainLoop();
 	vector <Player*> getListOfPlayers();
+	int getNumberOfPlayers();
 	~GameEngine();
 	void update(string s) override;
 private:

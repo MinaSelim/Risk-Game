@@ -52,6 +52,7 @@ Player::~Player()
 	delete hand;
 	hand = NULL;
 	
+	
 }
 
 //This method will ask the user the number of the armies they want to move from one country to another

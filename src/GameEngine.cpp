@@ -2,7 +2,7 @@
 #include "MapLoader.h"
 #include <string>
 #include <cstdlib>
-#include "GameObservers.h"
+
 
 using namespace std;
 
@@ -21,8 +21,8 @@ GameEngine::GameEngine() : listOfPlayers(new vector<Player*>())
 	Deck* deck = new Deck(map->getNumberOfCountriesInMap());
 	cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
 
-	EliminationObserver * eo = new EliminationObserver(this);
-	WinnerObserver * wo = new WinnerObserver(this);
+	EliminationObserver * eliminateObs = new EliminationObserver(this);
+	WinnerObserver * winnerObs = new WinnerObserver(this);
 }
 
 void GameEngine::chooseMap() // Function that lets the users select a map
@@ -148,7 +148,7 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 		(*listOfPlayers)[currentPlayer]->attack();
 		(*listOfPlayers)[currentPlayer]->fortify();
 
-		if ((*listOfPlayers)[currentPlayer]->numberTotalCountries == 0)
+		if ((*listOfPlayers)[currentPlayer]->numberTotalCountries() == 0)
 		{
 			notify("eliminate");
 		}
@@ -210,4 +210,9 @@ void GameEngine::update(string s) {}
 vector <Player*> GameEngine::getListOfPlayers() 
 {
 	return * listOfPlayers;
+}
+
+int GameEngine::getNumberOfPlayers()
+{
+	return listOfPlayers->size();
 }

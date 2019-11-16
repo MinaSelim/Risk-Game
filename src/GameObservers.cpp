@@ -143,8 +143,8 @@ void ConquerObserver::update(string type)
 void EliminationObserver::update(string type)
 {
 	if (type.compare("eliminate") == 0) {
-		GameEngine * p = getSubject();
-		//printMapOwnership(p);
+		GameEngine * g = getSubject();
+		printMapOwnership(g);
 		cout << endl << endl << "Player " << " has been Eliminated." << endl << endl;
 		
 	}
@@ -154,17 +154,19 @@ void WinnerObserver::update(string type)
 {
 	if (type.compare("win") == 0) {
 		GameEngine * g = getSubject();
-		//printMapOwnership(g);
+		printMapOwnership(g);
 		cout << endl << endl << "Player "  << " has won the game! Congratulations!" << endl << endl;
 		
 	}
 }
 
 void GameObservers::printMapOwnership(GameEngine * g)
-{
-	for (int i = 0; i < g->getListOfPlayers; i++)
+{	
+	vector <Player*>  players = g->getListOfPlayers();
+
+	for (unsigned int i = 0; i < players.size(); i++)
 	{
-		Player * p = g->getListOfPlayers[i];
+		Player * p = players[i];
 		int playerCountries = p->numberPlayerCountries();
 		int mapCountries = p->numberTotalCountries();
 		double percentageOwnership = 100 * (double)playerCountries / (double)mapCountries;

@@ -41,7 +41,7 @@ public:
 	~Player();
 	
 	void addCountryOwnerShip(CountryNode * node, int numOfArmies);
-	int  getArmiesAccordingToContinents();
+	int  getArmiesAccordingToContinents(); 
 
 	void reinforce();
 	void attack();
