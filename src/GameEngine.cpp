@@ -97,6 +97,30 @@ void GameEngine::assignTheWorldToAPlayer()// A testing Function that assigns the
 	}
 }
 
+void GameEngine::eliminatePlayer()// A testing Function that assigns the entire world to a player
+{
+	auto countryGraphShallowCopy = map->getCountriesGraph();
+
+	//asign half of countries to Player 0, the other half to Player 1
+	for (unsigned int i = 0; i < countryGraphShallowCopy.size()/2; i++)
+	{
+		(*listOfPlayers)[0]->addCountryOwnerShip(countryGraphShallowCopy[i], 1);
+	}
+
+	for (unsigned int i = countryGraphShallowCopy.size() / 2; i < countryGraphShallowCopy.size(); i++)
+	{
+		(*listOfPlayers)[1]->addCountryOwnerShip(countryGraphShallowCopy[i], 1);
+	}
+
+	//unassign by assigning countries from Player 0 to Player 1
+	for (unsigned int i = 0; i < countryGraphShallowCopy.size() / 2; i++)
+	{
+		(*listOfPlayers)[1]->addCountryOwnerShip(countryGraphShallowCopy[i], 1);
+	}
+
+
+}
+
 void GameEngine::setupGame()
 {
 	int currentPlayer = rand() % listOfPlayers->size();
@@ -142,23 +166,25 @@ void GameEngine::setupGame()
 void GameEngine::mainLoop() // main game loop, runs until the game ends
 {
 	int currentPlayer = rand() % listOfPlayers->size();
+
+	if ((*listOfPlayers)[currentPlayer]->numberTotalCountries() == 0)
+	{
+		notify("eliminate");
+	}
+
 	while (true)
 	{
 		(*listOfPlayers)[currentPlayer]->reinforce();
 		(*listOfPlayers)[currentPlayer]->attack();
 		(*listOfPlayers)[currentPlayer]->fortify();
 
-		if ((*listOfPlayers)[currentPlayer]->numberTotalCountries() == 0)
-		{
-			notify("eliminate");
-		}
 		if (gameWon())
 		{
 			break;
 		}
 		currentPlayer = (++currentPlayer) % listOfPlayers->size();
 	}
-
+	
 	cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName();
 	
 }

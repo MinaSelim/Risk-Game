@@ -28,6 +28,7 @@ public:
 	bool gameWon();
 	void startGame();
 	void assignTheWorldToAPlayer();
+	void eliminatePlayer();
 	void setupGame();
 	void mainLoop();
 	vector <Player*> getListOfPlayers();

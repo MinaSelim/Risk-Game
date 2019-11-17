@@ -129,11 +129,11 @@ WinnerObserver ::~WinnerObserver()
 	subject->detach(this);
 }
 
+
 void ConquerObserver::update(string type)
 {
 	if (type.compare("conquer") == 0) {
 		Player * p = getSubject();
-		//printMapOwnership(p);
 		cout << endl << endl << "Player " << p->getPlayerName() << " has conquered a country." << endl << endl;
 		
 	}
@@ -163,15 +163,14 @@ void WinnerObserver::update(string type)
 void GameObservers::printMapOwnership(GameEngine * g)
 {	
 	vector <Player*>  players = g->getListOfPlayers();
-
+	cout << "***PLAYER MAP OWNERSHIP BREAKDOWN***" << endl;
 	for (unsigned int i = 0; i < players.size(); i++)
 	{
 		Player * p = players[i];
 		int playerCountries = p->numberPlayerCountries();
 		int mapCountries = p->numberTotalCountries();
 		double percentageOwnership = 100 * (double)playerCountries / (double)mapCountries;
-		cout << endl << endl << "Player " << p->getPlayerName() << " has " << percentageOwnership << "% of countries on the Map." << endl << endl;
+		cout << "Player " << p->getPlayerName() << " has " << percentageOwnership << "% of countries on the Map." << endl;
 	}
-	
-	
 }
+

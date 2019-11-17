@@ -43,6 +43,7 @@
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
+  
   <ItemGroup>
     <ClCompile Include="src\Cards.cpp">
       <Filter>Source</Filter>

@@ -53,37 +53,37 @@ public:
 	ReinforceObserver(Player* p);
 	~ReinforceObserver();
 	void update(string) override;
-	Player * getSubject() const { return subject; };
+	Player* getSubject() const { return subject; };
 private:
 	Player * subject;
 };
 
 class ConquerObserver : public GameObservers {
 public:
-	ConquerObserver(Player * p);
+	ConquerObserver(Player* p);
 	~ConquerObserver();
 	void update(string) override;
-	Player * getSubject() const { return subject; };
+	Player* getSubject() const { return subject; };
 private:
 	Player * subject;
 };
 
 class EliminationObserver : public GameObservers {
 public:
-	EliminationObserver(GameEngine * g);
+	EliminationObserver(GameEngine* g);
 	~EliminationObserver();
 	void update(string) override;
-	GameEngine * getSubject() const { return subject; };
+	GameEngine* getSubject() const { return subject; };
 private:
 	GameEngine * subject;
 };
 
 class WinnerObserver : public GameObservers {
 public:
-	WinnerObserver(GameEngine * g);
+	WinnerObserver(GameEngine* g);
 	~WinnerObserver();
 	void update(string) override;
-	GameEngine * getSubject() const { return subject; };
+	GameEngine* getSubject() const { return subject; };
 private:
 	GameEngine * subject;
 };
