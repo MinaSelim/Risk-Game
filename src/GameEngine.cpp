@@ -35,8 +35,19 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 	} while (cin.fail() || choice < 0 || choice >= (int)(mapsNames.size()));
 
 	try {
-		MapLoader mapLoader;
-		map = mapLoader.loadMap( MAPS_DIRECTORY + mapsNames[choice]);
+
+		//the first choise represent a map from the conquest game which will be adapted to this game 
+		//using the adapter class
+		if (choice == 0) {
+			ConquestMapReader coquestMapReader;
+			MapLoaderAdapter mapLoader(&coquestMapReader);
+			map = mapLoader.loadMap(MAPS_DIRECTORY + mapsNames[choice]);
+		}
+		else {
+			MapLoader mapLoader;
+			map = mapLoader.loadMap(MAPS_DIRECTORY + mapsNames[choice]);
+		}
+		
 	}
 	catch (int /*i*/)
 	{

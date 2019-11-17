@@ -181,12 +181,15 @@ namespace
 }
 
 
-
+//The purpose of this method is to include the id of a country to the list of the neighbors of another country.
 void ConquestMapReader::conquestCreateListOfNeighbors(char * token,int & countryId, map<string, int>& countryIds, CountryInformation & country)
 {
+	//if the country exists in the countryIds --> get the id from there. Otherwise, create a new one.
 	if (countryIds.count(token) > 0) {
 		auto pos = countryIds.find(token);
 		int  tempCountryId = pos->second;
+		
+		//Inser the country Id in the list of countries:
 		country.neighbouringCountriesIds.push_back(tempCountryId);
 	}
 	else 
@@ -198,6 +201,8 @@ void ConquestMapReader::conquestCreateListOfNeighbors(char * token,int & country
 	}
 }
 
+//The purpose of this method is to create the information required for each country 
+//The information are read from the map file.
 CountryInformation * ConquestMapReader::conquestCreateCountryInformation(char * countryInfo, std::vector<ContinentInformation*>& continents, int &countryId, map<string,int> & countryIds)
 {
 	char * token = nullptr;
@@ -217,6 +222,8 @@ CountryInformation * ConquestMapReader::conquestCreateCountryInformation(char * 
 
 	token = strtok_s(nullptr, delim, &context);
 	std::string continentName = token;
+	
+	//To get the continent Id in which the country exists
 	for (unsigned int i = 0; i < continents.size(); i++) {
 		if (continents.at(i)->continentName->compare(continentName)==0) {
 			continentId = *continents.at(i)->continentId;
@@ -226,6 +233,8 @@ CountryInformation * ConquestMapReader::conquestCreateCountryInformation(char * 
 
 	std::vector<int> neighbours;
 
+	//if the country already exists in the dictionary of countryIds, just use the id value from there. Otherwise,
+	// insert it the countryIds and use that value for creating the country Node
 	if (countryIds.count(countryName) > 0) 
 	{
 		auto pos = countryIds.find(countryName);
@@ -237,6 +246,8 @@ CountryInformation * ConquestMapReader::conquestCreateCountryInformation(char * 
 		countryIds.insert({ countryName, countryId });
 		countryId++;
 	}
+
+	//Creating the list of neighbors to a country
 	while (token != nullptr)
 	{	
 		conquestCreateListOfNeighbors(token, countryId, countryIds, *info);
@@ -246,7 +257,8 @@ CountryInformation * ConquestMapReader::conquestCreateCountryInformation(char * 
 }
 
 
-
+//The purrpose of the method is to read the map file and 
+//get the required info
 Map * ConquestMapReader::conquestLoadMap(std::string fileName)
 {
 	if (!Utility::fileExist(fileName))
@@ -267,6 +279,8 @@ Map * ConquestMapReader::conquestLoadMap(std::string fileName)
 	while (!mapFile.eof())
 	{
 		mapFile.getline(nextLine, count);
+		
+		//Get the list of continents and their control values
 		while (std::string("[Territories]").compare(nextLine)) {
 			continentId++;
 			if (std::string("").compare(nextLine)) {
@@ -277,7 +291,7 @@ Map * ConquestMapReader::conquestLoadMap(std::string fileName)
 
 		mapFile.getline(nextLine, count);
 
-
+		//Get the list of countries, in which continent they exist and their list of neighbors
 		while (!mapFile.eof()) {
 			if (std::string("").compare(nextLine)) {
 				countries.push_back(conquestCreateCountryInformation(nextLine, continents, countryId, countryIds));
@@ -288,6 +302,9 @@ Map * ConquestMapReader::conquestLoadMap(std::string fileName)
 	Map * map = new Map(countries, continents);
 	return map;
 }
+
+//The purpose of this method is to create continent object with the information got from 
+//the map file.
 ContinentInformation * ConquestMapReader::conquestCreateContinentInformation(char * continentInfo, int id)
 {
 	char * token = nullptr;
@@ -320,7 +337,7 @@ MapLoaderAdapter::MapLoaderAdapter(ConquestMapReader * mapReader) : MapLoader()
 
 Map * MapLoaderAdapter::loadMap(std::string fileName)
 {
-	conquestMapReader->conquestLoadMap(fileName);
+	return conquestMapReader->conquestLoadMap(fileName);
 }
 
 
