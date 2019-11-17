@@ -6,11 +6,16 @@
 #include <iostream>
 
 using namespace::std;
+
+//The purpose of the method is to interact with the user during the reinforce to ask them 
+//where they want to place their armies
 void HumanBehaviour::placeArmiesDuringReinforce()
 {
 	vector<int> neightboursIds;
 	int chosenArmyNumber = 0;
 	string chosenCountry = "N/A";
+
+	//Asking the user to choose a country 
 	chosenCountry = player->choosingCountry();
 
 	if (player->getNumberOfArmies() == 1)
@@ -23,6 +28,7 @@ void HumanBehaviour::placeArmiesDuringReinforce()
 		cin >> chosenArmyNumber;
 	}
 
+	//The player has to leave at least one army at the country
 	while (chosenArmyNumber < 1 || player->getNumberOfArmies() < chosenArmyNumber) {
 		cout << "You don't have enough armies please choose again: ";
 		cin >> chosenArmyNumber;
@@ -39,10 +45,13 @@ void HumanBehaviour::placeArmiesDuringReinforce()
 
 	int numOfArmiesAtChosenCountry = player->getNumberOfArmyAtCountry(player->map->getNodeFromGraphByName(chosenCountry)->countryInformation->getCountryName());
 	player->setNumberOfArmyAtCountry(*player->map->getNodeFromGraphByName(chosenCountry), numOfArmiesAtChosenCountry + chosenArmyNumber);
+	cout << "The number of armies is: " << numOfArmiesAtChosenCountry + chosenArmyNumber << " armies at " << chosenCountry << endl;
 	player->setNumberOfArmies(player->getNumberOfArmies() - chosenArmyNumber);
 
 }
 
+
+//If the player was human, they will asked which country they want to attack
 void HumanBehaviour::attackEnemies()
 {
 	if (player->countries->size() != 0) {
@@ -56,8 +65,14 @@ void HumanBehaviour::attackEnemies()
 				string attackingCountry;
 				string defendingCountry;
 				player->printListOfAllCountriesEnemies();
+
+				//choosing the country from where the player will attack
 				attackingCountry = player->chooseAttackingCountry();
+
+				//The country which will defend itself from the attack
 				defendingCountry = player->chooseCountryToBeAttacked(attackingCountry);
+
+				//in case if the player change their mind and they don't want to attack anymore.
 				if (defendingCountry.compare("cancel") != 0)
 				{
 					player->attackSequence(player->map->getNodeFromGraphByName(attackingCountry), player->map->getNodeFromGraphByName(defendingCountry));
@@ -76,6 +91,8 @@ void HumanBehaviour::attackEnemies()
 	}
 }
 
+//In case if the player was human, they wil be asked to choose the country they want to fortify and move 
+//the armies to which country
 void HumanBehaviour::fortify()
 {
 	//if the player doesn't have any countries.
@@ -111,7 +128,7 @@ void HumanBehaviour::fortify()
 					auto chosenCountry = player->map->getNodeFromGraphByName(chosenCountryString);
 					auto chosenNeighborCountry = player->map->getNodeFromGraphByName(chosenNeighborCountryString);
 					int numOfarmiesAtChosenCountry = player->getNumberOfArmyAtCountry(*chosenCountry->countryInformation->countryName);
-					int numOfArmiesAtNeighboringCountry = player->getNumberOfArmyAtCountry(*chosenNeighborCountry->countryInformation->countryName);
+					//int numOfArmiesAtNeighboringCountry = player->getNumberOfArmyAtCountry(*chosenNeighborCountry->countryInformation->countryName);
 					int numOfMovingArmies = 0;
 
 					if (numOfarmiesAtChosenCountry > 1)
@@ -149,6 +166,7 @@ void HumanBehaviour::fortify()
 	}
 }
 
+//Mina
 int HumanBehaviour::getAttackRoll(int attackArmiesOnNode)
 {
 	DicesPrompt dicesPrompt;
@@ -157,6 +175,7 @@ int HumanBehaviour::getAttackRoll(int attackArmiesOnNode)
 	return attackerNumDice;
 }
 
+//Mina
 int HumanBehaviour::getDefenseRoll(int defenseArmiesOnNode)
 {
 	DicesPrompt dicesPrompt;
@@ -165,6 +184,7 @@ int HumanBehaviour::getDefenseRoll(int defenseArmiesOnNode)
 	return attackerNumDice;
 }
 
+//The player can choose the number of armies they want to move to the new coquered country 
 int HumanBehaviour::getNumberOfTroopsToTransfer(int attackerArmies)
 {
 	int numArmiesToTransfer = 0;
@@ -182,29 +202,43 @@ HumanBehaviour::HumanBehaviour(Player * player)
 	this->player = player;
 }
 
-
+//In case of the player was of type aggressive--> they will reinforce the country which has the most number of armies
 void AggresiveAIBehaviour::placeArmiesDuringReinforce()
 {
 	if (player->countries->size() == 0)
 		return;
+
+	//Getting the node of the country with most number of armies
 	auto nodeToReinforce = findCountryNodeWithHighestAmountOfTroupsThatCanAttack();
+
+	cout << "The player " << player->getPlayerName() << " has choosen to reinforce " << nodeToReinforce->countryInformation->countryName << endl;
+	
 	nodeToReinforce->playerInfo->setNumberOfArmies(player->getNumberOfArmies() + nodeToReinforce->playerInfo->getNumberOfArmies());
 
-	player->setNumberOfArmies(0);
+	cout << "The country " << nodeToReinforce->countryInformation->countryName << " contains " << player->getNumberOfArmies() + nodeToReinforce->playerInfo->getNumberOfArmies() << " armies" << endl;
 
+	player->setNumberOfArmies(0);
 }
 
+// The aggressive Type player will choose to attack with its country that contains the most number of armies
 void AggresiveAIBehaviour::attackEnemies()
 {
 	if (player->countries->size() == 0)
 		return;
+
+	//choosing the country with which the country will attack 
 	auto attackingNode = findCountryNodeWithHighestAmountOfTroupsThatCanAttack();
+
+	cout << "The player " << player->getPlayerName() << " has chosen " << attackingNode->countryInformation->countryName << " to attack from" << endl;
+
+	//The player will keep trying to attack until they have one army left in the country
 	while (attackingNode->playerInfo->getNumberOfArmies() != 1)
 	{
+
 		auto neighbours = attackingNode->neighbouringCountries;
 		CountryNode * defendingNeighbours = nullptr;
 
-		for (int i = 0; i < neighbours.size(); i++)
+		for (unsigned int i = 0; i < neighbours.size(); i++)
 		{
 			if (player->isEnemy(*neighbours[i]->countryInformation->countryName))
 			{
@@ -216,25 +250,34 @@ void AggresiveAIBehaviour::attackEnemies()
 		{
 			break;
 		}
-
+		
+		cout << "The country " << defendingNeighbours->countryInformation->countryName << " has been chosen to be attacked " << endl;
 
 		player->rollingSequence(attackingNode, defendingNeighbours);
 
+		//choosing the country that has the biggest number of armies 
 		attackingNode = findCountryNodeWithHighestAmountOfTroupsThatCanAttack();
-
 	}
 }
 
+//In case if the player was of type fortify, by putting all its armies in one country
 void AggresiveAIBehaviour::fortify()
 {
 	if (player->countries->size() == 0)
 		return;
+
+	//choose the country that has the biggest number of armies which doesn't have armies around it
 	auto countryNodeWithTroups = findCountryNodeWithHighestAmountOfTroupsThatCannotAttack();
+
+	cout << "The player " << player->getPlayerName() << " has chosen the country " << countryNodeWithTroups->countryInformation->countryName << " to fortify" << endl;
+
+
 	if (countryNodeWithTroups->playerInfo->getNumberOfArmies() > 1)
 	{
+		//The list of the neighbors that belong to countryNodeWithTroups
 		auto neighbours = countryNodeWithTroups->neighbouringCountries;
 		CountryNode * fortifiedNode = nullptr;
-		for (int i = 0; i < neighbours.size(); i++)
+		for (unsigned int i = 0; i < neighbours.size(); i++)
 		{
 			if (player->countryOwnedByPlayer(*neighbours[i]->countryInformation->countryName))
 			{
@@ -247,10 +290,16 @@ void AggresiveAIBehaviour::fortify()
 		}
 		if (fortifiedNode)
 		{
+			cout << "The player " << player->getPlayerName() << " has chosen the country " << fortifiedNode->countryInformation->countryName 
+				<< " to move their armies from " << countryNodeWithTroups->countryInformation->countryName << endl;
 			player->armyManipulationFortify(fortifiedNode, countryNodeWithTroups, countryNodeWithTroups->playerInfo->getNumberOfArmies() - 1);
 		}
 
 	}
+	else {
+		cout << "The player " << player->getPlayerName()  << " have only one army at " << countryNodeWithTroups->countryInformation->countryName << " to fortify " <<  endl;
+	}
+
 }
 
 AggresiveAIBehaviour::AggresiveAIBehaviour(Player * player)
@@ -258,12 +307,15 @@ AggresiveAIBehaviour::AggresiveAIBehaviour(Player * player)
 	this->player = player;
 }
 
+
+//The purpose of this method is to find the country that contains the country with the most number of armies
+//Mina
 CountryNode * AggresiveAIBehaviour::findCountryNodeWithHighestAmountOfTroupsThatCanAttack()
 {
 	auto ownedCountries = *player->countries;
 	auto countryNode = ownedCountries[0];
 
-	for(int i = 0; i < ownedCountries.size(); i++)
+	for(unsigned int i = 0; i < ownedCountries.size(); i++)
 	{
 		if (!nodeHasEnemies(countryNode))
 		{
@@ -291,12 +343,14 @@ CountryNode * AggresiveAIBehaviour::findCountryNodeWithHighestAmountOfTroupsThat
 	return countryNode;
 }
 
+
+//Mina
 CountryNode * AggresiveAIBehaviour::findCountryNodeWithHighestAmountOfTroupsThatCannotAttack()
 {
 	auto ownedCountries = *player->countries;
 	auto countryNode = ownedCountries[0];
 
-	for (int i = 0; i < ownedCountries.size(); i++)
+	for (unsigned int i = 0; i < ownedCountries.size(); i++)
 	{
 		if (nodeHasEnemies(countryNode))
 		{
@@ -313,11 +367,14 @@ CountryNode * AggresiveAIBehaviour::findCountryNodeWithHighestAmountOfTroupsThat
 	return countryNode;
 }
 
+//The purpose of this method is to verify if a country has enemy country around them
 bool  AggresiveAIBehaviour::nodeHasEnemies(CountryNode * node)
 {
+
+	//Getting the list of neighbors to country node 
 	auto neighbours = node->neighbouringCountries;
 
-	for (int i = 0; i < neighbours.size(); i++)
+	for (unsigned int i = 0; i < neighbours.size(); i++)
 	{
 		if (player->isEnemy(*neighbours[i]->countryInformation->countryName)) {
 			return true;
@@ -327,37 +384,56 @@ bool  AggresiveAIBehaviour::nodeHasEnemies(CountryNode * node)
 	return false;
 }
 
+//The purpose of this method is to reinforce the country according to Benvolent player's logic
 void BenevolentAIBehaviour::placeArmiesDuringReinforce()
 {
+	//While the player has more armies they can place 
 	while (player->getNumberOfArmies())
 	{
+		cout << "The player " << player->getPlayerName() << " has " << player->getNumberOfArmies() << " to place" << endl;
+		//find the country which has the least number of armies
 		auto nodeToReinforce = findWeakestNodeOwnedByPlayer();
+
+		cout << "The player " << player->getPlayerName() << " has chosen " << nodeToReinforce->countryInformation->countryName << " to reinforce" << endl;
+		
+		//increase the number of armies that exist in the the chosen country 
 		nodeToReinforce->playerInfo->setNumberOfArmies(nodeToReinforce->playerInfo->getNumberOfArmies() + 1);
 
 		player->setNumberOfArmies(player->getNumberOfArmies()-1);
 	}
 }
 
+
 void BenevolentAIBehaviour::attackEnemies()
 {
 	std::cout << "I am too benevolent to attack, ignoring the irony that my pacifism approach will cause more death in the long run";
 }
 
+
+//The purpose of this method is to implement the fortify logic according to the player of Benevolent type
 void BenevolentAIBehaviour::fortify()
 {
 	if (player->countries->size() == 0)
 		return;
+
+	//Chosing the country to frotify 
 	auto nodeToFortify = findWeakestNodeOwnedByPlayer();
+
+	cout << "The player " << player->getPlayerName() << " has chosen the country " << nodeToFortify->countryInformation->countryName << " to move their armies to from one of its neighbors" << endl;
 
 	auto neighbours = nodeToFortify->neighbouringCountries;
 	CountryNode * countryNodeWithTroups = nullptr;
-	for (int i = 0; i < neighbours.size(); i++)
+	for (unsigned int i = 0; i < neighbours.size(); i++)
 	{
 		if (player->countryOwnedByPlayer(*neighbours[i]->countryInformation->countryName))
 		{
 			countryNodeWithTroups = neighbours[i];
 			if (countryNodeWithTroups->playerInfo->getNumberOfArmies() -1 > nodeToFortify->playerInfo->getNumberOfArmies())
 			{
+
+				cout << "The player " << player->getPlayerName() << " has chosen the country " << nodeToFortify->countryInformation->countryName
+					<< " to move their armies from " << countryNodeWithTroups->countryInformation->countryName << endl;
+
 				int numOfArmiesToTransfer = (countryNodeWithTroups->playerInfo->getNumberOfArmies() + nodeToFortify->playerInfo->getNumberOfArmies())/2;
 				numOfArmiesToTransfer = countryNodeWithTroups->playerInfo->getNumberOfArmies() - numOfArmiesToTransfer;
 				player->armyManipulationFortify(nodeToFortify, countryNodeWithTroups, numOfArmiesToTransfer);
@@ -374,12 +450,14 @@ BenevolentAIBehaviour::BenevolentAIBehaviour(Player * player)
 	this->player = player;
 }
 
+//Find the country that has the least number of armies owned by the player
 CountryNode * BenevolentAIBehaviour::findWeakestNodeOwnedByPlayer()
 {
+	//Get the list of countries owned by the player
 	auto ownedCountries = *player->countries;
 	auto countryNode = ownedCountries[0];
 
-	for (int i = 0; i < ownedCountries.size(); i++)
+	for (unsigned int i = 0; i < ownedCountries.size(); i++)
 	{
 		if (countryNode->playerInfo->getNumberOfArmies() > ownedCountries[i]->playerInfo->getNumberOfArmies())
 		{

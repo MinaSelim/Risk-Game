@@ -9,6 +9,7 @@
 
 using namespace std;
 
+//Created an enum to figure out the type of the player we want to create	
 enum BehaviourEnum { Human = 0, Aggresive, Benevolent };
 
 class Player {

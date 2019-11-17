@@ -153,7 +153,7 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 		currentPlayer = (++currentPlayer) % listOfPlayers->size();
 	}
 
-	cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName();
+	std::cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName();
 	
 }
 

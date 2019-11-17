@@ -65,24 +65,24 @@ Player::~Player()
 //and it will move the army from one country to one of its chosen neighbor:
 void Player::armyManipulationFortify(CountryNode * chosenNeighborCountry, CountryNode * chosenCountry, int numOfMovingArmies)
 {
+	//First Get the number of armies that exist in each the country and the neighbor country 
 	int numOfarmiesAtChosenCountry = getNumberOfArmyAtCountry(*chosenCountry->countryInformation->countryName);
 	int numOfArmiesAtNeighboringCountry = getNumberOfArmyAtCountry(*chosenNeighborCountry->countryInformation->countryName);
 	
-	
-
+	//Adjust the number of armies in each of the countries 
 	setNumberOfArmyAtCountry(*chosenCountry, numOfarmiesAtChosenCountry - numOfMovingArmies);
 	setNumberOfArmyAtCountry(*chosenNeighborCountry, numOfArmiesAtNeighboringCountry + numOfMovingArmies);
 
+	//printing out the number of armies that exist in each countries after the fortify
 	cout << "The number of Armies at " << *chosenCountry->countryInformation->countryName << " is " << getNumberOfArmyAtCountry(*chosenCountry->countryInformation->countryName) << endl;
 	cout << "The number of Armies at " << *chosenNeighborCountry->countryInformation->countryName << " is " << getNumberOfArmyAtCountry(*chosenNeighborCountry->countryInformation->countryName) << "\n" << endl;
-	
-
 }
 
 
 
 void Player::fortify()
 {
+	//Calling the fortify method according to the type of the player
 	playerBehaviour->fortify();
 }
 
@@ -141,6 +141,8 @@ string Player::choosingCountry()
 		cout << "Which one of your countries you wish to choose: " << endl;
 		printListOfCountries();
 		cin >> inputCountryName;
+		
+		//the method will verify if the country is of the player's or no.
 		value = countryOwnedByPlayer(inputCountryName);
 
 		if (!value) {
@@ -260,7 +262,7 @@ void Player::printListOfCountryAdjacentEnemies(CountryNode & country)
 	}
 }
 
-
+//The purpose of the method is to make the player owns the country.
 void Player::addCountryOwnerShip(CountryNode * node, int numOfArmies)
 {
 	if (node->playerInfo->getPlayer())
@@ -314,6 +316,7 @@ string Player::chooseAttackingCountry()
 		printListOfCountries();
 		cin >> chosenCountry;
 		value = countryOwnedByPlayer(chosenCountry);
+
 		//if the country has less than 2 armies reset value to -1, since you need minimum 2 armies to attack
 		if (!value) {
 			cout << "The inserted country Name doesn't exist in the list of countries. Please Try again: \n\n" << endl;
@@ -325,9 +328,7 @@ string Player::chooseAttackingCountry()
 				value = true;
 			}
 		}
-
 	} while (!value);
-
 	return chosenCountry;
 }
 //this method will ask the user to pick a country to attack
@@ -391,6 +392,16 @@ void Player::reinforce()
 	//	int cardsExchangeArmies = hand->exchange();
 		int cardsExchangeArmies = 0;
 
+		//if the player was a regular user, they will be asked what they want to do with their cards:
+		//Otherwise, it will exchange the cards with armies, if that's possible for the other type of players
+		if (*currentBehaviourEnum == BehaviourEnum::Human)
+		{
+			cardsExchangeArmies = this->getHandOfCards()->exchange();
+		}
+		else {
+			cardsExchangeArmies = this->getHandOfCards()->verifyExchange();
+		}
+
 		setNumberOfArmies(cardsExchangeArmies +  getNumberOfArmies());
 
 		cout << "The player has " << countries->size() << " countries, this will give him "
@@ -406,7 +417,7 @@ void Player::reinforce()
 	}
 	else
 	{
-		cout << "You don't have any country to reinforce" << endl;
+		cout << "Player doesn't have any country to reinforce" << endl;
 	}
 
 }

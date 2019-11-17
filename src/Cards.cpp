@@ -200,74 +200,23 @@ int HandOfCards::getNumberOfCards(string key) {
 //The Player can exchange between the cards they have and armies
 int HandOfCards::exchange()
 {
-	static int nextTurnNumberOfArmies = 4;
-	static int numberOfArmies		  = 4;
-	numberOfArmies					  = nextTurnNumberOfArmies;
 	int numberOfCardsInHand		      = this->getTotalNumberOfCards();
 	string userInput				  = "yes";
-	string question					  = "Do you want to exchange your cards with some armies(yes/no):";
-
-	//Represent the number of the types of cards that it has more than 0 cards in hand
-	int numberOfTypesValid			  = 0;
-	bool possibleExchange			  = false;
 
 	//The player have the options of exchaging or not if they have more than 5 cards
 	if (numberOfCardsInHand < 5) 
 	{
-		userInput = userConfirmation(question);
+		userInput = userConfirmation("Do you want to exchange your cards with some armies(yes/no):");
 	}
-	
+
 	if (userInput.compare("yes") == 0) {
-		for (auto it = this->playersCards->begin(); it != this->playersCards->end(); ++it) 
-		{
-			int numberOfCardsOfAType = *it->second;
-			string cardType = *it->first;
-
-			if (numberOfCardsOfAType >= 3) 
-			{
-				*it->second -= 3;
-				possibleExchange = true;
-				break;
-			}
-			else if (numberOfCardsOfAType > 0 && numberOfCardsOfAType != 3)
-			{
-				numberOfTypesValid += 1;
-			}
-			if (numberOfTypesValid == 3) 
-			{
-				possibleExchange = true;
-				this->reduceByOne();
-				break;
-			}
-		}
-
-		//If the player has enough cards then:
-		if (possibleExchange) 
-		{
-			if (numberOfArmies < 12) 
-			{
-				nextTurnNumberOfArmies += 2;
-			}
-			else if (numberOfArmies == 12) {
-				nextTurnNumberOfArmies += 3;
-			}
-			else {
-				nextTurnNumberOfArmies += 5;
-			}
-			return numberOfArmies;
-		}
-		else 
-		{
-			cout << "The player doesn't have enough cards to execute the exchange mehtod \n" << endl;
-			return 0;
-		}
+		return verifyExchange();
 	}
 	else 
 	{
 		cout << "The player doesn't want to exchange() their cards with armies \n";
-		return NULL;
-	}
-		
+		return 0;
+	}	
 }
 
 //To get the total number of cards in player's hand:
@@ -281,6 +230,65 @@ int HandOfCards::getTotalNumberOfCards()
 	return total;
 }
 
+int HandOfCards::verifyExchange()
+{
+	static int nextTurnNumberOfArmies = 4;
+	static int numberOfArmies = 4;
+	bool possibleExchange = false;
+	numberOfArmies = nextTurnNumberOfArmies;
+	int numberOfTypesValid = 0;
+
+	for (auto it = this->playersCards->begin(); it != this->playersCards->end(); ++it)
+	{
+		int numberOfCardsOfAType = *it->second;
+		string cardType = *it->first;
+
+		if (numberOfCardsOfAType >= 3)
+		{
+			*it->second -= 3;
+			possibleExchange = true;
+			break;
+		}
+		else if (numberOfCardsOfAType > 0 && numberOfCardsOfAType != 3)
+		{
+			numberOfTypesValid += 1;
+		}
+		if (numberOfTypesValid == 3)
+		{
+			possibleExchange = true;
+			this->reduceByOne();
+			break;
+		}
+	}
+
+	return calculateNumberOfArmiesToExchange(possibleExchange, nextTurnNumberOfArmies, numberOfArmies);
+	
+}
+
+int HandOfCards::calculateNumberOfArmiesToExchange(bool possibleExchange, int & nextTurnNumberOfArmies, int & numberOfArmies) 
+{
+	//If the player has enough cards then:
+	if (possibleExchange)
+	{
+		if (numberOfArmies < 12)
+		{
+			nextTurnNumberOfArmies += 2;
+		}
+		else if (numberOfArmies == 12) {
+			nextTurnNumberOfArmies += 3;
+		}
+		else {
+			nextTurnNumberOfArmies += 5;
+		}
+		cout << "The Player will get " << numberOfArmies << " in this round for exchanging cards" << endl;
+		return numberOfArmies;
+	}
+	else
+	{
+		cout << "The player doesn't have enough cards to execute the exchange mehtod \n" << endl;
+		return 0;
+	}
+}
 //To display how many cards the player has from each type of cards.
 void HandOfCards::PrintValues() {
 	for (auto it = this->playersCards->begin(); it != this->playersCards->end(); ++it) {
