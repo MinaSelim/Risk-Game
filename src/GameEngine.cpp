@@ -40,8 +40,8 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 		//using the adapter class
 		if (choice == 0) {
 			ConquestMapReader coquestMapReader;
-			MapLoaderAdapter mapLoader(&coquestMapReader);
-			map = mapLoader.loadMap(MAPS_DIRECTORY + mapsNames[choice]);
+			MapLoader* mapLoader = new MapLoaderAdapter(&coquestMapReader);
+			map = mapLoader->loadMap(MAPS_DIRECTORY + mapsNames[choice]);
 		}
 		else {
 			MapLoader mapLoader;

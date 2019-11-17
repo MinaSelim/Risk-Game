@@ -6,7 +6,7 @@
 class MapLoader {
 public:
 	MapLoader() {};
-	Map * loadMap(std::string fileName);
+	virtual Map * loadMap(std::string fileName);
 };
 
 namespace {
