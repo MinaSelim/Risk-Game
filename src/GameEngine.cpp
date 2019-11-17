@@ -15,10 +15,10 @@ GameEngine::GameEngine()
 
 	for (int i = 0; i < numOfPlayers; i++) 
 	{
-		listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Benevolent));
+		listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Aggresive));
 	}
 
-	Deck* deck = new Deck(map->getNumberOfCountriesInMap());
+	deck = new Deck(map->getNumberOfCountriesInMap());
 	cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
 
 }
@@ -143,7 +143,14 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 	while (true)
 	{
 		(*listOfPlayers)[currentPlayer]->reinforce();
+
+		int numberOfCountriesBeforeAttack = (*listOfPlayers)[currentPlayer]->getNumberOfCountries();
 		(*listOfPlayers)[currentPlayer]->attack();
+		int numberOfCountriesAfterAttack = (*listOfPlayers)[currentPlayer]->getNumberOfCountries();
+
+		if (numberOfCountriesAfterAttack > numberOfCountriesBeforeAttack) {
+			(*listOfPlayers)[currentPlayer]->getHandOfCards()->pickACard(deck);
+		}
 		(*listOfPlayers)[currentPlayer]->fortify();
 		if (gameWon())
 		{

@@ -157,7 +157,7 @@ HandOfCards::~HandOfCards()
 void HandOfCards::pickACard(Deck * deck)
 {
 	string  cardValue = deck->draw();
-
+	cout << "The player has picked a card of type: " << cardValue << endl;
 	Card * card = new Card();
 	card->setCard(cardValue);
 

@@ -56,6 +56,7 @@ public:
 	void setNumberOfArmies(int value) { *numberOfArmies = value; };
 	int getNumberOfArmies() { return *numberOfArmies; };
 	void setMap(Map * mapToSet) { map = mapToSet; };
+	int getNumberOfCountries() { return countries->size(); };
 
 private:
 	void armyManipulationFortify(CountryNode * chosenNeighborCountry, CountryNode * chosenCountry, int numOfMovingArmies);

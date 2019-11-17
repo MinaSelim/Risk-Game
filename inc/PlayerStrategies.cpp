@@ -211,7 +211,7 @@ void AggresiveAIBehaviour::placeArmiesDuringReinforce()
 	//Getting the node of the country with most number of armies
 	auto nodeToReinforce = findCountryNodeWithHighestAmountOfTroupsThatCanAttack();
 
-	cout << "The player " << player->getPlayerName() << " has choosen to reinforce " << nodeToReinforce->countryInformation->countryName << endl;
+	cout << "The player " << player->getPlayerName() << " has chosen to reinforce " << nodeToReinforce->countryInformation->getCountryName() << endl;
 	
 	nodeToReinforce->playerInfo->setNumberOfArmies(player->getNumberOfArmies() + nodeToReinforce->playerInfo->getNumberOfArmies());
 
@@ -229,7 +229,7 @@ void AggresiveAIBehaviour::attackEnemies()
 	//choosing the country with which the country will attack 
 	auto attackingNode = findCountryNodeWithHighestAmountOfTroupsThatCanAttack();
 
-	cout << "The player " << player->getPlayerName() << " has chosen " << attackingNode->countryInformation->countryName << " to attack from" << endl;
+	cout << "The player " << player->getPlayerName() << " has chosen " << attackingNode->countryInformation->getCountryName() << " to attack from" << endl;
 
 	//The player will keep trying to attack until they have one army left in the country
 	while (attackingNode->playerInfo->getNumberOfArmies() != 1)
@@ -269,7 +269,7 @@ void AggresiveAIBehaviour::fortify()
 	//choose the country that has the biggest number of armies which doesn't have armies around it
 	auto countryNodeWithTroups = findCountryNodeWithHighestAmountOfTroupsThatCannotAttack();
 
-	cout << "The player " << player->getPlayerName() << " has chosen the country " << countryNodeWithTroups->countryInformation->countryName << " to fortify" << endl;
+	cout << "The player " << player->getPlayerName() << " has chosen the country " << countryNodeWithTroups->countryInformation->getCountryName() << " to fortify" << endl;
 
 
 	if (countryNodeWithTroups->playerInfo->getNumberOfArmies() > 1)
@@ -290,8 +290,8 @@ void AggresiveAIBehaviour::fortify()
 		}
 		if (fortifiedNode)
 		{
-			cout << "The player " << player->getPlayerName() << " has chosen the country " << fortifiedNode->countryInformation->countryName 
-				<< " to move their armies from " << countryNodeWithTroups->countryInformation->countryName << endl;
+			cout << "The player " << player->getPlayerName() << " has chosen the country " << fortifiedNode->countryInformation->getCountryName()
+				<< " to move their armies from " << countryNodeWithTroups->countryInformation->getCountryName() << endl;
 			player->armyManipulationFortify(fortifiedNode, countryNodeWithTroups, countryNodeWithTroups->playerInfo->getNumberOfArmies() - 1);
 		}
 
@@ -394,7 +394,7 @@ void BenevolentAIBehaviour::placeArmiesDuringReinforce()
 		//find the country which has the least number of armies
 		auto nodeToReinforce = findWeakestNodeOwnedByPlayer();
 
-		cout << "The player " << player->getPlayerName() << " has chosen " << nodeToReinforce->countryInformation->countryName << " to reinforce" << endl;
+		cout << "The player " << player->getPlayerName() << " has chosen " << nodeToReinforce->countryInformation->getCountryName() << " to reinforce" << endl;
 		
 		//increase the number of armies that exist in the the chosen country 
 		nodeToReinforce->playerInfo->setNumberOfArmies(nodeToReinforce->playerInfo->getNumberOfArmies() + 1);
@@ -419,7 +419,7 @@ void BenevolentAIBehaviour::fortify()
 	//Chosing the country to frotify 
 	auto nodeToFortify = findWeakestNodeOwnedByPlayer();
 
-	cout << "The player " << player->getPlayerName() << " has chosen the country " << nodeToFortify->countryInformation->countryName << " to move their armies to from one of its neighbors" << endl;
+	cout << "The player " << player->getPlayerName() << " has chosen the country " << nodeToFortify->countryInformation->getCountryName() << " to move their armies to from one of its neighbors" << endl;
 
 	auto neighbours = nodeToFortify->neighbouringCountries;
 	CountryNode * countryNodeWithTroups = nullptr;
@@ -431,8 +431,8 @@ void BenevolentAIBehaviour::fortify()
 			if (countryNodeWithTroups->playerInfo->getNumberOfArmies() -1 > nodeToFortify->playerInfo->getNumberOfArmies())
 			{
 
-				cout << "The player " << player->getPlayerName() << " has chosen the country " << nodeToFortify->countryInformation->countryName
-					<< " to move their armies from " << countryNodeWithTroups->countryInformation->countryName << endl;
+				cout << "The player " << player->getPlayerName() << " has chosen the country " << nodeToFortify->countryInformation->getCountryName()
+					<< " to move their armies from " << countryNodeWithTroups->countryInformation->getCountryName() << endl;
 
 				int numOfArmiesToTransfer = (countryNodeWithTroups->playerInfo->getNumberOfArmies() + nodeToFortify->playerInfo->getNumberOfArmies())/2;
 				numOfArmiesToTransfer = countryNodeWithTroups->playerInfo->getNumberOfArmies() - numOfArmiesToTransfer;

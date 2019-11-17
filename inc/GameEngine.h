@@ -21,6 +21,7 @@ class GameEngine {
 private:
 	vector <Player*> * listOfPlayers;
 	Map * map;
+	Deck * deck;
 
 public:
 	GameEngine();
