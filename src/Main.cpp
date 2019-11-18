@@ -7,11 +7,10 @@ int main()
 	//ConquestMapReader reader;
 	//reader.conquestLoadMap("C:\\Program Files (x86)\\Conquest\\Maps\\Atlantis.map");
 	GameEngine e;
-	e.startGame();
-	//e.setupGame();
-	//e.assignTheWorldToAPlayer();
-	// e.eliminatePlayer();
-	//e.mainLoop();
+	//e.startGame();
+	e.setupGame();
+	e.assignTheWorldToAPlayer();
+	e.mainLoop();
 	
 	//PlayerDriver::PlayerTester();
 
