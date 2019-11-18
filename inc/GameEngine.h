@@ -49,5 +49,7 @@ private:
 
 namespace FileIO
 {
+	bool verifyTypeOfMapFile(std::string fileName);
 	std::vector<string> readDirectory(const std::string& directoryName);
+	bool checkUpFileType(std::ifstream & inputStream, std::string lineContent);
 }
