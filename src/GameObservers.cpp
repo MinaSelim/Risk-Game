@@ -90,11 +90,10 @@ void AttackObserver::update(string type)
 
 	if (phase.compare("attack") == 0) {
 		vector <Player*> list = subject->getListOfPlayers();
-		auto g = getSubject();
-		cout << endl << endl << "Player " << token << ":Attack phase" << endl;
-			/*<< "The list of countries with more than one army are: " << endl;
+		cout << endl << endl << "Player " << token << ":Attack phase" << endl
+			<< "The list of countries with more than one army are: " << endl;
 		subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->printListOfCountriesWithMoreThanOneArmy();
-	*/
+
 	}
 }
 
@@ -113,10 +112,9 @@ void FortifyObserver::update(string type)
 	token = strtok_s(nullptr, delimiter.c_str(), &next);
 
 	if (phase.compare("fortify") == 0) {
-		GameEngine * p = getSubject();
-		cout << endl << endl << "Player " << token << ":Fortify phase" << endl;
-			/*<< "The list of countries with more than one army are: " << endl;
-		subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->printListOfCountriesWithMoreThanOneArmy();*/
+		cout << endl << endl << "Player " << token << ":Fortify phase" << endl
+			<< "The list of countries with more than one army are: " << endl;
+		subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->printListOfCountriesWithMoreThanOneArmy();
 	}
 }
 
@@ -134,12 +132,11 @@ void ReinforceObserver::update(string type)
 	token = strtok_s(nullptr, delimiter.c_str(), &next);
 
 	if (phase.compare("reinforce") == 0) {
-		GameEngine * p = getSubject();
 		cout << endl << endl << "Player " << token << ":Reinforce phase" << endl;
-		/*cout << "The player has: " << endl
-			<< "countries: " << subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->getNumberTotalCountries() << endl
+		cout << "The player has: " << endl
+			<< "countries: " << subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->getNumberPlayerCountries() << endl
 			<< "continents: " << subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->getContinentsOwnedByPlayer().size() << endl
-			<< "cards: " << subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->getHandOfCards()->getTotalNumberOfCards() << endl;*/
+			<< "cards: " << subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->getHandOfCards()->getTotalNumberOfCards() << endl;
 	}
 }
 
@@ -194,14 +191,14 @@ void ConquerObserver::update(string type)
 	if (phase.compare("conquer") == 0) {
 		GameEngine * p = getSubject();
 		printMapOwnership(p);
-		cout << endl << endl << "Player "<< currentPlayer << " has conquered some country/ies." << endl << endl;
-		
+		cout << endl << endl << "Player " << currentPlayer << " has conquered some country/ies." << endl << endl;
+
 	}
 }
 
 
 void EliminationObserver::update(string type)
-{	
+{
 	std::string delimiter = " ";
 	std::string phase;
 	std::string currentPlayer;
@@ -240,7 +237,7 @@ void WinnerObserver::update(string type)
 		GameEngine * g = getSubject();
 		printMapOwnership(g);
 		cout << endl << endl << "Player " << currentPlayer << " has won the game! Congratulations!" << endl << endl;
-		
+
 	}
 }
 

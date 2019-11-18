@@ -185,15 +185,13 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 			system("CLS");
 			phase = "conquer ";
 			notify(phase.append(currentPlayerAsString));
-			this_thread::sleep_for(chrono::milliseconds(3000));
+			this_thread::sleep_for(chrono::milliseconds(6000));
 		}
 
 		system("CLS");
 		phase = "fortify ";
 		notify(phase.append(currentPlayerAsString));
-		(*listOfPlayers)[currentPlayer]->fortify();
-
-		
+		(*listOfPlayers)[currentPlayer]->fortify();		
 		
 		//remove player from list when they are eliminated
 		int playerCountries = (*listOfPlayers)[currentPlayer]->getNumberPlayerCountries();
