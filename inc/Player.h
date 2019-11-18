@@ -5,6 +5,7 @@
 #include "Cards.h"
 #include "Dice.h"
 #include "Utility.h"
+#include "GameObservers.h"
 
 using namespace std;
 
@@ -40,13 +41,14 @@ public:
 	~Player();
 	
 	void addCountryOwnerShip(CountryNode * node, int numOfArmies);
-	int  getArmiesAccordingToContinents();
+	int  getArmiesAccordingToContinents(); 
 
 	void reinforce();
 	void attack();
 	void fortify();
 
 	void printListOfCountries();
+	void printListOfCountriesWithMoreThanOneArmy();
 	void printListOfCountryNeighbors(CountryNode & country);
 	void printListOfPlayersCountryNeighbors(CountryNode& country);
 	void printListOfAllCountriesEnemies();
@@ -59,5 +61,9 @@ public:
 	string getPlayerName() { return *playerName; };
 	void setNumberOfArmies(int value) { *numberOfArmies = value; };
 	int getNumberOfArmies() { return *numberOfArmies; };
+	vector<int> getContinentsOwnedByPlayer();
 	void setMap(Map * mapToSet) { map = mapToSet; };
+
+	int getNumberPlayerCountries();
+	int getNumberTotalCountries();
 };

@@ -7,6 +7,7 @@
 #include <filesystem>
 #include "Cards.h"
 #include <sys/types.h>
+#include "GameObservers.h"
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #include <windows.h>
 #else
@@ -17,25 +18,38 @@
 
 using namespace std;
 
-class GameEngine {
+class GameEngine : public Subject {
 private:
 	vector <Player*> * listOfPlayers;
 	Map * map;
 
 public:
 	GameEngine();
+	bool eliminatedPlayer();
 	bool gameWon();
 	void startGame();
 	void assignTheWorldToAPlayer();
+	void eliminatePlayer();
 	void setupGame();
 	void mainLoop();
+	vector <Player*> getListOfPlayers();
+	int getNumberOfPlayers();
 	~GameEngine();
+	void update(string s) override;
 private:
 	void chooseMap();
 	int selectPlayersNumber();
+	EliminationObserver * eliminateObs;
+	WinnerObserver * winnerObs;
+	ConquerObserver * conquerObs;
+	AttackObserver * attackObs;
+	ReinforceObserver * reinforceObs;
+	FortifyObserver * fortifyObs;
 };
 
 namespace FileIO
 {
+	bool verifyTypeOfMapFile(std::string fileName);
 	std::vector<string> readDirectory(const std::string& directoryName);
+	bool checkUpFileType(std::ifstream & inputStream, std::string lineContent);
 }

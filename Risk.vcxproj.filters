@@ -39,7 +39,11 @@
     <ClInclude Include="inc\PlayerDriver.h">
       <Filter>Drivers</Filter>
     </ClInclude>
+    <ClInclude Include="inc\GameObservers.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
+  
   <ItemGroup>
     <ClCompile Include="src\Cards.cpp">
       <Filter>Source</Filter>
@@ -67,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="src\PlayerDriver.cpp">
       <Filter>Drivers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObservers.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
