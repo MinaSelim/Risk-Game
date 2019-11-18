@@ -37,7 +37,7 @@ void Subject::notify(string type) {
 };
 
 
-AttackObserver::AttackObserver(Player* p)
+AttackObserver::AttackObserver(GameEngine* p)
 {
 	subject = p;
 	subject->attach(this);
@@ -48,7 +48,7 @@ AttackObserver ::~AttackObserver()
 	subject->detach(this);
 }
 
-FortifyObserver::FortifyObserver(Player* p)
+FortifyObserver::FortifyObserver(GameEngine* p)
 {
 	subject = p;
 	subject->attach(this);
@@ -59,7 +59,7 @@ FortifyObserver ::~FortifyObserver()
 	subject->detach(this);
 }
 
-ReinforceObserver::ReinforceObserver(Player* p)
+ReinforceObserver::ReinforceObserver(GameEngine* p)
 {
 	subject = p;
 	subject->attach(this);
@@ -72,31 +72,70 @@ ReinforceObserver ::~ReinforceObserver()
 
 void AttackObserver::update(string type)
 {
-	if (type.compare("attack") == 0) {
-		Player * p = getSubject();
-		cout << endl << endl << "Player " << p->getPlayerName() << ":Attack phase" << endl << endl;
+	std::string delimiter = " ";
+	std::string phase;
+	std::string currentPlayer;
+
+	char* cstr = const_cast<char*>(type.c_str());
+	char* token;
+	char *next = NULL;
+	token = strtok_s(cstr, delimiter.c_str(), &next);
+	phase = token;
+	token = strtok_s(nullptr, delimiter.c_str(), &next);
+	currentPlayer = token;
+
+	if (phase.compare("attack") == 0) {
+		vector <Player*> list = subject->getListOfPlayers();
+		system("CLS");
+		auto g = getSubject();
+		cout << endl << endl << "Player " << currentPlayer << ":Attack phase" << endl << endl;
 	}
 }
 
 
 void FortifyObserver::update(string type)
 {
-	if (type.compare("fortify") == 0) {
-		Player * p = getSubject();
-		cout << endl << endl << "Player " << p->getPlayerName() << ": Fortify phase" << endl << endl;
+	std::string delimiter = " ";
+	std::string phase;
+	std::string currentPlayer;
+
+	char* cstr = const_cast<char*>(type.c_str());
+	char* token;
+	char *next = NULL;
+	token = strtok_s(cstr, delimiter.c_str(), &next);
+	phase = token;
+	token = strtok_s(nullptr, delimiter.c_str(), &next);
+	currentPlayer = token;
+
+	if (phase.compare("fortify") == 0) {
+		system("CLS");
+		GameEngine * p = getSubject();
+		cout << endl << endl << "Player " << currentPlayer << ": Fortify phase" << endl << endl;
 	}
 }
 
 void ReinforceObserver::update(string type)
 {
-	if (type.compare("reinforce") == 0) {
-		//system("CLS");
-		Player * p = getSubject();
-		cout << endl << endl << "Player " << p->getPlayerName() << ":Reinforce phase" << endl << endl;
+	std::string delimiter = " ";
+	std::string phase;
+	std::string currentPlayer;
+
+	char* cstr = const_cast<char*>(type.c_str());
+	char* token;
+	char *next = NULL;
+	token = strtok_s(cstr, delimiter.c_str(), &next);
+	phase = token;
+	token = strtok_s(nullptr, delimiter.c_str(), &next);
+	currentPlayer = token;
+
+	if (phase.compare("reinforce") == 0) {
+		system("CLS");
+		GameEngine * p = getSubject();
+		cout << endl << endl << "Player " << currentPlayer << ":Reinforce phase" << endl << endl;
 	}
 }
 
-ConquerObserver::ConquerObserver(Player * p)
+ConquerObserver::ConquerObserver(GameEngine * p)
 {
 	subject = p;
 	subject->attach(this);
@@ -133,8 +172,8 @@ WinnerObserver ::~WinnerObserver()
 void ConquerObserver::update(string type)
 {
 	if (type.compare("conquer") == 0) {
-		Player * p = getSubject();
-		cout << endl << endl << "Player " << p->getPlayerName() << " has conquered a country." << endl << endl;
+		GameEngine * p = getSubject();
+		cout << endl << endl << "Player " << " has conquered a country." << endl << endl;
 		
 	}
 }
@@ -172,7 +211,7 @@ void GameObservers::printMapOwnership(GameEngine * g)
 		int mapCountries = p->getNumberTotalCountries();
 		double percentageOwnership = 100 * (double)playerCountries / (double)mapCountries;
 		cout << "Player " << p->getPlayerName() << " has " << percentageOwnership << "% of countries on the Map." << endl;
-		delete p;
+		// delete p;
 	}
 	
 	cout << endl;

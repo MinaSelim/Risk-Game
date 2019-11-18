@@ -9,7 +9,7 @@
 
 using namespace std;
 
-class Player : public Subject {
+class Player {
 	
 private:
 	string * playerName;
@@ -62,7 +62,7 @@ public:
 	int getNumberOfArmies() { return *numberOfArmies; };
 	void setMap(Map * mapToSet) { map = mapToSet; };
 
-	void update(string s) override;
+	//void update(string s) override;
 	int getNumberPlayerCountries();
 	int getNumberTotalCountries();
 };

@@ -11,32 +11,28 @@ using Utility::userConfirmation;
 Player::Player() :playerName(new string("Player")), countries(new vector<CountryNode*>()),
 numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards())
 {
-	AttackObserver * ac = new AttackObserver(this);
-	FortifyObserver * fo = new FortifyObserver(this);
-	ReinforceObserver * ro = new ReinforceObserver(this);
-	ConquerObserver * co = new ConquerObserver(this);
-	
-
-
+	//AttackObserver * ac = new AttackObserver(this);
+	//FortifyObserver * fo = new FortifyObserver(this);
+	//ReinforceObserver * ro = new ReinforceObserver(this);
+	//ConquerObserver * co = new ConquerObserver(this);
 }
 
 Player::Player(string playerName, Map * map) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
 numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(map)
 {
-	AttackObserver  * ac = new AttackObserver(this);
-	FortifyObserver * fo = new FortifyObserver(this);
-	ReinforceObserver * ro = new ReinforceObserver(this);
-	ConquerObserver * co = new ConquerObserver(this);
-	
+	//AttackObserver  * ac = new AttackObserver(this);
+	//FortifyObserver * fo = new FortifyObserver(this);
+	//ReinforceObserver * ro = new ReinforceObserver(this);
+	//ConquerObserver * co = new ConquerObserver(this);
 }
 
 Player::Player(string playerName, vector<CountryNode*> * listOfCountries, Map * map) : playerName(new string(playerName)), countries(listOfCountries),
 numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(map)
 {
-	AttackObserver  * ac = new AttackObserver(this);
-	FortifyObserver * fo = new FortifyObserver(this);
-	ReinforceObserver * ro = new ReinforceObserver(this);
-	ConquerObserver * co = new ConquerObserver(this);
+	//AttackObserver  * ac = new AttackObserver(this);
+	//FortifyObserver * fo = new FortifyObserver(this);
+	//ReinforceObserver * ro = new ReinforceObserver(this);
+	//ConquerObserver * co = new ConquerObserver(this);
 }
 
 Player::~Player()
@@ -50,9 +46,7 @@ Player::~Player()
 	delete dice;
 	dice = NULL;
 	delete hand;
-	hand = NULL;
-	
-	
+	hand = NULL;	
 }
 
 //This method will ask the user the number of the armies they want to move from one country to another
@@ -97,7 +91,6 @@ void Player::armyManipulationFortify(CountryNode * chosenNeighborCountry, Countr
 
 void Player::fortify()
 {
-	notify("fortify");
 	//if the player doesn't have any countries.
 	if (countries->size() != 0) {
 		cout << "Executing the Fortify Method:\n" << endl;
@@ -426,7 +419,6 @@ bool Player::isEnemyNeighbor(CountryNode & country, string enemyNeighbor)
 
 void Player::reinforce()
 {
-	notify("reinforce");
 	if (countries->size() != 0) {
 		cout << endl << "Executing the Reinforce method for player " << getPlayerName() << endl;
 
@@ -588,7 +580,6 @@ void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defen
 //this method handles when a country is defeated and has to transfer ownership to a enemy player
 void Player::transferDefeatedCountry(CountryNode * attackingCountry, CountryNode * defendingCountry)
 {
-	notify("conquer");
 	int attackerArmies = attackingCountry->playerInfo->getNumberOfArmies();
 	string defendingCountryName = *defendingCountry->countryInformation->countryName;
 	int numArmiesToTransfer = 0;
@@ -644,7 +635,6 @@ void Player::attackSequence(CountryNode * attackingCountry, CountryNode * defend
 //Attack Part:
 void Player::attack()
 {
-	notify("attack");
 	if (countries->size() != 0) {
 		bool repeat = true;
 		do
@@ -677,7 +667,7 @@ void Player::attack()
 
 }
 
-void Player::update(string s) {}
+//void Player::update(string s) {}
 
 int Player::getNumberPlayerCountries()
 {

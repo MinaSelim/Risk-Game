@@ -2,6 +2,7 @@
 #include "MapLoader.h"
 #include <string>
 #include <cstdlib>
+#include <sstream>
 
 
 using namespace std;
@@ -23,6 +24,9 @@ GameEngine::GameEngine() : listOfPlayers(new vector<Player*>())
 
 	EliminationObserver * eliminateObs = new EliminationObserver(this);
 	WinnerObserver * winnerObs = new WinnerObserver(this);
+	AttackObserver *attackObs = new AttackObserver(this);
+	ReinforceObserver *reinforceObs = new ReinforceObserver(this);
+	FortifyObserver *fortifyObs = new FortifyObserver(this);
 }
 
 void GameEngine::chooseMap() // Function that lets the users select a map
@@ -155,10 +159,24 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 
 	while (true)
 	{
-		
+		stringstream currentPlayerAsStream;
+		currentPlayerAsStream << currentPlayer;
+		std::string currentPlayerAsString;
+		currentPlayerAsStream >> currentPlayerAsString;
+
 		printMapOwnership(this);
+		
+		std::string phase = "reinforce ";
+		notify(phase.append(currentPlayerAsString));
 		(*listOfPlayers)[currentPlayer]->reinforce();
+		
+		phase = "attack ";
+		notify(phase.append(currentPlayerAsString));
+
 		(*listOfPlayers)[currentPlayer]->attack();
+		phase = "fortify ";
+		notify(phase.append(currentPlayerAsString));
+
 		(*listOfPlayers)[currentPlayer]->fortify();
 
 		int playerCountries = (*listOfPlayers)[currentPlayer]->getNumberPlayerCountries();
