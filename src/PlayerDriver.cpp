@@ -5,8 +5,9 @@
 using namespace std;
 void PlayerDriver::PlayerTester()
 {
-	//Map * map = MapLoader::loadMap("./maps/worldNew.map");
-	//Deck* deck = new Deck(map->getNumberOfCountriesInMap());
+	MapLoader mapLoader;
+	Map * map = mapLoader.loadMap("./maps/worldNew.map");
+	//auto mapNode = map->getFirstNode();
 	//auto mapNode = map->getFirstNode();
 
 	//Creating the first player:

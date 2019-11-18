@@ -19,7 +19,6 @@ struct CountryInformation {
 	int *xCoordinate;
 	int *yCoordinate;
 	int *continentId;
-	//string continentName;
 	string *countryName;
 	vector<int> neighbouringCountriesIds;
 	CountryInformation(int id, int x, int y, int contId, string countName, vector<int> neigboursIds);
@@ -27,6 +26,7 @@ struct CountryInformation {
 	string getCountryName();
 	virtual ~CountryInformation();
 };
+
 
 class PlayerNode {
 private:
@@ -52,7 +52,6 @@ struct CountryNode {
 	CountryNode(const CountryNode & node);
 	~CountryNode();
 };
-
 
 class Map {
 
