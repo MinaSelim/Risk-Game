@@ -215,7 +215,7 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 			system("CLS");
 			phase = "eliminate ";
 			notify(phase.append(currentPlayerAsString));
-			this_thread::sleep_for(chrono::milliseconds(3000));
+			this_thread::sleep_for(chrono::milliseconds(6000));
 		}
 
 		if (gameWon())
