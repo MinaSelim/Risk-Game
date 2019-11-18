@@ -261,6 +261,7 @@ CountryInformation * ConquestMapReader::conquestCreateCountryInformation(char * 
 //get the required info
 Map * ConquestMapReader::conquestLoadMap(std::string fileName)
 {
+	//In case if the file doesn't exist in the directory
 	if (!Utility::fileExist(fileName))
 	{
 		throw FILE_DOES_NOT_EXIST;
@@ -311,9 +312,11 @@ ContinentInformation * ConquestMapReader::conquestCreateContinentInformation(cha
 	char * context = nullptr;
 	char delim[] = "=";
 
+	//Get the content name
 	token = strtok_s(continentInfo, delim, &context);
 	std::string continentName = token;
 
+	//Get the control value of the content
 	token = strtok_s(nullptr, delim, &context);
 	int controlValue = Utility::convertCStringToNumber(token);
 
@@ -330,7 +333,13 @@ MapLoaderAdapter::MapLoaderAdapter()
 {
 }
 
-MapLoaderAdapter::MapLoaderAdapter(ConquestMapReader * mapReader) : MapLoader()
+MapLoaderAdapter::~MapLoaderAdapter()
+{
+	delete conquestMapReader;
+	conquestMapReader = NULL;
+}
+
+MapLoaderAdapter::MapLoaderAdapter(ConquestMapReader * mapReader) 
 {
 	conquestMapReader = mapReader;
 }

@@ -6,6 +6,7 @@
 class MapLoader {
 public:
 	MapLoader() {};
+	virtual ~MapLoader() {};
 	virtual Map * loadMap(std::string fileName);
 };
 
@@ -18,7 +19,9 @@ namespace {
 };
 
 class ConquestMapReader {
+
 public:
+	~ConquestMapReader() {};
 	void conquestCreateListOfNeighbors(char * token, int & countryId, map<string, int>& countryIds, CountryInformation& country);
 	CountryInformation*  conquestCreateCountryInformation(char*countryInfo, std::vector<ContinentInformation*> & continents, int &countryId, map<string, int>&countryIds);
 	Map * conquestLoadMap(std::string fileName);
@@ -30,9 +33,9 @@ private:
 	ConquestMapReader * conquestMapReader;
 public:
 	MapLoaderAdapter();
+	~MapLoaderAdapter();
 	MapLoaderAdapter(ConquestMapReader * mapReader);
 	Map * loadMap(std::string fileName);
-
 };
 
 
