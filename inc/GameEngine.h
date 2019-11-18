@@ -31,6 +31,7 @@ public:
 	void setupGame();
 	void mainLoop();
 	~GameEngine();
+	void choosePlayerType(int numOfPlayers);
 private:
 	void chooseMap();
 	int selectPlayersNumber();

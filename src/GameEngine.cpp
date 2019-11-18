@@ -13,10 +13,7 @@ GameEngine::GameEngine()
 	int numOfPlayers = selectPlayersNumber();
 
 
-	for (int i = 0; i < numOfPlayers; i++) 
-	{
-		listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Aggresive));
-	}
+	choosePlayerType(numOfPlayers);
 
 	deck = new Deck(map->getNumberOfCountriesInMap());
 	cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
@@ -204,5 +201,34 @@ FindClose(hFind);
 	closedir(dirp);
 #endif
 	return directoryVector;
+}
+
+
+void GameEngine::choosePlayerType(int numOfPlayers) // Function that lets the users select a map
+{
+	for (int i = 0; i < numOfPlayers; i++)
+	{
+			
+
+		std::vector<string> playerTypes = {"Human", "Aggressive","Benevolent"};
+		std::cout << "Select the type of the player " << i <<" \n";
+		Utility::displayItemsInAVector(playerTypes);
+		int choice = -1;
+		do {
+			std::cout << "Select a valid number: \n";
+			cin >> choice;
+		} while (cin.fail() || choice < 0 || choice >= (int)(playerTypes.size()));
+
+		if (choice == 0) {
+			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Human));
+		}
+		else if (choice == 1) {
+			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Aggresive));
+		}
+		else {
+			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Benevolent));
+
+		}
+	}
 }
 
