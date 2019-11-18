@@ -42,8 +42,11 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 	Utility::displayItemsInAVector(mapsNames);
 	int choice = -1;
 	do {
-		cin.clear();
-		cin.ignore(300, '\n');
+		if (choice != -1) {
+			cin.clear();
+			cin.ignore(300, '\n');
+		}
+		
 		std::cout << "Select a valid number: \n";
 		cin >> choice;	
 	} while (cin.fail() || choice < 0 || choice >= (int)(mapsNames.size()));
