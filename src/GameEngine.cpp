@@ -43,6 +43,7 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 			MapLoader* mapLoader = new MapLoaderAdapter(&coquestMapReader);
 			map = mapLoader->loadMap(MAPS_DIRECTORY + mapsNames[choice]);
 		}
+	
 		else {
 			MapLoader mapLoader;
 			map = mapLoader.loadMap(MAPS_DIRECTORY + mapsNames[choice]);

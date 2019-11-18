@@ -339,7 +339,7 @@ MapLoaderAdapter::~MapLoaderAdapter()
 	conquestMapReader = NULL;
 }
 
-MapLoaderAdapter::MapLoaderAdapter(ConquestMapReader * mapReader) 
+MapLoaderAdapter::MapLoaderAdapter(ConquestMapReader * mapReader) : MapLoader()
 {
 	conquestMapReader = mapReader;
 }

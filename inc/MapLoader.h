@@ -36,6 +36,7 @@ public:
 	~MapLoaderAdapter();
 	MapLoaderAdapter(ConquestMapReader * mapReader);
 	Map * loadMap(std::string fileName);
+
 };
 
 
