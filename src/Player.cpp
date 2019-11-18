@@ -11,28 +11,16 @@ using Utility::userConfirmation;
 Player::Player() :playerName(new string("Player")), countries(new vector<CountryNode*>()),
 numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards())
 {
-	//AttackObserver * ac = new AttackObserver(this);
-	//FortifyObserver * fo = new FortifyObserver(this);
-	//ReinforceObserver * ro = new ReinforceObserver(this);
-	//ConquerObserver * co = new ConquerObserver(this);
 }
 
 Player::Player(string playerName, Map * map) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
 numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(map)
 {
-	//AttackObserver  * ac = new AttackObserver(this);
-	//FortifyObserver * fo = new FortifyObserver(this);
-	//ReinforceObserver * ro = new ReinforceObserver(this);
-	//ConquerObserver * co = new ConquerObserver(this);
 }
 
 Player::Player(string playerName, vector<CountryNode*> * listOfCountries, Map * map) : playerName(new string(playerName)), countries(listOfCountries),
 numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(map)
 {
-	//AttackObserver  * ac = new AttackObserver(this);
-	//FortifyObserver * fo = new FortifyObserver(this);
-	//ReinforceObserver * ro = new ReinforceObserver(this);
-	//ConquerObserver * co = new ConquerObserver(this);
 }
 
 Player::~Player()
@@ -664,8 +652,6 @@ void Player::attack()
 	}
 
 }
-
-//void Player::update(string s) {}
 
 int Player::getNumberPlayerCountries()
 {
