@@ -25,6 +25,7 @@ private:
 
 public:
 	GameEngine();
+	bool eliminatedPlayer();
 	bool gameWon();
 	void startGame();
 	void assignTheWorldToAPlayer();

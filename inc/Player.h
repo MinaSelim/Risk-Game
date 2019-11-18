@@ -63,6 +63,6 @@ public:
 	void setMap(Map * mapToSet) { map = mapToSet; };
 
 	void update(string s) override;
-	int numberPlayerCountries();
-	int numberTotalCountries();
+	int getNumberPlayerCountries();
+	int getNumberTotalCountries();
 };

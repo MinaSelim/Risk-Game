@@ -49,7 +49,6 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 
 bool GameEngine::gameWon()
 {
-	notify("win");
 	auto countryGraph = map->getCountriesGraph();
 
 	auto firstNode = map->getFirstNode();
@@ -97,27 +96,14 @@ void GameEngine::assignTheWorldToAPlayer()// A testing Function that assigns the
 	}
 }
 
-void GameEngine::eliminatePlayer()// A testing Function that assigns the entire world to a player
+void GameEngine::eliminatePlayer()// A testing Function that assigns countries to 2 players, then reassigns 1 players countries to another, trying to trigger elimination observer
 {
 	auto countryGraphShallowCopy = map->getCountriesGraph();
 
-	//asign half of countries to Player 0, the other half to Player 1
-	for (unsigned int i = 0; i < countryGraphShallowCopy.size()/2; i++)
-	{
-		(*listOfPlayers)[0]->addCountryOwnerShip(countryGraphShallowCopy[i], 1);
-	}
-
-	for (unsigned int i = countryGraphShallowCopy.size() / 2; i < countryGraphShallowCopy.size(); i++)
-	{
-		(*listOfPlayers)[1]->addCountryOwnerShip(countryGraphShallowCopy[i], 1);
-	}
-
-	//unassign by assigning countries from Player 0 to Player 1
-	for (unsigned int i = 0; i < countryGraphShallowCopy.size() / 2; i++)
-	{
-		(*listOfPlayers)[1]->addCountryOwnerShip(countryGraphShallowCopy[i], 1);
-	}
-
+	//set up situation for player 0 to eliminate player 1
+	(*listOfPlayers)[0]->addCountryOwnerShip(countryGraphShallowCopy[0], 10);
+	
+	(*listOfPlayers)[1]->addCountryOwnerShip(countryGraphShallowCopy[1], 1);
 
 }
 
@@ -167,19 +153,22 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 {
 	int currentPlayer = rand() % listOfPlayers->size();
 
-	if ((*listOfPlayers)[currentPlayer]->numberTotalCountries() == 0)
-	{
-		notify("eliminate");
-	}
-
 	while (true)
 	{
+		
+		printMapOwnership(this);
 		(*listOfPlayers)[currentPlayer]->reinforce();
 		(*listOfPlayers)[currentPlayer]->attack();
 		(*listOfPlayers)[currentPlayer]->fortify();
 
+		int playerCountries = (*listOfPlayers)[currentPlayer]->getNumberPlayerCountries();
+		
+		//this condition doesnt get triggered, gets null pointer
+		
+
 		if (gameWon())
 		{
+			notify("win");
 			break;
 		}
 		currentPlayer = (++currentPlayer) % listOfPlayers->size();
@@ -198,7 +187,6 @@ GameEngine::~GameEngine()
 	}
 
 	delete listOfPlayers;
-	
 }
 
 std::vector<string> FileIO::readDirectory(const std::string& directoryName)

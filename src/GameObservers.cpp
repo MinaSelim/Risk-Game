@@ -90,7 +90,7 @@ void FortifyObserver::update(string type)
 void ReinforceObserver::update(string type)
 {
 	if (type.compare("reinforce") == 0) {
-		system("CLS");
+		//system("CLS");
 		Player * p = getSubject();
 		cout << endl << endl << "Player " << p->getPlayerName() << ":Reinforce phase" << endl << endl;
 	}
@@ -145,8 +145,8 @@ void EliminationObserver::update(string type)
 	if (type.compare("eliminate") == 0) {
 		GameEngine * g = getSubject();
 		printMapOwnership(g);
-		cout << endl << endl << "Player " << " has been Eliminated." << endl << endl;
-		
+		cout << "Player has been Eliminated." << endl;
+
 	}
 }
 
@@ -155,7 +155,7 @@ void WinnerObserver::update(string type)
 	if (type.compare("win") == 0) {
 		GameEngine * g = getSubject();
 		printMapOwnership(g);
-		cout << endl << endl << "Player "  << " has won the game! Congratulations!" << endl << endl;
+		cout << endl << endl << "Player has won the game! Congratulations!" << endl << endl;
 		
 	}
 }
@@ -163,14 +163,18 @@ void WinnerObserver::update(string type)
 void GameObservers::printMapOwnership(GameEngine * g)
 {	
 	vector <Player*>  players = g->getListOfPlayers();
-	cout << "***PLAYER MAP OWNERSHIP BREAKDOWN***" << endl;
+	cout << endl;
+	cout << "***Player World Domination View***" << endl;
 	for (unsigned int i = 0; i < players.size(); i++)
 	{
 		Player * p = players[i];
-		int playerCountries = p->numberPlayerCountries();
-		int mapCountries = p->numberTotalCountries();
+		int playerCountries = p->getNumberPlayerCountries();
+		int mapCountries = p->getNumberTotalCountries();
 		double percentageOwnership = 100 * (double)playerCountries / (double)mapCountries;
 		cout << "Player " << p->getPlayerName() << " has " << percentageOwnership << "% of countries on the Map." << endl;
+		delete p;
 	}
+	
+	cout << endl;
 }
 
