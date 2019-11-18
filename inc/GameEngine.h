@@ -39,6 +39,12 @@ public:
 private:
 	void chooseMap();
 	int selectPlayersNumber();
+	EliminationObserver * eliminateObs;
+	WinnerObserver * winnerObs;
+	ConquerObserver * conquerObs;
+	AttackObserver * attackObs;
+	ReinforceObserver * reinforceObs;
+	FortifyObserver * fortifyObs;
 };
 
 namespace FileIO

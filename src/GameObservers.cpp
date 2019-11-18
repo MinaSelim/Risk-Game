@@ -248,13 +248,10 @@ void GameObservers::printMapOwnership(GameEngine * g)
 	cout << "***Player World Domination View***" << endl;
 	for (unsigned int i = 0; i < players.size(); i++)
 	{
-		Player * p = new Player();
-		p = players[i];
-		int playerCountries = p->getNumberPlayerCountries();
-		int mapCountries = p->getNumberTotalCountries();
+		int playerCountries = players[i]->getNumberPlayerCountries();
+		int mapCountries = players[i]->getNumberTotalCountries();
 		double percentageOwnership = 100 * (double)playerCountries / (double)mapCountries;
-		cout << "Player " << p->getPlayerName() << " has " << percentageOwnership << "% of countries on the Map." << endl;
-		// delete p;
+		cout << "Player " << players[i]->getPlayerName() << " has " << percentageOwnership << "% of countries on the Map." << endl;
 	}
 
 	cout << endl;

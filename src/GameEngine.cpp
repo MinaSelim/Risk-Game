@@ -23,12 +23,14 @@ GameEngine::GameEngine() : listOfPlayers(new vector<Player*>())
 	Deck* deck = new Deck(map->getNumberOfCountriesInMap());
 	cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
 
-	EliminationObserver * eliminateObs = new EliminationObserver(this);
-	WinnerObserver * winnerObs = new WinnerObserver(this);
-	ConquerObserver * conquerObs = new ConquerObserver(this);
-	AttackObserver *attackObs = new AttackObserver(this);
-	ReinforceObserver *reinforceObs = new ReinforceObserver(this);
-	FortifyObserver *fortifyObs = new FortifyObserver(this);
+	
+	eliminateObs = new EliminationObserver(this);
+	winnerObs = new WinnerObserver(this);
+	conquerObs = new ConquerObserver(this);
+	attackObs = new AttackObserver(this);
+	reinforceObs = new ReinforceObserver(this);
+	fortifyObs = new FortifyObserver(this);
+ 
 }
 
 void GameEngine::chooseMap() // Function that lets the users select a map
@@ -224,8 +226,22 @@ GameEngine::~GameEngine()
 	{
 		delete (*listOfPlayers)[i];
 	}
-
 	delete listOfPlayers;
+
+	delete eliminateObs;
+	delete winnerObs;
+	delete reinforceObs;
+	delete fortifyObs;
+	delete attackObs;
+	delete conquerObs;
+
+	eliminateObs = nullptr;
+	winnerObs = nullptr;
+	reinforceObs = nullptr;
+	fortifyObs = nullptr;
+	attackObs = nullptr;
+	conquerObs = nullptr;
+
 }
 
 std::vector<string> FileIO::readDirectory(const std::string& directoryName)

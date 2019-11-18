@@ -5,10 +5,10 @@
 int main()
 {
 	GameEngine e;
-	e.startGame();
-	//e.setupGame();
-	//e.assignTheWorldToAPlayer();
-	//e.mainLoop();
+	//e.startGame();
+	e.setupGame();
+	e.assignTheWorldToAPlayer();
+	e.mainLoop();
 	
 	//PlayerDriver::PlayerTester();
 
