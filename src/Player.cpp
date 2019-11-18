@@ -46,7 +46,7 @@ Player::~Player()
 	delete dice;
 	dice = NULL;
 	delete hand;
-	hand = NULL;	
+	hand = NULL;
 }
 
 //This method will ask the user the number of the armies they want to move from one country to another
@@ -93,7 +93,6 @@ void Player::fortify()
 {
 	//if the player doesn't have any countries.
 	if (countries->size() != 0) {
-		cout << "Executing the Fortify Method:\n" << endl;
 		string question = "Would you like to fortify your position (yes/no): ";
 		if (userConfirmation(question).compare("yes") == 0)
 		{
@@ -420,7 +419,6 @@ bool Player::isEnemyNeighbor(CountryNode & country, string enemyNeighbor)
 void Player::reinforce()
 {
 	if (countries->size() != 0) {
-		cout << endl << "Executing the Reinforce method for player " << getPlayerName() << endl;
 
 		// Checking how many armies the player should get with a minimum of 3 armies.
 		int armiesCountries = countries->size() / 3;
@@ -436,11 +434,7 @@ void Player::reinforce()
 
 		setNumberOfArmies(cardsExchangeArmies + armiesContinents + armiesCountries + getNumberOfArmies());
 
-		cout << "The player has " << countries->size() << " countries, this will give him "
-			<< armiesCountries << " armies" << endl
-			<< "Player will get " << armiesContinents << " armies from his continents" << endl
-			<< "Player acquired " << cardsExchangeArmies << " armies from exchanging cards." << endl
-			<< "User now has "
+		cout << "User gained from reinforce "
 			<< getNumberOfArmies() << " armies" << endl;
 
 		do {
@@ -454,10 +448,7 @@ void Player::reinforce()
 
 }
 
-//The method will return the number of armies a player gets according to the control-value of the contitents they rule.
-int Player::getArmiesAccordingToContinents()
-{
-	int armies = 0;
+vector<int> Player::getContinentsOwnedByPlayer() {
 	std::vector<int> continentsIdOwned;
 	std::vector<int> continentIds = map->getContinentIds();
 
@@ -468,11 +459,18 @@ int Player::getArmiesAccordingToContinents()
 		}
 	}
 
-	cout << "Player has " << continentsIdOwned.size() << " continents" << endl;
+	return continentsIdOwned;
+}
+
+//The method will return the number of armies a player gets according to the control-value of the contitents they rule.
+int Player::getArmiesAccordingToContinents()
+{
+	int armies = 0;
+	std::vector<int> continentsIdOwned = getContinentsOwnedByPlayer();
 
 	// adding armies according to the control-value of each continent
 	for (unsigned i = 0; i < continentsIdOwned.size(); i++) {
-		armies += map->getContinentControlValue(continentsIdOwned[i] );
+		armies += map->getContinentControlValue(continentsIdOwned[i]);
 	}
 	return armies;
 }
@@ -570,7 +568,7 @@ void Player::rollingSequence(CountryNode * attackingCountry, CountryNode * defen
 	defendingCountry->playerInfo->setNumberOfArmies(defenderArmies);
 
 	if (defenderArmies == 0)
-	{	
+	{
 		transferDefeatedCountry(attackingCountry, defendingCountry);
 	}
 
@@ -674,7 +672,16 @@ int Player::getNumberPlayerCountries()
 	return countries->size();
 }
 
-int Player::getNumberTotalCountries() 
+int Player::getNumberTotalCountries()
 {
 	return map->getNumberOfCountriesInMap();
+}
+
+void Player::printListOfCountriesWithMoreThanOneArmy()
+{
+	for (unsigned int i = 0; i < countries->size(); i++)
+	{
+		if ((*countries)[i]->playerInfo->getNumberOfArmies() > 1)
+			cout << *(*countries)[i]->countryInformation->countryName << " has " << (*countries)[i]->playerInfo->getNumberOfArmies() << " armies." << endl;
+	}
 }
