@@ -68,7 +68,7 @@ Map * MapLoader::loadMap(std::string fileName)
 
 namespace
 {
-	void seekFileStreamToLine(std::ifstream & inputStream, std::string lineContent) //seeks to a certain line in the file
+	bool seekFileStreamToLine(std::ifstream & inputStream, std::string lineContent) //seeks to a certain line in the file
 	{
 		std::streamsize  count = 400;
 		char nextLine[400];
@@ -79,7 +79,11 @@ namespace
 
 			if (!lineContent.compare(nextLine))
 			{
-				return;
+				return true;
+			}
+			if (inputStream.eof()) {
+				inputStream.getline(nextLine, -1);
+				return false;
 			}
 		}
 	}
@@ -348,5 +352,3 @@ Map * MapLoaderAdapter::loadMap(std::string fileName)
 {
 	return conquestMapReader->conquestLoadMap(fileName);
 }
-
-

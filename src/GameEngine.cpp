@@ -1,7 +1,10 @@
 #include "GameEngine.h"
 #include "MapLoader.h"
+#include "Utility.h"
 #include <string>
 #include <cstdlib>
+#include <fstream>
+
 
 using namespace std;
 
@@ -23,6 +26,7 @@ GameEngine::GameEngine()
 
 }
 
+
 void GameEngine::chooseMap() // Function that lets the users select a map
 {
 	std::vector<string> mapsNames = FileIO::readDirectory(MAPS_DIRECTORY);
@@ -36,12 +40,12 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 
 	try {
 
-		//the first choise represent a map from the conquest game which will be adapted to this game 
-		//using the adapter class
-		if (choice == 0) {
-			ConquestMapReader coquestMapReader;
-			MapLoader* mapLoader = new MapLoaderAdapter(&coquestMapReader);
+		bool verify = FileIO::verifyTypeOfMapFile(MAPS_DIRECTORY + mapsNames[choice]);
+		if (!verify) {
+			ConquestMapReader * coquestMapReader = new ConquestMapReader();
+			MapLoader* mapLoader = new MapLoaderAdapter(coquestMapReader);
 			map = mapLoader->loadMap(MAPS_DIRECTORY + mapsNames[choice]);
+			delete mapLoader;
 		}
 	
 		else {
@@ -178,6 +182,21 @@ GameEngine::~GameEngine()
 	}
 
 	delete listOfPlayers;
+}
+
+bool FileIO::verifyTypeOfMapFile(std::string fileName)
+{
+	if (!Utility::fileExist(fileName))
+	{
+		throw FILE_DOES_NOT_EXIST;
+	}
+
+	std::ifstream mapFile(fileName);
+	bool found = seekFileStreamToLine(mapFile, "[borders]");
+	if (found) {
+		return true;
+	}
+	return false;
 }
 
 std::vector<string> FileIO::readDirectory(const std::string& directoryName)

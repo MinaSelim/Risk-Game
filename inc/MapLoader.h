@@ -10,8 +10,9 @@ public:
 	virtual Map * loadMap(std::string fileName);
 };
 
+
 namespace {
-	void seekFileStreamToLine(std::ifstream & inputStream, std::string lineContent);
+	bool seekFileStreamToLine(std::ifstream & inputStream, std::string lineContent);
 	CountryInformation * createCountryInformation(char * countryInfo);
 	ContinentInformation * createContinentInformation(char * continentInfo, int continentId);
 	void createBordersInformation(char * bordersInfo, std::vector<CountryInformation*>  countries);
