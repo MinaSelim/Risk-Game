@@ -4,6 +4,7 @@
 #include <string>
 #include <cstdlib>
 #include <fstream>
+#include "ErrorCodes.h"
 
 
 using namespace std;
