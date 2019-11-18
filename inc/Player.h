@@ -48,6 +48,7 @@ public:
 	void fortify();
 
 	void printListOfCountries();
+	void printListOfCountriesWithMoreThanOneArmy();
 	void printListOfCountryNeighbors(CountryNode & country);
 	void printListOfPlayersCountryNeighbors(CountryNode& country);
 	void printListOfAllCountriesEnemies();
@@ -60,9 +61,9 @@ public:
 	string getPlayerName() { return *playerName; };
 	void setNumberOfArmies(int value) { *numberOfArmies = value; };
 	int getNumberOfArmies() { return *numberOfArmies; };
+	vector<int> getContinentsOwnedByPlayer();
 	void setMap(Map * mapToSet) { map = mapToSet; };
 
-	//void update(string s) override;
 	int getNumberPlayerCountries();
 	int getNumberTotalCountries();
 };

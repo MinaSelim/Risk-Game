@@ -11,5 +11,7 @@ int main()
 	e.mainLoop();
 	
 	//PlayerDriver::PlayerTester();
+
+	system("PAUSE");
 }
 
