@@ -336,3 +336,4 @@ void PlayerNode::assignPlayer(Player * playerToSet)
 
 	player = playerToSet;
 }
+
