@@ -8,7 +8,6 @@ int main()
 	//e.startGame();
 	//e.setupGame();
 	e.assignTheWorldToAPlayer();
-	//e.eliminatePlayer();
 	e.mainLoop();
 	
 	//PlayerDriver::PlayerTester();

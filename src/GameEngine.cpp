@@ -207,6 +207,7 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 
 		if (gameWon())
 		{
+			system("CLS");
 			phase = "win ";
 			notify(phase.append(currentPlayerAsString));
 			break;

@@ -85,7 +85,6 @@ void AttackObserver::update(string type)
 
 	if (phase.compare("attack") == 0) {
 		vector <Player*> list = subject->getListOfPlayers();
-		//system("CLS");
 		auto g = getSubject();
 		printMapOwnership(g);
 		cout << endl << endl << "Player " << currentPlayer << ":Attack phase" << endl << endl;
@@ -108,7 +107,6 @@ void FortifyObserver::update(string type)
 	currentPlayer = token;
 
 	if (phase.compare("fortify") == 0) {
-		//system("CLS");
 		GameEngine * p = getSubject();
 		printMapOwnership(p);
 		cout << endl << endl << "Player " << currentPlayer << ": Fortify phase" << endl << endl;
@@ -130,7 +128,6 @@ void ReinforceObserver::update(string type)
 	currentPlayer = token;
 
 	if (phase.compare("reinforce") == 0) {
-		//system("CLS");
 		GameEngine * p = getSubject();
 		printMapOwnership(p);
 		cout << endl << endl << "Player " << currentPlayer << ":Reinforce phase" << endl << endl;
