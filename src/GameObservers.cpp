@@ -140,7 +140,7 @@ void ReinforceObserver::update(string type)
 		GameEngine * p = getSubject();
 		cout << endl << endl << "Player " << token << ":Reinforce phase" << endl;
 		cout << "The player has: " << endl
-			<< "countries: " << subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->getNumberTotalCountries() << endl
+			<< "countries: " << subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->getNumberPlayerCountries() << endl
 			<< "continents: " << subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->getContinentsOwnedByPlayer().size() << endl
 			<< "cards: " << subject->getListOfPlayers().at(Utility::convertCStringToNumber(token))->getHandOfCards()->getTotalNumberOfCards() << endl;
 	}

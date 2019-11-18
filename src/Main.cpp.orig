@@ -1,0 +1,24 @@
+#include <iostream>
+#include "GameEngine.h"
+#include "PlayerDriver.h"
+<<<<<<< HEAD
+
+=======
+#include "MapLoader.h"
+>>>>>>> bd421c3b6abc3524c14abfd3bca32a9ea6d31edb
+int main()
+{
+	//ConquestMapReader reader;
+	//reader.conquestLoadMap("C:\\Program Files (x86)\\Conquest\\Maps\\Atlantis.map");
+	GameEngine e;
+	e.startGame();
+	//e.setupGame();
+	//e.assignTheWorldToAPlayer();
+	// e.eliminatePlayer();
+	//e.mainLoop();
+	
+	//PlayerDriver::PlayerTester();
+
+	system("PAUSE");
+}
+
