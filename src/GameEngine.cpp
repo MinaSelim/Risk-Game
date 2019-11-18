@@ -185,6 +185,25 @@ GameEngine::~GameEngine()
 	delete listOfPlayers;
 }
 
+bool FileIO::checkUpFileType(std::ifstream & inputStream, std::string lineContent) 
+{
+	std::streamsize  count = 400;
+	char nextLine[400];
+
+	while (!inputStream.eof())
+	{
+		inputStream.getline(nextLine, count);
+
+		if (!lineContent.compare(nextLine))
+		{
+			return true;
+		}
+		if (inputStream.eof()) {
+			return false;
+		}
+	}
+}
+
 bool FileIO::verifyTypeOfMapFile(std::string fileName)
 {
 	if (!Utility::fileExist(fileName))
@@ -193,7 +212,7 @@ bool FileIO::verifyTypeOfMapFile(std::string fileName)
 	}
 
 	std::ifstream mapFile(fileName);
-	bool found = seekFileStreamToLine(mapFile, "[borders]");
+	bool found = FileIO::checkUpFileType(mapFile, "[borders]");
 	if (found) {
 		return true;
 	}
