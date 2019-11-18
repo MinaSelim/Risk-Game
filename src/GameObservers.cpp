@@ -7,7 +7,6 @@ using namespace std;
 
 GameObservers::GameObservers()
 {
-
 }
 
 
@@ -86,8 +85,9 @@ void AttackObserver::update(string type)
 
 	if (phase.compare("attack") == 0) {
 		vector <Player*> list = subject->getListOfPlayers();
-		system("CLS");
+		//system("CLS");
 		auto g = getSubject();
+		printMapOwnership(g);
 		cout << endl << endl << "Player " << currentPlayer << ":Attack phase" << endl << endl;
 	}
 }
@@ -108,8 +108,9 @@ void FortifyObserver::update(string type)
 	currentPlayer = token;
 
 	if (phase.compare("fortify") == 0) {
-		system("CLS");
+		//system("CLS");
 		GameEngine * p = getSubject();
+		printMapOwnership(p);
 		cout << endl << endl << "Player " << currentPlayer << ": Fortify phase" << endl << endl;
 	}
 }
@@ -129,15 +130,16 @@ void ReinforceObserver::update(string type)
 	currentPlayer = token;
 
 	if (phase.compare("reinforce") == 0) {
-		system("CLS");
+		//system("CLS");
 		GameEngine * p = getSubject();
+		printMapOwnership(p);
 		cout << endl << endl << "Player " << currentPlayer << ":Reinforce phase" << endl << endl;
 	}
 }
 
-ConquerObserver::ConquerObserver(GameEngine * p)
+ConquerObserver::ConquerObserver(GameEngine * g)
 {
-	subject = p;
+	subject = g;
 	subject->attach(this);
 }
 
@@ -171,30 +173,67 @@ WinnerObserver ::~WinnerObserver()
 
 void ConquerObserver::update(string type)
 {
-	if (type.compare("conquer") == 0) {
+	std::string delimiter = " ";
+	std::string phase;
+	std::string currentPlayer;
+
+	char* cstr = const_cast<char*>(type.c_str());
+	char* token;
+	char *next = NULL;
+	token = strtok_s(cstr, delimiter.c_str(), &next);
+	phase = token;
+	token = strtok_s(nullptr, delimiter.c_str(), &next);
+	currentPlayer = token;
+
+	if (phase.compare("conquer") == 0) {
 		GameEngine * p = getSubject();
-		cout << endl << endl << "Player " << " has conquered a country." << endl << endl;
+		printMapOwnership(p);
+		cout << endl << endl << "Player "<< currentPlayer << " has conquered some country/ies." << endl << endl;
 		
 	}
 }
 
 
 void EliminationObserver::update(string type)
-{
-	if (type.compare("eliminate") == 0) {
+{	
+	std::string delimiter = " ";
+	std::string phase;
+	std::string currentPlayer;
+
+	char* cstr = const_cast<char*>(type.c_str());
+	char* token;
+	char *next = NULL;
+	token = strtok_s(cstr, delimiter.c_str(), &next);
+	phase = token;
+	token = strtok_s(nullptr, delimiter.c_str(), &next);
+	currentPlayer = token;
+
+	if (phase.compare("eliminate") == 0) {
 		GameEngine * g = getSubject();
 		printMapOwnership(g);
-		cout << "Player has been Eliminated." << endl;
+		cout << "Player " << currentPlayer << " has eliminated another Player." << endl;
 
 	}
 }
 
 void WinnerObserver::update(string type)
 {
-	if (type.compare("win") == 0) {
+	std::string delimiter = " ";
+	std::string phase;
+	std::string currentPlayer;
+
+	char* cstr = const_cast<char*>(type.c_str());
+	char* token;
+	char *next = NULL;
+	token = strtok_s(cstr, delimiter.c_str(), &next);
+	phase = token;
+	token = strtok_s(nullptr, delimiter.c_str(), &next);
+	currentPlayer = token;
+
+	if (phase.compare("win") == 0) {
 		GameEngine * g = getSubject();
 		printMapOwnership(g);
-		cout << endl << endl << "Player has won the game! Congratulations!" << endl << endl;
+		cout << endl << endl << "Player " << currentPlayer << " has won the game! Congratulations!" << endl << endl;
 		
 	}
 }
@@ -206,7 +245,8 @@ void GameObservers::printMapOwnership(GameEngine * g)
 	cout << "***Player World Domination View***" << endl;
 	for (unsigned int i = 0; i < players.size(); i++)
 	{
-		Player * p = players[i];
+		Player * p = new Player();
+		p = players[i];
 		int playerCountries = p->getNumberPlayerCountries();
 		int mapCountries = p->getNumberTotalCountries();
 		double percentageOwnership = 100 * (double)playerCountries / (double)mapCountries;

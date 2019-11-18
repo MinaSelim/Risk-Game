@@ -3,7 +3,8 @@
 #include <string>
 #include <cstdlib>
 #include <sstream>
-
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -24,6 +25,7 @@ GameEngine::GameEngine() : listOfPlayers(new vector<Player*>())
 
 	EliminationObserver * eliminateObs = new EliminationObserver(this);
 	WinnerObserver * winnerObs = new WinnerObserver(this);
+	ConquerObserver * conquerObs = new ConquerObserver(this);
 	AttackObserver *attackObs = new AttackObserver(this);
 	ReinforceObserver *reinforceObs = new ReinforceObserver(this);
 	FortifyObserver *fortifyObs = new FortifyObserver(this);
@@ -100,15 +102,17 @@ void GameEngine::assignTheWorldToAPlayer()// A testing Function that assigns the
 	}
 }
 
-void GameEngine::eliminatePlayer()// A testing Function that assigns countries to 2 players, then reassigns 1 players countries to another, trying to trigger elimination observer
+// A testing Function that assigns countries to 2 players, then reassigns 1 players countries to another, trying to trigger elimination observer
+void GameEngine::eliminatePlayer()
 {
 	auto countryGraphShallowCopy = map->getCountriesGraph();
 
 	//set up situation for player 0 to eliminate player 1
-	(*listOfPlayers)[0]->addCountryOwnerShip(countryGraphShallowCopy[0], 10);
-	
-	(*listOfPlayers)[1]->addCountryOwnerShip(countryGraphShallowCopy[1], 1);
-
+	for (unsigned int i = 0; i < countryGraphShallowCopy.size() - 1; i++)
+	{
+		(*listOfPlayers)[0]->addCountryOwnerShip(countryGraphShallowCopy[i], 2);
+	}
+	(*listOfPlayers)[1]->addCountryOwnerShip(countryGraphShallowCopy[countryGraphShallowCopy.size()], 1);
 }
 
 void GameEngine::setupGame()
@@ -159,34 +163,52 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 
 	while (true)
 	{
+		system("CLS");
 		stringstream currentPlayerAsStream;
 		currentPlayerAsStream << currentPlayer;
 		std::string currentPlayerAsString;
 		currentPlayerAsStream >> currentPlayerAsString;
 
-		printMapOwnership(this);
-		
 		std::string phase = "reinforce ";
 		notify(phase.append(currentPlayerAsString));
 		(*listOfPlayers)[currentPlayer]->reinforce();
-		
-		phase = "attack ";
-		notify(phase.append(currentPlayerAsString));
+		system("CLS");
 
+		phase = "attack ";
+		int countriesBeforeAttack = (*listOfPlayers)[currentPlayer]->getNumberPlayerCountries();
+		notify(phase.append(currentPlayerAsString));
 		(*listOfPlayers)[currentPlayer]->attack();
+		int countriesAfterAttack = (*listOfPlayers)[currentPlayer]->getNumberPlayerCountries();
+
+		if (countriesAfterAttack > countriesBeforeAttack)
+		{
+			system("CLS");
+			phase = "conquer ";
+			notify(phase.append(currentPlayerAsString));
+			this_thread::sleep_for(chrono::milliseconds(3000));
+		}
+
+		system("CLS");
 		phase = "fortify ";
 		notify(phase.append(currentPlayerAsString));
-
 		(*listOfPlayers)[currentPlayer]->fortify();
 
+		
+		
+		//remove player from list when they are eliminated
 		int playerCountries = (*listOfPlayers)[currentPlayer]->getNumberPlayerCountries();
-		
-		//this condition doesnt get triggered, gets null pointer
-		
+		if (playerCountries == 0)
+		{
+			system("CLS");
+			phase = "eliminate ";
+			notify(phase.append(currentPlayerAsString));
+			this_thread::sleep_for(chrono::milliseconds(3000));
+		}
 
 		if (gameWon())
 		{
-			notify("win");
+			phase = "win ";
+			notify(phase.append(currentPlayerAsString));
 			break;
 		}
 		currentPlayer = (++currentPlayer) % listOfPlayers->size();
