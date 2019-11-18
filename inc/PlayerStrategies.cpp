@@ -220,7 +220,7 @@ void AggresiveAIBehaviour::placeArmiesDuringReinforce()
 	
 	nodeToReinforce->playerInfo->setNumberOfArmies(player->getNumberOfArmies() + nodeToReinforce->playerInfo->getNumberOfArmies());
 
-	cout << "The country " << nodeToReinforce->countryInformation->countryName << " contains " << player->getNumberOfArmies() + nodeToReinforce->playerInfo->getNumberOfArmies() << " armies" << endl;
+	cout << "The country " << nodeToReinforce->countryInformation->getCountryName() << " contains " << player->getNumberOfArmies() + nodeToReinforce->playerInfo->getNumberOfArmies() << " armies" << endl;
 
 	player->setNumberOfArmies(0);
 }
