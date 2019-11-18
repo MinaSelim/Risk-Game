@@ -230,6 +230,8 @@ int HandOfCards::getTotalNumberOfCards()
 	return total;
 }
 
+//The purpose of the method is to verify if the player has the chance to exchange the
+//cards they have with armies
 int HandOfCards::verifyExchange()
 {
 	static int nextTurnNumberOfArmies = 4;
@@ -243,16 +245,19 @@ int HandOfCards::verifyExchange()
 		int numberOfCardsOfAType = *it->second;
 		string cardType = *it->first;
 
+		//If the player has three cards of the same type.
 		if (numberOfCardsOfAType >= 3)
 		{
 			*it->second -= 3;
 			possibleExchange = true;
 			break;
 		}
+		//If they have at least one card of the type
 		else if (numberOfCardsOfAType > 0 && numberOfCardsOfAType != 3)
 		{
 			numberOfTypesValid += 1;
 		}
+		//if they have at least one card from each type
 		if (numberOfTypesValid == 3)
 		{
 			possibleExchange = true;
@@ -265,6 +270,8 @@ int HandOfCards::verifyExchange()
 	
 }
 
+//The purpose of the method is to calculate the number of armies the player will get 
+//in return for exchanging their cards with armies
 int HandOfCards::calculateNumberOfArmiesToExchange(bool possibleExchange, int & nextTurnNumberOfArmies, int & numberOfArmies) 
 {
 	//If the player has enough cards then:
