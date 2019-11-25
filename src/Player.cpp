@@ -28,6 +28,10 @@ numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), ma
 	{
 		this->playerBehaviour = new BenevolentAIBehaviour(this);
 	}
+	else if (behaviour == BehaviourEnum::Random)
+	{
+		this->playerBehaviour = new RandomAIBehaviour(this);
+	}
 }
 
 Player::Player(string playerName, vector<CountryNode*> * listOfCountries, Map * map, BehaviourEnum behaviour) : playerName(new string(playerName)),
@@ -598,6 +602,10 @@ void Player::setStrategy(BehaviourEnum & behaviour)
 	else if (behaviour == BehaviourEnum::Benevolent)
 	{
 		this->playerBehaviour = new BenevolentAIBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Random)
+	{
+		this->playerBehaviour = new RandomAIBehaviour(this);
 	}
 }
 

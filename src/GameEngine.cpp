@@ -283,6 +283,8 @@ bool FileIO::checkUpFileType(std::ifstream & inputStream, std::string lineConten
 			return false;
 		}
 	}
+
+	return false;
 }
 
 bool FileIO::verifyTypeOfMapFile(std::string fileName)
@@ -337,7 +339,7 @@ void GameEngine::choosePlayerType(int numOfPlayers) // Function that lets the us
 	{
 			
 
-		std::vector<string> playerTypes = {"Human", "Aggressive","Benevolent","Cheater"};
+		std::vector<string> playerTypes = {"Human", "Aggressive","Benevolent","Random"};
 		std::cout << "Select the type of the player " << i <<" \n";
 		Utility::displayItemsInAVector(playerTypes);
 		int choice = -1;

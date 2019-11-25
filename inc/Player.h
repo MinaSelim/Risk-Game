@@ -31,10 +31,11 @@ public:
 	Player(string playerName, Map * map, BehaviourEnum behaviour);
 	Player(string playerName, vector<CountryNode*>* listOfCountries, Map * map, BehaviourEnum behaviour);
 	~Player();
+	friend Behaviour;
 	friend HumanBehaviour;
 	friend BenevolentAIBehaviour;
 	friend AggresiveAIBehaviour;
-	friend RandomAiBehaviour;
+	friend RandomAIBehaviour;
 	
 	void addCountryOwnerShip(CountryNode * node, int numOfArmies);
 	int  getArmiesAccordingToContinents();
