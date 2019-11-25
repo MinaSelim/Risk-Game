@@ -584,6 +584,23 @@ int Player::getNumberTotalCountries()
 	return map->getNumberOfCountriesInMap();
 }
 
+void Player::setStrategy(BehaviourEnum & behaviour)
+{
+	delete this->playerBehaviour;
+	if (behaviour == BehaviourEnum::Human)
+	{
+		this->playerBehaviour = new HumanBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Aggresive)
+	{
+		this->playerBehaviour = new AggresiveAIBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Benevolent)
+	{
+		this->playerBehaviour = new BenevolentAIBehaviour(this);
+	}
+}
+
 void Player::printListOfCountriesWithMoreThanOneArmy()
 {
 	for (unsigned int i = 0; i < countries->size(); i++)

@@ -171,7 +171,7 @@ void HumanBehaviour::fortify()
 	}
 }
 
-//Mina
+//Prompts human player to roll
 int HumanBehaviour::getAttackRoll(int attackArmiesOnNode)
 {
 	DicesPrompt dicesPrompt;
@@ -180,7 +180,7 @@ int HumanBehaviour::getAttackRoll(int attackArmiesOnNode)
 	return attackerNumDice;
 }
 
-//Mina
+//Prompts Human player to roll
 int HumanBehaviour::getDefenseRoll(int defenseArmiesOnNode)
 {
 	DicesPrompt dicesPrompt;
@@ -314,8 +314,7 @@ AggresiveAIBehaviour::AggresiveAIBehaviour(Player * player)
 }
 
 
-//The purpose of this method is to find the country that contains the most number of armies
-//Mina
+//The purpose of this method is to find the country that contains the most number of armies that can attack
 CountryNode * AggresiveAIBehaviour::findCountryNodeWithHighestAmountOfTroupsThatCanAttack()
 {
 	auto ownedCountries = *player->countries;
@@ -350,7 +349,7 @@ CountryNode * AggresiveAIBehaviour::findCountryNodeWithHighestAmountOfTroupsThat
 }
 
 
-//Mina
+//The purpose of this method is to find the country that contains the most number of armies that cannot attack
 CountryNode * AggresiveAIBehaviour::findCountryNodeWithHighestAmountOfTroupsThatCannotAttack()
 {
 	auto ownedCountries = *player->countries;
@@ -500,4 +499,35 @@ int Behaviour::getDefenseRoll(int defenseArmiesOnNode)
 int Behaviour::getNumberOfTroopsToTransfer(int attackerArmies)
 {
 	return attackerArmies -1;
+}
+
+void RandomAiBehaviour::placeArmiesDuringReinforce()
+{
+	if (player->countries->size() == 0)
+		return;
+
+	//Getting the node of the country with most number of armies and that can attack its neighbors
+	auto nodeToReinforce = findRandomNodeOwnedByPlayer();
+
+	cout << "The player " << player->getPlayerName() << " has chosen to reinforce " << nodeToReinforce->countryInformation->getCountryName() << endl;
+
+	nodeToReinforce->playerInfo->setNumberOfArmies(player->getNumberOfArmies() + nodeToReinforce->playerInfo->getNumberOfArmies());
+
+	cout << "The country " << nodeToReinforce->countryInformation->getCountryName() << " contains " << player->getNumberOfArmies() + nodeToReinforce->playerInfo->getNumberOfArmies() << " armies" << endl;
+
+	player->setNumberOfArmies(0);
+
+}
+
+RandomAiBehaviour::RandomAiBehaviour(Player * player)
+{
+	this->player = player;
+}
+
+CountryNode * RandomAiBehaviour::findRandomNodeOwnedByPlayer()
+{
+	auto ownedCountries = *player->countries;
+	int randomCountryIndex = rand() % ownedCountries.size();
+
+	return  ownedCountries[randomCountryIndex];
 }

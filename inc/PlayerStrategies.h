@@ -50,3 +50,13 @@ public:
 private:
 	CountryNode * findWeakestNodeOwnedByPlayer();
 };
+
+class  RandomAiBehaviour : public Behaviour {
+public:
+	virtual void placeArmiesDuringReinforce();
+	virtual void attackEnemies();
+	virtual void fortify();
+	RandomAiBehaviour(Player * player);
+	CountryNode * findRandomNodeOwnedByPlayer();
+	std::vector<CountryNode *> findEveryFortifiableNode;
+};

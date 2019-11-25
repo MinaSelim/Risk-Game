@@ -337,7 +337,7 @@ void GameEngine::choosePlayerType(int numOfPlayers) // Function that lets the us
 	{
 			
 
-		std::vector<string> playerTypes = {"Human", "Aggressive","Benevolent"};
+		std::vector<string> playerTypes = {"Human", "Aggressive","Benevolent","Cheater"};
 		std::cout << "Select the type of the player " << i <<" \n";
 		Utility::displayItemsInAVector(playerTypes);
 		int choice = -1;
@@ -354,9 +354,11 @@ void GameEngine::choosePlayerType(int numOfPlayers) // Function that lets the us
 		else if (choice == 1) {
 			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Aggresive));
 		}
-		else {
+		else if (choice == 2) {
 			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Benevolent));
-
+		}
+		else if (choice == 3) {
+			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Random));
 		}
 	}
 }
