@@ -12,28 +12,42 @@
 
 using namespace std;
 
-GameEngine::GameEngine() 
+GameEngine::GameEngine()
 	: listOfPlayers(new vector<Player*>())
 {
 	cout << "Welcome To the Risk Game" << endl;
-	chooseMap();
-	int numOfPlayers = selectPlayersNumber();
+
+	int gameType;
+	do {
+		cout << "Press 1 for single game, 2 for tournament";
+		cin >> gameType;
+	} while (gameType < 0 || gameType > 2);
+
+	int numOfPlayers = selectPlayersNumber(gameType);
+
+	if (gameType == 1) {
+		chooseMap();
+		deck = new Deck(map->getNumberOfCountriesInMap());
+		cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
+		choosePlayerType(numOfPlayers, gameType);
+	}
 
 
-	choosePlayerType(numOfPlayers);
-
-	deck = new Deck(map->getNumberOfCountriesInMap());
-	cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
-
-	
 	eliminateObs = new EliminationObserver(this);
 	winnerObs = new WinnerObserver(this);
 	conquerObs = new ConquerObserver(this);
 	attackObs = new AttackObserver(this);
 	reinforceObs = new ReinforceObserver(this);
 	fortifyObs = new FortifyObserver(this);
- 
+
+	if (gameType == 2) {
+		int numberOfGames = chooseNumberOfGames();
+		numberOfTurns = chooseNumberOfTurns();
+		startTournament(numberOfGames, numOfPlayers);
+	}
+
 }
+
 
 void GameEngine::chooseMap() // Function that lets the users select a map
 {
@@ -46,9 +60,9 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 			cin.clear();
 			cin.ignore(300, '\n');
 		}
-		
+
 		std::cout << "Select a valid number: \n";
-		cin >> choice;	
+		cin >> choice;
 	} while (cin.fail() || choice < 0 || choice >= (int)(mapsNames.size()));
 
 	try {
@@ -60,12 +74,12 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 			map = mapLoader->loadMap(MAPS_DIRECTORY + mapsNames[choice]);
 			delete mapLoader;
 		}
-	
+
 		else {
 			MapLoader mapLoader;
 			map = mapLoader.loadMap(MAPS_DIRECTORY + mapsNames[choice]);
 		}
-		
+
 	}
 	catch (int /*i*/)
 	{
@@ -92,8 +106,17 @@ bool GameEngine::gameWon()
 }
 
 
-int GameEngine::selectPlayersNumber() //Selection for number of players
+int GameEngine::selectPlayersNumber(int gameType) //Selection for number of players
 {
+	int singleGame[2];
+	if (gameType == 1) {
+		singleGame[0] = 2;
+		singleGame[1] = 6;
+	}
+	else {
+		singleGame[0] = 2;
+		singleGame[1] = 4;
+	}
 	int userInput = 0;
 	do {
 		cout << "Please insert the number of Players: ";
@@ -105,14 +128,15 @@ int GameEngine::selectPlayersNumber() //Selection for number of players
 			cin.ignore();
 			cin >> userInput;
 		}
-	} while (userInput < 2  || userInput > 6);
+	} while (userInput < singleGame[0] || userInput > singleGame[1]);
 	return userInput;
 }
 
-void GameEngine::startGame() //Starts the game
+// 1 for single player, 2 for tournament
+void GameEngine::startGame(int gameType = 1) //Starts the game
 {
 	setupGame();
-	mainLoop();
+	mainLoop(gameType);
 }
 
 void GameEngine::assignTheWorldToAPlayer()// A testing Function that assigns the entire world to a player
@@ -139,7 +163,6 @@ void GameEngine::eliminatePlayer()
 
 void GameEngine::setupGame()
 {
-
 	int currentPlayer = rand() % listOfPlayers->size();
 	auto countryGraphShallowCopy = map->getCountriesGraph();
 
@@ -169,7 +192,7 @@ void GameEngine::setupGame()
 
 	while (troopsLeftToPlace > 0)
 	{
-		std::cout << "Troops left to place : " << troopsLeftToPlace <<endl; 
+		std::cout << "Troops left to place : " << troopsLeftToPlace << endl;
 		for (unsigned int i = 0; i < listOfPlayers->size(); i++)
 		{
 			(*listOfPlayers)[i]->setNumberOfArmies(1);
@@ -180,11 +203,13 @@ void GameEngine::setupGame()
 	}
 }
 
-void GameEngine::mainLoop() // main game loop, runs until the game ends
+void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the game ends
 {
+	int counter = 0;
 	int currentPlayer = rand() % listOfPlayers->size();
 	while (true)
 	{
+		counter++;
 		system("CLS");
 		stringstream currentPlayerAsStream;
 		currentPlayerAsStream << currentPlayer;
@@ -214,8 +239,8 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 		system("CLS");
 		phase = "fortify ";
 		notify(phase.append(currentPlayerAsString));
-		(*listOfPlayers)[currentPlayer]->fortify();		
-		
+		(*listOfPlayers)[currentPlayer]->fortify();
+
 		//remove player from list when they are eliminated
 		int playerCountries = (*listOfPlayers)[currentPlayer]->getNumberPlayerCountries();
 		if (playerCountries == 0)
@@ -233,12 +258,19 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 			notify(phase.append(currentPlayerAsString));
 			break;
 		}
+
+		if (gameType == 2 && numberOfTurns == counter)
+		{
+			cout << "A draw occured";
+			break;
+		}
+
 		(*listOfPlayers)[currentPlayer]->printListOfCountries();
 		currentPlayer = (++currentPlayer) % listOfPlayers->size();
 	}
 
 	cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName();
-	
+
 }
 
 GameEngine::~GameEngine()
@@ -266,7 +298,7 @@ GameEngine::~GameEngine()
 
 }
 
-bool FileIO::checkUpFileType(std::ifstream & inputStream, std::string lineContent) 
+bool FileIO::checkUpFileType(std::ifstream & inputStream, std::string lineContent)
 {
 	std::streamsize  count = 400;
 	char nextLine[400];
@@ -314,9 +346,9 @@ std::vector<string> FileIO::readDirectory(const std::string& directoryName)
 			{
 				directoryVector.push_back(data.cFileName);
 			}
-			
+
 		} while (FindNextFile(hFind, &data) != 0);
-FindClose(hFind);
+		FindClose(hFind);
 	}
 	//The #else contains untested code for Linux
 #else
@@ -331,14 +363,21 @@ FindClose(hFind);
 	return directoryVector;
 }
 void GameEngine::update(string s) {}
-void GameEngine::choosePlayerType(int numOfPlayers) // Function that lets the users select a map
+
+// TODO: Uncomment strategy codes
+void GameEngine::choosePlayerType(int numOfPlayers, int gameType) // Function that lets the users select a map
 {
 	for (int i = 0; i < numOfPlayers; i++)
 	{
-			
+		std::vector<string> playerTypes;
+		if (gameType == 1) {
+			playerTypes = { "Aggressive","Benevolent", "Human" };
+		}
+		else {
+			playerTypes = { "Aggressive","Benevolent", "Random", "Cheater" };
+		}
 
-		std::vector<string> playerTypes = {"Human", "Aggressive","Benevolent"};
-		std::cout << "Select the type of the player " << i <<" \n";
+		std::cout << "Select the type of the player " << i << " \n";
 		Utility::displayItemsInAVector(playerTypes);
 		int choice = -1;
 		do {
@@ -349,21 +388,76 @@ void GameEngine::choosePlayerType(int numOfPlayers) // Function that lets the us
 		} while (cin.fail() || choice < 0 || choice >= (int)(playerTypes.size()));
 
 		if (choice == 0) {
-			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Human));
-		}
-		else if (choice == 1) {
 			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Aggresive));
 		}
-		else {
+		else if (choice == 1) {
 			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Benevolent));
-
+		}
+		else if (choice == 3 && gameType == 1) {
+			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Human));
+		}
+		else if (choice == 3 && gameType == 2) {
+			//listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Random));
+		}
+		else if (choice == 4) {
+			//listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Cheater));
 		}
 	}
 }
 
-vector <Player*> GameEngine::getListOfPlayers() 
+int GameEngine::chooseNumberOfGames() {
+	std::cout << "Select number of games" << " \n";
+	int choice;
+	do {
+		cin.clear();
+		cin.ignore(300, '\n');
+		std::cout << "Select a valid number: \n";
+		cin >> choice;
+	} while (cin.fail() || choice < 1 || choice > 5);
+	return choice;
+}
+
+int GameEngine::chooseNumberOfTurns() {
+	std::cout << "Select number of turns" << " \n";
+	int choice;
+	do {
+		cin.clear();
+		cin.ignore(300, '\n');
+		std::cout << "Select a valid number: \n";
+		cin >> choice;
+	} while (cin.fail() || choice < 10 || choice > 50);
+	return choice;
+}
+
+void GameEngine::startTournament(int numberOfGames, int numberOfPlayers) {
+	std::cout << "Select number of maps" << " \n";
+	int choice;
+	do {
+		cin.clear();
+		cin.ignore(300, '\n');
+		std::cout << "Select a valid number: \n";
+		cin >> choice;
+	} while (cin.fail() || choice < 1 || choice > 5);
+	std::vector<Map> * mapVector = new vector<Map>;
+	while (mapVector->size() < choice) {
+		chooseMap();
+		deck = new Deck(map->getNumberOfCountriesInMap());
+		cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
+		mapVector->push_back(*map);
+	}
+	for (int i = 0; i < numberOfGames; i++) {
+		for (unsigned i = 0; i < mapVector->size(); i++) {
+			*map = mapVector->at(i);
+			choosePlayerType(numberOfPlayers, 2);
+			startGame(2);
+		}
+	}
+
+}
+
+vector <Player*> GameEngine::getListOfPlayers()
 {
-	return * listOfPlayers;
+	return *listOfPlayers;
 }
 
 int GameEngine::getNumberOfPlayers()

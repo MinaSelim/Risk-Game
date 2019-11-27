@@ -82,7 +82,7 @@ Map::Map(std::vector<CountryInformation*> countries, std::vector<ContinentInform
 
 }
 
-Map::Map(Map & map)
+Map::Map(const Map & map)
 {
 	countriesGraph = new std::vector<CountryNode*>();
 	for (unsigned int i = 0; i < map.countriesGraph->size(); i++)
@@ -90,6 +90,14 @@ Map::Map(Map & map)
 		CountryNode * node = new CountryNode(*(*map.countriesGraph)[i]);
 		countriesGraph->push_back(node);
 	}
+
+	continentsInfo = std::vector<ContinentInformation*>();
+	for (unsigned int i = 0; i < map.continentsInfo.size(); i++)
+	{
+		ContinentInformation * continentsNode = new ContinentInformation(*(map.continentsInfo)[i]);
+		continentsInfo.push_back(continentsNode);
+	}
+
 
 	attachEdgesToNodes();
 	validateMap();
@@ -336,4 +344,23 @@ void PlayerNode::assignPlayer(Player * playerToSet)
 
 	player = playerToSet;
 }
+
+ContinentInformation::ContinentInformation(const ContinentInformation & node)
+{
+	continentName = new string (*node.continentName);
+	controlValue = new int(*node.controlValue);
+	continentId = new int(*node.continentId);
+}
+
+
+//const Map& Map::operator=(const Map& m) {
+//	if (&m != this) {
+//		delete countriesGraph;
+//		delete &continentsInfo;
+//		vector<CountryNode*> *countriesGraph = m.countriesGraph;
+//		vector<ContinentInformation*> continentsInfo = m.continentsInfo;
+//	}
+//	return *this;
+//}
+
 

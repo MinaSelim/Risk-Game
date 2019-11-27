@@ -11,6 +11,7 @@ struct ContinentInformation {
 	int * controlValue;
 	int * continentId;
 	ContinentInformation(string name, int controlValue, int id);
+	ContinentInformation(const ContinentInformation & ci);
 	~ContinentInformation();
 };
 
@@ -61,7 +62,7 @@ private:
 
 public:
 	Map(vector<CountryInformation*> countries, vector<ContinentInformation*> continents);
-	Map(Map & map);
+	Map(const Map & map);
 	CountryNode * getNodeFromGraphByName(string countryName);
 	int getNumberOfCountriesInMap();
 	CountryNode* getFirstNode();
@@ -71,6 +72,8 @@ public:
 	bool checkUserContinents(int continentId, string playerName);
 	CountryNode* getNodeFromGraphById(int countryId);
 	int getContinentControlValue(int continentId);
+	//const Map& operator=(const Map& m);
+
 private:
 	void validateMap();
 	void validateContinents();

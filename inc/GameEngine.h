@@ -28,25 +28,29 @@ public:
 	GameEngine();
 	bool eliminatedPlayer();
 	bool gameWon();
-	void startGame();
+	void startGame(int gameType);
 	void assignTheWorldToAPlayer();
 	void eliminatePlayer();
 	void setupGame();
-	void mainLoop();
+	void mainLoop(int gameType);
 	vector <Player*> getListOfPlayers();
 	int getNumberOfPlayers();
 	~GameEngine();
-	void choosePlayerType(int numOfPlayers);
+	void choosePlayerType(int numOfPlayers, int gameType);
 	void update(string s) override;
 private:
 	void chooseMap();
-	int selectPlayersNumber();
+	int chooseNumberOfGames();
+	int chooseNumberOfTurns();
+	void startTournament(int numberOfGames, int numberOfPlayers);
+	int selectPlayersNumber(int gameType);
 	EliminationObserver * eliminateObs;
 	WinnerObserver * winnerObs;
 	ConquerObserver * conquerObs;
 	AttackObserver * attackObs;
 	ReinforceObserver * reinforceObs;
 	FortifyObserver * fortifyObs;
+	int numberOfTurns;
 };
 
 namespace FileIO
