@@ -8,6 +8,7 @@
 #include "Cards.h"
 #include <sys/types.h>
 #include "GameObservers.h"
+#include "PlayerStrategies.h"
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #include <windows.h>
 #else
@@ -23,6 +24,7 @@ private:
 	vector <Player*> * listOfPlayers;
 	Map * map;
 	Deck * deck;
+	vector <string> * finalTable;
 
 public:
 	GameEngine();
@@ -43,6 +45,8 @@ private:
 	int chooseNumberOfGames();
 	int chooseNumberOfTurns();
 	void startTournament(int numberOfGames, int numberOfPlayers);
+	void resetMap();
+	void resetPlayers();
 	int selectPlayersNumber(int gameType);
 	EliminationObserver * eliminateObs;
 	WinnerObserver * winnerObs;

@@ -13,6 +13,7 @@ numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), pl
 {
 }
 
+
 Player::Player(string playerName, Map * map, BehaviourEnum behaviour) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
 numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(map), currentBehaviourEnum(new BehaviourEnum(behaviour))
 {

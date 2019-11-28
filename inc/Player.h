@@ -22,19 +22,21 @@ private:
 	DicesRoller * dice;
 	Map * map;
 	int * numberOfArmies;
-	BehaviourEnum * currentBehaviourEnum;
 	Behaviour * playerBehaviour;
 
 
 public:
 	Player();
+	Player(string playerName, BehaviourEnum beheaviourEnum, Map map);
 	Player(string playerName, Map * map, BehaviourEnum behaviour);
 	Player(string playerName, vector<CountryNode*>* listOfCountries, Map * map, BehaviourEnum behaviour);
 	~Player();
 	friend HumanBehaviour;
 	friend BenevolentAIBehaviour;
 	friend AggresiveAIBehaviour;
-	
+	string getPlayerName() { return *playerName; };
+	BehaviourEnum getBehaviourEnum() { return *currentBehaviourEnum; };
+	BehaviourEnum * currentBehaviourEnum;
 	void addCountryOwnerShip(CountryNode * node, int numOfArmies);
 	int  getArmiesAccordingToContinents();
 
@@ -54,7 +56,6 @@ public:
 
 	DicesRoller* getDice()  { return dice; };
 	HandOfCards* getHandOfCards() { return hand; };
-	string getPlayerName() { return *playerName; };
 	void setNumberOfArmies(int value) { *numberOfArmies = value; };
 	int getNumberOfArmies() { return *numberOfArmies; };
 	vector<int> getContinentsOwnedByPlayer();

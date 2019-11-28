@@ -265,11 +265,28 @@ void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the ga
 			break;
 		}
 
+
 		(*listOfPlayers)[currentPlayer]->printListOfCountries();
 		currentPlayer = (++currentPlayer) % listOfPlayers->size();
 	}
 
+	string enumType;
+	switch (*(*listOfPlayers)[currentPlayer]->currentBehaviourEnum) 
+	{
+	case BehaviourEnum::Aggresive:
+		enumType = "Aggresive";
+		break;
+	case BehaviourEnum::Benevolent:
+		enumType = "Benevolent";
+		break;
+	case BehaviourEnum::Human:
+		enumType = "Human";
+		break;
+	}
+	finalTable->push_back(enumType);
+
 	cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName();
+	system("pause");
 
 }
 
@@ -432,12 +449,14 @@ int GameEngine::chooseNumberOfTurns() {
 void GameEngine::startTournament(int numberOfGames, int numberOfPlayers) {
 	std::cout << "Select number of maps" << " \n";
 	int choice;
+	finalTable = new vector <string>;
 	do {
 		cin.clear();
 		cin.ignore(300, '\n');
 		std::cout << "Select a valid number: \n";
 		cin >> choice;
 	} while (cin.fail() || choice < 1 || choice > 5);
+
 	std::vector<Map> * mapVector = new vector<Map>;
 	while (mapVector->size() < choice) {
 		chooseMap();
@@ -445,13 +464,56 @@ void GameEngine::startTournament(int numberOfGames, int numberOfPlayers) {
 		cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
 		mapVector->push_back(*map);
 	}
+
+	bool playersChosen = false;
 	for (int i = 0; i < numberOfGames; i++) {
 		for (unsigned i = 0; i < mapVector->size(); i++) {
 			*map = mapVector->at(i);
-			choosePlayerType(numberOfPlayers, 2);
+			if (!playersChosen)
+			{
+				choosePlayerType(numberOfPlayers, 2);
+				playersChosen = true;
+			}
+			else
+			{
+				resetPlayers();
+			}
 			startGame(2);
+			//reset players after each game
+			//resetPlayers();
 		}
+		
 	}
+
+	for (unsigned int i = 0; i < finalTable->size(); i++) {
+		std::cout << finalTable->at(i) << endl;
+	}
+}
+
+
+void GameEngine::resetMap() 
+{
+	
+}
+
+void GameEngine::resetPlayers()
+{
+	vector<Player*>  newPlayers;
+
+	for (unsigned int i = 0; i < listOfPlayers->size(); i++)
+	{
+		string playerName = (*listOfPlayers)[i]->getPlayerName();
+		BehaviourEnum strategy = (*listOfPlayers)[i]->getBehaviourEnum();
+		delete (*listOfPlayers)[i];
+		(*listOfPlayers)[i] = nullptr;
+		Player * p = new Player(playerName, this->map, strategy);
+		newPlayers.push_back(p);
+		
+	}
+
+	*listOfPlayers = newPlayers;
+
+
 
 }
 
