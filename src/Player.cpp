@@ -32,6 +32,10 @@ numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), ma
 	{
 		this->playerBehaviour = new RandomAIBehaviour(this);
 	}
+	else if (behaviour == BehaviourEnum::Cheater) {	
+		this->playerBehaviour = new CheaterAIBehaviour(this);
+
+	}
 }
 
 Player::Player(string playerName, vector<CountryNode*> * listOfCountries, Map * map, BehaviourEnum behaviour) : playerName(new string(playerName)),
@@ -48,6 +52,10 @@ countries(listOfCountries), numberOfArmies(new int(0)), dice(new DicesRoller()),
 	else if (behaviour == BehaviourEnum::Human)
 	{
 		this->playerBehaviour = new BenevolentAIBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Cheater) {
+		this->playerBehaviour = new CheaterAIBehaviour(this);
+
 	}
 }
 

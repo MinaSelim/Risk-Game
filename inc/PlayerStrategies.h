@@ -68,3 +68,16 @@ private:
 	std::vector<CountryNode *> findEveryNodeThatCanAttack();
 
 };
+
+class CheaterAIBehaviour : public Behaviour {
+public:
+	CheaterAIBehaviour(Player * player);
+	virtual void placeArmiesDuringReinforce();
+	virtual void attackEnemies();
+	virtual void fortify();
+private:
+	bool hasAnEnemyNeighbor(CountryNode & country);
+	bool hasEnoughArmies(CountryNode & country);
+	void attackingNeighbors(CountryNode & country);
+	void attackingProcedure(CountryNode & attackingNode, CountryNode & defendingNeighbour);
+};

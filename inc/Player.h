@@ -11,7 +11,7 @@
 using namespace std;
 
 //Created an enum to figure out the type of the player we want to create	
-enum BehaviourEnum { Human = 0, Aggresive, Benevolent, Random };
+enum BehaviourEnum { Human = 0, Aggresive, Benevolent, Random, Cheater };
 
 class Player {
 	
@@ -36,6 +36,7 @@ public:
 	friend BenevolentAIBehaviour;
 	friend AggresiveAIBehaviour;
 	friend RandomAIBehaviour;
+	friend CheaterAIBehaviour;
 	
 	void addCountryOwnerShip(CountryNode * node, int numOfArmies);
 	int  getArmiesAccordingToContinents();

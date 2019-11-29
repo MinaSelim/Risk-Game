@@ -657,3 +657,109 @@ std::vector<CountryNode*> RandomAIBehaviour::findEveryNodeThatCanAttack()
 	return retVector;
 
 }
+
+CheaterAIBehaviour::CheaterAIBehaviour(Player * player)
+{
+	this->player = player;
+}
+
+//The cheater will reinforce each country they have by doubling the number of armies
+void CheaterAIBehaviour::placeArmiesDuringReinforce()
+{
+	//it will count the number of time the method will be called
+	//its purpose is to let the cheater only double the number of armies once 
+	//during the setup time
+	static int gameSetupTurn = 0;
+	
+	//the last turn in the reinforce calling method during the setup
+	if (gameSetupTurn == 39) {
+		//Multiplying by two the number of armies of each country 
+		for (int i = 0; i < player->countries->size(); i++) {
+			int originalNumberOfArmy = player->countries->at(i)->playerInfo->getNumberOfArmies();
+			player->countries->at(i)->playerInfo->setNumberOfArmies(originalNumberOfArmy * 2);
+		}
+	}
+
+	//Everytime after the setup.
+	else if (gameSetupTurn > 39) {
+		//Multiplying by two the number of armies of each country 
+		for (int i = 0; i < player->countries->size(); i++) {
+			int originalNumberOfArmy = player->countries->at(i)->playerInfo->getNumberOfArmies();
+			player->countries->at(i)->playerInfo->setNumberOfArmies(originalNumberOfArmy * 2);
+		}
+	}
+	gameSetupTurn++;
+}
+
+//The cheater will conquer the neighbor countries without even attacking them.
+void CheaterAIBehaviour::attackEnemies()
+{
+	if (player->countries->size() == 0)
+		return;
+
+	//will go through all the countries of the player which has enemy neighbors
+	for (int i = 0; i < player->countries->size(); i++)
+	{
+		//To make sure that the neighbor is an enemy
+		if (hasAnEnemyNeighbor(*player->countries->at(i))) 
+		{
+			attackingNeighbors(*player->countries->at(i));
+		}
+	}
+}
+
+
+//Will conquer every enemy neighbor without executing the atacking method.
+void CheaterAIBehaviour::attackingNeighbors(CountryNode & country)
+{
+	for (int i = 0; i < country.neighbouringCountries.size(); i++) 
+	{
+		//To make sure that the neighbor is an enemy
+		if (player->isEnemy(country.neighbouringCountries.at(i)->countryInformation->getCountryName()))
+		{
+			player->transferDefeatedCountry(&country, country.neighbouringCountries.at(i));
+		}
+	}
+} 
+
+
+//The player will basically multiple by two the number of armies they have in each county 
+//which has at least one enemy neighbor
+void CheaterAIBehaviour::fortify()
+{
+	if (player->countries->size() == 0)
+		return;
+
+	//looping through the list of player's countries
+	for (int i = 0; i < player->countries->size(); i++) 
+	{
+		//To make sure that the player has at least one enemy neighbor
+		if (hasAnEnemyNeighbor(*player->countries->at(i)))
+		{
+			int originalNumberOfArmy = player->countries->at(i)->playerInfo->getNumberOfArmies();
+			player->countries->at(i)->playerInfo->setNumberOfArmies(originalNumberOfArmy * 2);
+			cout << "The country " << player->countries->at(i)->countryInformation->getCountryName() << 
+				" has " << player->countries->at(i)->playerInfo->getNumberOfArmies() << endl;
+		}
+	}
+}
+
+//The method is to make sure that the player's country has at least one enemy neighbor
+bool CheaterAIBehaviour::hasAnEnemyNeighbor(CountryNode & country)
+{
+	for (unsigned int i = 0; i < country.neighbouringCountries.size(); i++)
+	{
+		if (player->isEnemy(country.neighbouringCountries.at(i)->countryInformation->getCountryName()))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+
+//The mehod is to validate that the country has at least 2 armies.
+bool CheaterAIBehaviour::hasEnoughArmies(CountryNode & country)
+{
+	return country.playerInfo->getNumberOfArmies() > 1;
+}
