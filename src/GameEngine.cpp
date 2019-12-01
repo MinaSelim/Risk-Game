@@ -19,19 +19,11 @@ GameEngine::GameEngine()
 
 	int gameType;
 	do {
-		cout << "Press 1 for single game, 2 for tournament";
+		cout << "Press 1 for single game, 2 for tournament" << endl;
 		cin >> gameType;
 	} while (gameType < 0 || gameType > 2);
 
 	int numOfPlayers = selectPlayersNumber(gameType);
-
-	if (gameType == 1) {
-		chooseMap();
-		deck = new Deck(map->getNumberOfCountriesInMap());
-		cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
-		choosePlayerType(numOfPlayers, gameType);
-	}
-
 
 	eliminateObs = new EliminationObserver(this);
 	winnerObs = new WinnerObserver(this);
@@ -40,7 +32,14 @@ GameEngine::GameEngine()
 	reinforceObs = new ReinforceObserver(this);
 	fortifyObs = new FortifyObserver(this);
 
-	if (gameType == 2) {
+	if (gameType == 1) {
+		chooseMap();
+		deck = new Deck(map->getNumberOfCountriesInMap());
+		cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
+		choosePlayerType(numOfPlayers, gameType);
+		startGame(1);
+	}
+	else if (gameType == 2) {
 		int numberOfGames = chooseNumberOfGames();
 		numberOfTurns = chooseNumberOfTurns();
 		startTournament(numberOfGames, numOfPlayers);
@@ -206,6 +205,7 @@ void GameEngine::setupGame()
 void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the game ends
 {
 	int counter = 0;
+	boolean draw = false;
 	int currentPlayer = rand() % listOfPlayers->size();
 	while (true)
 	{
@@ -233,7 +233,7 @@ void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the ga
 			system("CLS");
 			phase = "conquer ";
 			notify(phase.append(currentPlayerAsString));
-			this_thread::sleep_for(chrono::milliseconds(6000));
+			system("pause");
 		}
 
 		system("CLS");
@@ -248,10 +248,17 @@ void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the ga
 			system("CLS");
 			phase = "eliminate ";
 			notify(phase.append(currentPlayerAsString));
-			this_thread::sleep_for(chrono::milliseconds(6000));
+			system("pause");
 		}
 
-		if (gameWon())
+		if (gameType == 2 && numberOfTurns == counter)
+		{
+			cout << "A draw occured";
+			draw = true;
+			break;
+		}
+
+		if (gameWon() && !draw)
 		{
 			system("CLS");
 			phase = "win ";
@@ -259,35 +266,31 @@ void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the ga
 			break;
 		}
 
-		if (gameType == 2 && numberOfTurns == counter)
-		{
-			cout << "A draw occured";
-			break;
-		}
-
-
 		(*listOfPlayers)[currentPlayer]->printListOfCountries();
 		currentPlayer = (++currentPlayer) % listOfPlayers->size();
 	}
 
-	string enumType;
-	switch (*(*listOfPlayers)[currentPlayer]->currentBehaviourEnum) 
-	{
-	case BehaviourEnum::Aggresive:
-		enumType = "Aggresive";
-		break;
-	case BehaviourEnum::Benevolent:
-		enumType = "Benevolent";
-		break;
-	case BehaviourEnum::Human:
-		enumType = "Human";
-		break;
+	if (!draw) {
+		string enumType;
+		switch (*(*listOfPlayers)[currentPlayer]->currentBehaviourEnum)
+		{
+		case BehaviourEnum::Aggresive:
+			enumType = "Aggresive";
+			break;
+		case BehaviourEnum::Benevolent:
+			enumType = "Benevolent";
+			break;
+		case BehaviourEnum::Human:
+			enumType = "Human";
+			break;
+		}
+		finalTable->push_back(enumType);
+		cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName();
 	}
-	finalTable->push_back(enumType);
-
-	cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName();
-	system("pause");
-
+	else
+	{
+		finalTable->push_back("draw");
+	}
 }
 
 GameEngine::~GameEngine()
@@ -458,7 +461,8 @@ void GameEngine::startTournament(int numberOfGames, int numberOfPlayers) {
 	} while (cin.fail() || choice < 1 || choice > 5);
 
 	std::vector<Map> * mapVector = new vector<Map>;
-	while (mapVector->size() < choice) {
+	while (mapVector->size() < choice)
+	{
 		chooseMap();
 		deck = new Deck(map->getNumberOfCountriesInMap());
 		cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
@@ -466,9 +470,11 @@ void GameEngine::startTournament(int numberOfGames, int numberOfPlayers) {
 	}
 
 	bool playersChosen = false;
-	for (int i = 0; i < numberOfGames; i++) {
-		for (unsigned i = 0; i < mapVector->size(); i++) {
-			*map = mapVector->at(i);
+	for (int i = 0; i < numberOfGames; i++)
+	{
+		for (unsigned j = 0; j < mapVector->size(); j++)
+		{
+			*map = mapVector->at(j);
 			if (!playersChosen)
 			{
 				choosePlayerType(numberOfPlayers, 2);
@@ -479,21 +485,28 @@ void GameEngine::startTournament(int numberOfGames, int numberOfPlayers) {
 				resetPlayers();
 			}
 			startGame(2);
-			//reset players after each game
-			//resetPlayers();
 		}
-		
+		resetMap(mapVector);
 	}
 
-	for (unsigned int i = 0; i < finalTable->size(); i++) {
+	for (unsigned int i = 0; i < finalTable->size(); i++)
+	{
 		std::cout << finalTable->at(i) << endl;
 	}
+	system("pause");
 }
 
 
-void GameEngine::resetMap() 
+void GameEngine::resetMap(std::vector<Map> * mapVector)
 {
-	
+	for (unsigned i = 0; i < mapVector->size(); i++)
+	{
+		auto countryGraphShallowCopy = mapVector->at(i).getCountriesGraph();
+
+		for (unsigned j = 0; j < mapVector->at(i).getCountriesGraph().size(); j++) {
+			mapVector->at(i).getCountriesGraph()[j]->playerInfo->assignPlayer(NULL);
+		}
+	}
 }
 
 void GameEngine::resetPlayers()
@@ -508,13 +521,10 @@ void GameEngine::resetPlayers()
 		(*listOfPlayers)[i] = nullptr;
 		Player * p = new Player(playerName, this->map, strategy);
 		newPlayers.push_back(p);
-		
+
 	}
 
 	*listOfPlayers = newPlayers;
-
-
-
 }
 
 vector <Player*> GameEngine::getListOfPlayers()

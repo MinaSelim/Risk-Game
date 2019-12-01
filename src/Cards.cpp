@@ -87,7 +87,7 @@ string Deck::draw()
 		return newValue;
 	}
 	else {
-		return NULL;
+		return "";
 	}
 	
 }

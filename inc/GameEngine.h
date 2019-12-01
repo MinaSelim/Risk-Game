@@ -45,7 +45,7 @@ private:
 	int chooseNumberOfGames();
 	int chooseNumberOfTurns();
 	void startTournament(int numberOfGames, int numberOfPlayers);
-	void resetMap();
+	void resetMap(std::vector<Map> * mapVector);
 	void resetPlayers();
 	int selectPlayersNumber(int gameType);
 	EliminationObserver * eliminateObs;
