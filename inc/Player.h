@@ -65,7 +65,8 @@ public:
 	int getNumberOfCountries() { return countries->size(); };
 	int getNumberPlayerCountries();
 	int getNumberTotalCountries();
-	void setStrategy(BehaviourEnum & behaviour);
+	void setStrategy(BehaviourEnum behaviour);
+	BehaviourEnum getStrategy() { return *currentBehaviourEnum; }
 private:
 	void armyManipulationFortify(CountryNode * chosenNeighborCountry, CountryNode * chosenCountry, int numOfMovingArmies);
 	void attackSequence(CountryNode * attackingCountry, CountryNode * countryToBeAttacked);

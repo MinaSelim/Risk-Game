@@ -53,9 +53,12 @@ countries(listOfCountries), numberOfArmies(new int(0)), dice(new DicesRoller()),
 	{
 		this->playerBehaviour = new BenevolentAIBehaviour(this);
 	}
+	else if (behaviour == BehaviourEnum::Random)
+	{
+		this->playerBehaviour = new RandomAIBehaviour(this);
+	}
 	else if (behaviour == BehaviourEnum::Cheater) {
 		this->playerBehaviour = new CheaterAIBehaviour(this);
-
 	}
 }
 
@@ -596,9 +599,10 @@ int Player::getNumberTotalCountries()
 	return map->getNumberOfCountriesInMap();
 }
 
-void Player::setStrategy(BehaviourEnum & behaviour)
+void Player::setStrategy(BehaviourEnum  behaviour)
 {
 	delete this->playerBehaviour;
+	*this->currentBehaviourEnum = behaviour;
 	if (behaviour == BehaviourEnum::Human)
 	{
 		this->playerBehaviour = new HumanBehaviour(this);
@@ -614,6 +618,11 @@ void Player::setStrategy(BehaviourEnum & behaviour)
 	else if (behaviour == BehaviourEnum::Random)
 	{
 		this->playerBehaviour = new RandomAIBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Cheater) 
+	{
+		this->playerBehaviour = new CheaterAIBehaviour(this);
+
 	}
 }
 

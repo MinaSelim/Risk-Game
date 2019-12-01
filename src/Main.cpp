@@ -6,13 +6,13 @@ int main()
 {
 	//ConquestMapReader reader;
 	//reader.conquestLoadMap("C:\\Program Files (x86)\\Conquest\\Maps\\Atlantis.map");
-	//GameEngine e;
-	//e.startGame();
+	GameEngine e;
+	e.startGame();
 	//e.setupGame();
 	//e.assignTheWorldToAPlayer();
 	//e.mainLoop();
 
-	PlayerDriver::PlayerTester();
+	//PlayerDriver::PlayerTester();
 
 	system("PAUSE");
 }

@@ -678,6 +678,8 @@ void CheaterAIBehaviour::placeArmiesDuringReinforce()
 			int originalNumberOfArmy = player->countries->at(i)->playerInfo->getNumberOfArmies();
 			player->countries->at(i)->playerInfo->setNumberOfArmies(originalNumberOfArmy * 2);
 		}
+		cout << "After the attack phase, player " << player->getPlayerName() << " has these many armies in each of their country: \n" << endl;
+		player->printListOfCountries();
 	}
 
 	//Everytime after the setup.
@@ -687,7 +689,11 @@ void CheaterAIBehaviour::placeArmiesDuringReinforce()
 			int originalNumberOfArmy = player->countries->at(i)->playerInfo->getNumberOfArmies();
 			player->countries->at(i)->playerInfo->setNumberOfArmies(originalNumberOfArmy * 2);
 		}
+		cout << "After the attack phase, player " << player->getPlayerName() << " has these many armies in each of their country: \n" << endl;
+		player->printListOfCountries();
 	}
+	
+	player->setNumberOfArmies(0);
 	gameSetupTurn++;
 }
 
@@ -706,6 +712,8 @@ void CheaterAIBehaviour::attackEnemies()
 			attackingNeighbors(*player->countries->at(i));
 		}
 	}
+	cout << "After the attack phase, player " << player->getPlayerName() << " rules these countries: \n" << endl;
+	player->printListOfCountries();
 }
 
 
@@ -717,7 +725,7 @@ void CheaterAIBehaviour::attackingNeighbors(CountryNode & country)
 		//To make sure that the neighbor is an enemy
 		if (player->isEnemy(country.neighbouringCountries.at(i)->countryInformation->getCountryName()))
 		{
-			player->transferDefeatedCountry(&country, country.neighbouringCountries.at(i));
+			player->addCountryOwnerShip(country.neighbouringCountries.at(i), country.neighbouringCountries.at(i)->playerInfo->getNumberOfArmies());
 		}
 	}
 } 

@@ -165,7 +165,7 @@ void GameEngine::setupGame()
 	const int MAX_INITIAL_NUMBER_OF_TROOPS = 40;
 	int troopsLeftToPlace = MAX_INITIAL_NUMBER_OF_TROOPS - ((listOfPlayers->size() - 2) * 5); //formula to calculate number of initial troops
 
-//	troopsLeftToPlace = 5;
+	//troopsLeftToPlace = 5;
 
 	while (troopsLeftToPlace > 0)
 	{
@@ -185,6 +185,9 @@ void GameEngine::mainLoop() // main game loop, runs until the game ends
 	int currentPlayer = rand() % listOfPlayers->size();
 	while (true)
 	{
+		if ((*listOfPlayers)[currentPlayer]->getStrategy() == BehaviourEnum::Human) {
+			changingPlayerBehviour(*(*listOfPlayers)[currentPlayer]);
+		}
 		system("CLS");
 		stringstream currentPlayerAsStream;
 		currentPlayerAsStream << currentPlayer;
@@ -376,6 +379,39 @@ vector <Player*> GameEngine::getListOfPlayers()
 int GameEngine::getNumberOfPlayers()
 {
 	return listOfPlayers->size();
+}
+
+void GameEngine::changingPlayerBehviour(Player & player) {
+
+	string userRespond =Utility::userConfirmation("Do you want to change the behaviour of player " + player.getPlayerName() +" ?");
+	if (userRespond.compare("yes") == 0) {
+		std::vector<string> playerTypes = { "Human", "Aggressive","Benevolent","Random","Cheater" };
+		std::cout << "Select the type of the player: \n";
+		Utility::displayItemsInAVector(playerTypes);
+		int choice = -1;
+		do {
+			cin.clear();
+			cin.ignore(300, '\n');
+			std::cout << "Select a valid number: \n";
+			cin >> choice;
+		} while (cin.fail() || choice < 0 || choice >= (int)(playerTypes.size()));
+
+		if (choice == 0) {
+			player.setStrategy(BehaviourEnum::Human);
+		}
+		else if (choice == 1) {
+			player.setStrategy(BehaviourEnum::Aggresive);
+		}
+		else if (choice == 2) {
+			player.setStrategy(BehaviourEnum::Benevolent);
+		}
+		else if (choice == 3) {
+			player.setStrategy(BehaviourEnum::Random);
+		}
+		else if (choice == 4) {
+			player.setStrategy(BehaviourEnum::Cheater);
+		}
+	}
 }
 
 

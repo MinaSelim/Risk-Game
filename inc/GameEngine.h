@@ -41,6 +41,7 @@ public:
 private:
 	void chooseMap();
 	int selectPlayersNumber();
+	void changingPlayerBehviour(Player & player);
 	EliminationObserver * eliminateObs;
 	WinnerObserver * winnerObs;
 	ConquerObserver * conquerObs;
