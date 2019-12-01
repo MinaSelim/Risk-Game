@@ -501,6 +501,7 @@ int Behaviour::getNumberOfTroopsToTransfer(int attackerArmies)
 	return attackerArmies -1;
 }
 
+//Thearmies are placed randomly on a Node that can attack
 void RandomAIBehaviour::placeArmiesDuringReinforce()
 {
 	if (player->countries->size() == 0)
@@ -519,10 +520,11 @@ void RandomAIBehaviour::placeArmiesDuringReinforce()
 	player->printListOfCountries();
 }
 
+//The random Ai attacks enemmies a random amount of times
 void RandomAIBehaviour::attackEnemies()
 {
 	auto potentialAttackers = findEveryNodeThatCanAttack();
-	int numOfAttacksLeft = rand() % MAX_NUMBER_OF_RANDOM_ATTACKS;
+	int numOfAttacksLeft = rand() % MAX_NUMBER_OF_RANDOM_ATTACKS; // Picked a random number of Max attacks
 
 	while (potentialAttackers.size() > 0 && numOfAttacksLeft > 0)
 	{
@@ -556,6 +558,7 @@ void RandomAIBehaviour::attackEnemies()
 	}
 }
 
+//fortify a random node to fortify
 void RandomAIBehaviour::fortify()
 {
 	auto nodes = findEveryFortifiableNode();
@@ -577,6 +580,7 @@ RandomAIBehaviour::RandomAIBehaviour(Player * player)
 	this->player = player;
 }
 
+//Helped function to find which node to reinforce
 CountryNode * RandomAIBehaviour::findRandomNodeOwnedByPlayerThatCanAttack()
 {
 	auto ownedCountries = *player->countries;
@@ -593,6 +597,7 @@ CountryNode * RandomAIBehaviour::findRandomNodeOwnedByPlayerThatCanAttack()
 	return  nodes[randomCountryIndex];
 }
 
+// Helper find every fortifiable node
 std::vector<CountryNode*> RandomAIBehaviour::findEveryFortifiableNode()
 {
 	auto countryNodes = player->countries;
@@ -610,6 +615,7 @@ std::vector<CountryNode*> RandomAIBehaviour::findEveryFortifiableNode()
 	return nodes;
 }
 
+//helper function to find fortifiable neighbours
 bool RandomAIBehaviour::hasNeighboursThatCanFortify(CountryNode * node)
 {
 	auto neighbours = node->neighbouringCountries;
@@ -625,6 +631,7 @@ bool RandomAIBehaviour::hasNeighboursThatCanFortify(CountryNode * node)
 	return false;
 }
 
+//Find every neighbour that can fortify
 std::vector<CountryNode*> RandomAIBehaviour::findEveryNeighbourNodeThatCanFortify(CountryNode * node)
 {
 	std::vector<CountryNode*> neighboursToReturn;
@@ -641,6 +648,7 @@ std::vector<CountryNode*> RandomAIBehaviour::findEveryNeighbourNodeThatCanFortif
 	return neighboursToReturn;
 }
 
+//helper functions that finds every node that can attack
 std::vector<CountryNode*> RandomAIBehaviour::findEveryNodeThatCanAttack()
 {
 	std::vector<CountryNode*> retVector;
