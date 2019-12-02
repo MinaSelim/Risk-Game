@@ -132,16 +132,26 @@ int DicesPrompt::getRolledNumberOfDice(bool attack, int armies)
 			cout << "How many dice will you roll? ";
 			cin >> numDice;
 
+			if (cin.fail())
+			{
+				cout << "Please enter an integer ";
+				// clear error state
+				cin.clear();
+				// discard 'bad' character(s)
+				cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			}
 			if (numDice > maxDice || numDice < 1) 
 			{
 				cout << "Cannot roll more than 3 dice or less than 1" << endl;
+				cin.clear();
 			}
 			if (numDice > (armies - 1))
 			{
 				cout << "Cannot roll more than one dice because you have only two arrmies and you need to leave at least one behind" << endl;
+				cin.clear();
 			}
 
-		} while (numDice > maxDice || numDice < 1 || numDice >(armies - 1));
+		} while (numDice > maxDice || numDice < 1 || numDice > (armies - 1) );
 	}
 	else
 	{
