@@ -432,7 +432,7 @@ void GameEngine::choosePlayerType(int numOfPlayers, int gameType) // Function th
 
 //asks the player to choose the number of games to play on each map from 1 to 5
 int GameEngine::chooseNumberOfGames() {
-	std::cout << "Select number of games" << " \n";
+	std::cout << "Select number of games to play on each map:" << " \n";
 	int choice;
 	do {
 		cin.clear();
@@ -445,7 +445,7 @@ int GameEngine::chooseNumberOfGames() {
 
 //asks the player to choose the number of turns until a draw occurs in tournament mode between 10 and 50
 int GameEngine::chooseNumberOfTurns() {
-	std::cout << "Select number of turns" << " \n";
+	std::cout << "Select number of turns until a draw occurs:" << " \n";
 	int choice;
 	do {
 		cin.clear();
@@ -552,9 +552,8 @@ int GameEngine::getNumberOfPlayers()
 //function which prints the table after the tournament of who won which game
 void GameEngine::printFinalTable(vector <int> * mapTable, vector <string> * finalTable, int numPlayers, int numGames, int numMaps)
 {
-	
+	//gets the string value for the player type
 	vector <string> playerTypes;
-	
 	for (unsigned int i = 0; i < listOfPlayers->size(); i++) {
 		string enumType;
 		switch (*(*listOfPlayers)[i]->currentBehaviourEnum)
@@ -572,17 +571,22 @@ void GameEngine::printFinalTable(vector <int> * mapTable, vector <string> * fina
 		playerTypes.push_back(enumType);
 	}
 
+	//prints the players type as a string
 	cout << "Players: ";
 	for (unsigned int i = 0; i < playerTypes.size(); i++) {
 		cout << playerTypes.at(i) << " ";
 	}
 	cout << endl;
+
+	//prints a list of the chosen maps as strings
 	std::vector<string> mapsNames = FileIO::readDirectory(MAPS_DIRECTORY);
 	cout << "Maps: ";
 	for (unsigned int i = 0; i < mapTable->size(); i++) {
 		cout << mapsNames.at(mapTable->at(i)) << " ";
 	}
 	cout << endl;
+
+	//prints out the number of games and turns as per the assignment requirements
 	cout << "Games: " << numGames << endl;
 	cout << "Turns till draw: " << numberOfTurns << endl;
 	int mapCounter = 0;
@@ -590,12 +594,12 @@ void GameEngine::printFinalTable(vector <int> * mapTable, vector <string> * fina
 	cout << endl;
 	for (unsigned int i = 0; i < finalTable->size(); i++)
 	{
-	
+		//this basically resets for each "round" of games on a map
 		if (i > 0 && i % numGames == 0) {
 			mapCounter++;
 		}
 
-		cout << "Game " << mapCounter + 1 << " on the following Map: " << mapsNames.at(mapTable->at(mapCounter)) << endl;
+		cout << "Game " << i + 1 << " on the following Map: " << mapsNames.at(mapTable->at(mapCounter)) << endl;
 		cout << "Result: ";
 		string result = finalTable->at(i);
 
