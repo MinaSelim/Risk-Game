@@ -307,6 +307,10 @@ GameEngine::~GameEngine()
 	}
 	delete listOfPlayers;
 
+	delete mapTable;
+	delete finalTable;
+		
+	delete listOfPlayers;
 	delete eliminateObs;
 	delete winnerObs;
 	delete reinforceObs;
