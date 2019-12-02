@@ -27,6 +27,7 @@ private:
 
 public:
 	Player();
+	Player(string playerName, BehaviourEnum beheaviourEnum, Map map);
 	Player(string playerName, Map * map, BehaviourEnum behaviour);
 	Player(string playerName, vector<CountryNode*>* listOfCountries, Map * map, BehaviourEnum behaviour);
 	~Player();
@@ -34,11 +35,15 @@ public:
 	friend HumanBehaviour;
 	friend BenevolentAIBehaviour;
 	friend AggresiveAIBehaviour;
+<<<<<<< HEAD
 	string getPlayerName() { return *playerName; };
 	BehaviourEnum getBehaviourEnum() { return *currentBehaviourEnum; };
+	BehaviourEnum * currentBehaviourEnum;
+=======
 	friend RandomAIBehaviour;
 	friend CheaterAIBehaviour;
-	BehaviourEnum * currentBehaviourEnum;
+	
+>>>>>>> 01ad9c41fa09d1d7757096775ca830b057506d3a
 	void addCountryOwnerShip(CountryNode * node, int numOfArmies);
 	int  getArmiesAccordingToContinents();
 

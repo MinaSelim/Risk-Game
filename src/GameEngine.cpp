@@ -191,7 +191,7 @@ void GameEngine::setupGame()
 	const int MAX_INITIAL_NUMBER_OF_TROOPS = 40;
 	int troopsLeftToPlace = MAX_INITIAL_NUMBER_OF_TROOPS - ((listOfPlayers->size() - 2) * 5); //formula to calculate number of initial troops
 
-//	troopsLeftToPlace = 5;
+	//troopsLeftToPlace = 5;
 
 	while (troopsLeftToPlace > 0)
 	{
@@ -214,6 +214,9 @@ void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the ga
 	while (true)
 	{
 		counter++;
+		if ((*listOfPlayers)[currentPlayer]->getStrategy() == BehaviourEnum::Human) {
+			changingPlayerBehviour(*(*listOfPlayers)[currentPlayer]);
+		}
 		system("CLS");
 		stringstream currentPlayerAsStream;
 		currentPlayerAsStream << currentPlayer;
@@ -288,6 +291,12 @@ void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the ga
 		case BehaviourEnum::Human:
 			enumType = "Human";
 			break;
+		case BehaviourEnum::Cheater:
+			enumType = "Cheater";
+			break;
+		case BehaviourEnum::Random:
+			enumType = "Random";
+			break;
 		}
 		finalTable->push_back(enumType);
 		cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName() << endl;
@@ -344,6 +353,8 @@ bool FileIO::checkUpFileType(std::ifstream & inputStream, std::string lineConten
 			return false;
 		}
 	}
+
+	return false;
 }
 
 bool FileIO::verifyTypeOfMapFile(std::string fileName)
@@ -400,7 +411,7 @@ void GameEngine::choosePlayerType(int numOfPlayers, int gameType) // Function th
 	{
 		std::vector<string> playerTypes;
 		if (gameType == 1) {
-			playerTypes = { "Aggressive","Benevolent", "Human" };
+			playerTypes = { "Aggressive","Benevolent", "Random", "Cheater", "Human" };
 		}
 		else {
 			playerTypes = { "Aggressive","Benevolent", "Random", "Cheater" };
@@ -422,14 +433,14 @@ void GameEngine::choosePlayerType(int numOfPlayers, int gameType) // Function th
 		else if (choice == 1) {
 			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Benevolent));
 		}
-		else if (choice == 3 && gameType == 1) {
+		else if (choice == 2) {
+			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Random));
+		}
+		else if (choice == 3) {
+			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Cheater));
+		}
+		else if (choice == 4 && gameType == 1) {
 			listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Human));
-		}
-		else if (choice == 3 && gameType == 2) {
-			//listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Random));
-		}
-		else if (choice == 4) {
-			//listOfPlayers->push_back(new Player(to_string(i), map, BehaviourEnum::Cheater));
 		}
 	}
 }
@@ -620,4 +631,37 @@ void GameEngine::printFinalTable(vector <int> * mapTable, vector <string> * fina
 
 	}
 }
+void GameEngine::changingPlayerBehviour(Player & player) {
+
+	string userRespond =Utility::userConfirmation("Do you want to change the behaviour of player " + player.getPlayerName() +" ?");
+	if (userRespond.compare("yes") == 0) {
+		std::vector<string> playerTypes = { "Human", "Aggressive","Benevolent","Random","Cheater" };
+		std::cout << "Select the type of the player: \n";
+		Utility::displayItemsInAVector(playerTypes);
+		int choice = -1;
+		do {
+			cin.clear();
+			cin.ignore(300, '\n');
+			std::cout << "Select a valid number: \n";
+			cin >> choice;
+		} while (cin.fail() || choice < 0 || choice >= (int)(playerTypes.size()));
+
+		if (choice == 0) {
+			player.setStrategy(BehaviourEnum::Human);
+		}
+		else if (choice == 1) {
+			player.setStrategy(BehaviourEnum::Aggresive);
+		}
+		else if (choice == 2) {
+			player.setStrategy(BehaviourEnum::Benevolent);
+		}
+		else if (choice == 3) {
+			player.setStrategy(BehaviourEnum::Random);
+		}
+		else if (choice == 4) {
+			player.setStrategy(BehaviourEnum::Cheater);
+		}
+	}
+}
+
 
