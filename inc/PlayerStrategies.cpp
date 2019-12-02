@@ -171,7 +171,7 @@ void HumanBehaviour::fortify()
 	}
 }
 
-//Mina
+//Prompts human player to roll
 int HumanBehaviour::getAttackRoll(int attackArmiesOnNode)
 {
 	DicesPrompt dicesPrompt;
@@ -180,7 +180,7 @@ int HumanBehaviour::getAttackRoll(int attackArmiesOnNode)
 	return attackerNumDice;
 }
 
-//Mina
+//Prompts Human player to roll
 int HumanBehaviour::getDefenseRoll(int defenseArmiesOnNode)
 {
 	DicesPrompt dicesPrompt;
@@ -314,8 +314,7 @@ AggresiveAIBehaviour::AggresiveAIBehaviour(Player * player)
 }
 
 
-//The purpose of this method is to find the country that contains the most number of armies
-//Mina
+//The purpose of this method is to find the country that contains the most number of armies that can attack
 CountryNode * AggresiveAIBehaviour::findCountryNodeWithHighestAmountOfTroupsThatCanAttack()
 {
 	auto ownedCountries = *player->countries;
@@ -350,7 +349,7 @@ CountryNode * AggresiveAIBehaviour::findCountryNodeWithHighestAmountOfTroupsThat
 }
 
 
-//Mina
+//The purpose of this method is to find the country that contains the most number of armies that cannot attack
 CountryNode * AggresiveAIBehaviour::findCountryNodeWithHighestAmountOfTroupsThatCannotAttack()
 {
 	auto ownedCountries = *player->countries;
@@ -374,7 +373,7 @@ CountryNode * AggresiveAIBehaviour::findCountryNodeWithHighestAmountOfTroupsThat
 }
 
 //The purpose of this method is to verify if a country has enemy country around them
-bool  AggresiveAIBehaviour::nodeHasEnemies(CountryNode * node)
+bool  Behaviour::nodeHasEnemies(CountryNode * node)
 {
 
 	//Getting the list of neighbors to country node 
@@ -408,7 +407,7 @@ void BenevolentAIBehaviour::placeArmiesDuringReinforce()
 
 		cout << "The country " << nodeToReinforce->countryInformation->getCountryName() << " has " << nodeToReinforce->playerInfo->getNumberOfArmies() << " armies" << endl;
 
-		player->setNumberOfArmies(player->getNumberOfArmies()-1);
+		player->setNumberOfArmies(0);
 	}
 }
 
@@ -500,4 +499,283 @@ int Behaviour::getDefenseRoll(int defenseArmiesOnNode)
 int Behaviour::getNumberOfTroopsToTransfer(int attackerArmies)
 {
 	return attackerArmies -1;
+}
+
+//Thearmies are placed randomly on a Node that can attack
+void RandomAIBehaviour::placeArmiesDuringReinforce()
+{
+	if (player->countries->size() == 0)
+		return;
+
+	//Getting a random node that can attack. A random Node can cause a game to become unwinnable (which is against the instruction)
+	auto nodeToReinforce = findRandomNodeOwnedByPlayerThatCanAttack(); 
+
+	cout << "The player " << player->getPlayerName() << " has chosen to reinforce " << nodeToReinforce->countryInformation->getCountryName() << endl;
+
+	nodeToReinforce->playerInfo->setNumberOfArmies(player->getNumberOfArmies() + nodeToReinforce->playerInfo->getNumberOfArmies());
+
+	cout << "The country " << nodeToReinforce->countryInformation->getCountryName() << " contains " << player->getNumberOfArmies() + nodeToReinforce->playerInfo->getNumberOfArmies() << " armies" << endl;
+
+	player->setNumberOfArmies(0);
+	player->printListOfCountries();
+}
+
+//The random Ai attacks enemmies a random amount of times
+void RandomAIBehaviour::attackEnemies()
+{
+	auto potentialAttackers = findEveryNodeThatCanAttack();
+	int numOfAttacksLeft = rand() % MAX_NUMBER_OF_RANDOM_ATTACKS; // Picked a random number of Max attacks
+
+	while (potentialAttackers.size() > 0 && numOfAttacksLeft > 0)
+	{
+		int attackerIndex = rand() % potentialAttackers.size();
+		auto attackingNode = potentialAttackers[attackerIndex];
+
+		//Get the list of the neighbors
+		auto neighbours = attackingNode->neighbouringCountries;
+		CountryNode * defendingNeighbours = nullptr;
+
+		//Find the neighbor which is an enemy
+		for (unsigned int i = 0; i < neighbours.size(); i++)
+		{
+			if (player->isEnemy(*neighbours[i]->countryInformation->countryName))
+			{
+				defendingNeighbours = neighbours[i];
+			}
+		}
+
+		if (defendingNeighbours == NULL)
+		{
+			break;
+		}
+
+		cout << "The player " << player->getPlayerName() << " has chosen the country " << defendingNeighbours->countryInformation->getCountryName() << " to attack" << endl;
+
+		player->rollingSequence(attackingNode, defendingNeighbours);
+
+		numOfAttacksLeft--;
+		potentialAttackers = findEveryNodeThatCanAttack();
+	}
+}
+
+//fortify a random node to fortify
+void RandomAIBehaviour::fortify()
+{
+	auto nodes = findEveryFortifiableNode();
+	int nodeToFortifyIndex = rand() % nodes.size();
+	CountryNode * nodeToFortify = nodes[nodeToFortifyIndex];
+
+	auto neigboursThatCanReinforce = findEveryNeighbourNodeThatCanFortify(nodeToFortify);
+	int reinforcingNeighbourIndex = rand() % neigboursThatCanReinforce.size();
+	CountryNode * reinforcingNeighbour = neigboursThatCanReinforce[reinforcingNeighbourIndex];
+
+	int randomNumberOfTroopsToTransfer = (rand() % reinforcingNeighbour->playerInfo->getNumberOfArmies()-1) + 1; // this gets a number between 1 and num of armies
+
+	player->armyManipulationFortify(nodeToFortify, reinforcingNeighbour, randomNumberOfTroopsToTransfer);
+
+}
+
+RandomAIBehaviour::RandomAIBehaviour(Player * player)
+{
+	this->player = player;
+}
+
+//Helped function to find which node to reinforce
+CountryNode * RandomAIBehaviour::findRandomNodeOwnedByPlayerThatCanAttack()
+{
+	auto ownedCountries = *player->countries;
+	std::vector<CountryNode*> nodes;
+	for (int i = 0; i < ownedCountries.size(); i++)
+	{
+		if (nodeHasEnemies(ownedCountries[i]))
+		{
+			nodes.push_back(ownedCountries[i]);
+		}
+	}
+	int randomCountryIndex = rand() % nodes.size();
+
+	return  nodes[randomCountryIndex];
+}
+
+// Helper find every fortifiable node
+std::vector<CountryNode*> RandomAIBehaviour::findEveryFortifiableNode()
+{
+	auto countryNodes = player->countries;
+
+	std::vector<CountryNode*> nodes;
+
+	for (int i = 0; i < countryNodes->size(); i++)
+	{
+		CountryNode * node = (*countryNodes)[i];
+		if (hasNeighboursThatCanFortify(node)) {
+			nodes.push_back(node);
+		}
+	}
+
+	return nodes;
+}
+
+//helper function to find fortifiable neighbours
+bool RandomAIBehaviour::hasNeighboursThatCanFortify(CountryNode * node)
+{
+	auto neighbours = node->neighbouringCountries;
+	for (int i = 0; i < neighbours.size(); i++)
+	{
+		if (player->countryOwnedByPlayer(*neighbours[i]->countryInformation->countryName) &&
+			neighbours[i]->playerInfo->getNumberOfArmies() > 1)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+//Find every neighbour that can fortify
+std::vector<CountryNode*> RandomAIBehaviour::findEveryNeighbourNodeThatCanFortify(CountryNode * node)
+{
+	std::vector<CountryNode*> neighboursToReturn;
+	auto neighbours = node->neighbouringCountries;
+	for (int i = 0; i < neighbours.size(); i++)
+	{
+		if (player->countryOwnedByPlayer(*neighbours[i]->countryInformation->countryName) &&
+			neighbours[i]->playerInfo->getNumberOfArmies() > 1)
+		{
+			neighboursToReturn.push_back(neighbours[i]);
+		}
+	}
+
+	return neighboursToReturn;
+}
+
+//helper functions that finds every node that can attack
+std::vector<CountryNode*> RandomAIBehaviour::findEveryNodeThatCanAttack()
+{
+	std::vector<CountryNode*> retVector;
+	auto countryNodes = player->countries;
+
+	for (int i = 0; i < countryNodes->size(); i++)
+	{
+		if ((*countryNodes)[i]->playerInfo->getNumberOfArmies() > 1 && nodeHasEnemies((*countryNodes)[i]))
+		{
+			retVector.push_back((*countryNodes)[i]);
+		}
+	}
+
+	return retVector;
+
+}
+
+CheaterAIBehaviour::CheaterAIBehaviour(Player * player)
+{
+	this->player = player;
+}
+
+//The cheater will reinforce each country they have by doubling the number of armies
+void CheaterAIBehaviour::placeArmiesDuringReinforce()
+{
+	//it will count the number of time the method will be called
+	//its purpose is to let the cheater only double the number of armies once 
+	//during the setup time
+	static int gameSetupTurn = 0;
+	
+	//the last turn in the reinforce calling method during the setup
+	if (gameSetupTurn == 39) {
+		//Multiplying by two the number of armies of each country 
+		for (int i = 0; i < player->countries->size(); i++) {
+			int originalNumberOfArmy = player->countries->at(i)->playerInfo->getNumberOfArmies();
+			player->countries->at(i)->playerInfo->setNumberOfArmies(originalNumberOfArmy * 2);
+		}
+		cout << "After the attack phase, player " << player->getPlayerName() << " has these many armies in each of their country: \n" << endl;
+		player->printListOfCountries();
+	}
+
+	//Everytime after the setup.
+	else if (gameSetupTurn > 39) {
+		//Multiplying by two the number of armies of each country 
+		for (int i = 0; i < player->countries->size(); i++) {
+			int originalNumberOfArmy = player->countries->at(i)->playerInfo->getNumberOfArmies();
+			player->countries->at(i)->playerInfo->setNumberOfArmies(originalNumberOfArmy * 2);
+		}
+		cout << "After the attack phase, player " << player->getPlayerName() << " has these many armies in each of their country: \n" << endl;
+		player->printListOfCountries();
+	}
+	
+	player->setNumberOfArmies(0);
+	gameSetupTurn++;
+}
+
+//The cheater will conquer the neighbor countries without even attacking them.
+void CheaterAIBehaviour::attackEnemies()
+{
+	if (player->countries->size() == 0)
+		return;
+
+	//will go through all the countries of the player which has enemy neighbors
+	for (int i = 0; i < player->countries->size(); i++)
+	{
+		//To make sure that the neighbor is an enemy
+		if (hasAnEnemyNeighbor(*player->countries->at(i))) 
+		{
+			attackingNeighbors(*player->countries->at(i));
+		}
+	}
+	cout << "After the attack phase, player " << player->getPlayerName() << " rules these countries: \n" << endl;
+	player->printListOfCountries();
+}
+
+
+//Will conquer every enemy neighbor without executing the atacking method.
+void CheaterAIBehaviour::attackingNeighbors(CountryNode & country)
+{
+	for (int i = 0; i < country.neighbouringCountries.size(); i++) 
+	{
+		//To make sure that the neighbor is an enemy
+		if (player->isEnemy(country.neighbouringCountries.at(i)->countryInformation->getCountryName()))
+		{
+			player->addCountryOwnerShip(country.neighbouringCountries.at(i), country.neighbouringCountries.at(i)->playerInfo->getNumberOfArmies());
+		}
+	}
+} 
+
+
+//The player will basically multiple by two the number of armies they have in each county 
+//which has at least one enemy neighbor
+void CheaterAIBehaviour::fortify()
+{
+	if (player->countries->size() == 0)
+		return;
+
+	//looping through the list of player's countries
+	for (int i = 0; i < player->countries->size(); i++) 
+	{
+		//To make sure that the player has at least one enemy neighbor
+		if (hasAnEnemyNeighbor(*player->countries->at(i)))
+		{
+			int originalNumberOfArmy = player->countries->at(i)->playerInfo->getNumberOfArmies();
+			player->countries->at(i)->playerInfo->setNumberOfArmies(originalNumberOfArmy * 2);
+			cout << "The country " << player->countries->at(i)->countryInformation->getCountryName() << 
+				" has " << player->countries->at(i)->playerInfo->getNumberOfArmies() << endl;
+		}
+	}
+}
+
+//The method is to make sure that the player's country has at least one enemy neighbor
+bool CheaterAIBehaviour::hasAnEnemyNeighbor(CountryNode & country)
+{
+	for (unsigned int i = 0; i < country.neighbouringCountries.size(); i++)
+	{
+		if (player->isEnemy(country.neighbouringCountries.at(i)->countryInformation->getCountryName()))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+
+//The mehod is to validate that the country has at least 2 armies.
+bool CheaterAIBehaviour::hasEnoughArmies(CountryNode & country)
+{
+	return country.playerInfo->getNumberOfArmies() > 1;
 }

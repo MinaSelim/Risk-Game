@@ -11,7 +11,7 @@
 using namespace std;
 
 //Created an enum to figure out the type of the player we want to create	
-enum BehaviourEnum { Human = 0, Aggresive, Benevolent };
+enum BehaviourEnum { Human = 0, Aggresive, Benevolent, Random, Cheater };
 
 class Player {
 	
@@ -31,11 +31,14 @@ public:
 	Player(string playerName, Map * map, BehaviourEnum behaviour);
 	Player(string playerName, vector<CountryNode*>* listOfCountries, Map * map, BehaviourEnum behaviour);
 	~Player();
+	friend Behaviour;
 	friend HumanBehaviour;
 	friend BenevolentAIBehaviour;
 	friend AggresiveAIBehaviour;
 	string getPlayerName() { return *playerName; };
 	BehaviourEnum getBehaviourEnum() { return *currentBehaviourEnum; };
+	friend RandomAIBehaviour;
+	friend CheaterAIBehaviour;
 	BehaviourEnum * currentBehaviourEnum;
 	void addCountryOwnerShip(CountryNode * node, int numOfArmies);
 	int  getArmiesAccordingToContinents();
@@ -63,6 +66,8 @@ public:
 	int getNumberOfCountries() { return countries->size(); };
 	int getNumberPlayerCountries();
 	int getNumberTotalCountries();
+	void setStrategy(BehaviourEnum behaviour);
+	BehaviourEnum getStrategy() { return *currentBehaviourEnum; }
 private:
 	void armyManipulationFortify(CountryNode * chosenNeighborCountry, CountryNode * chosenCountry, int numOfMovingArmies);
 	void attackSequence(CountryNode * attackingCountry, CountryNode * countryToBeAttacked);

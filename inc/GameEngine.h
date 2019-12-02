@@ -44,6 +44,7 @@ private:
 	void chooseMap();
 	int chooseNumberOfGames();
 	int chooseNumberOfTurns();
+	void changingPlayerBehviour(Player & player);
 	void startTournament(int numberOfGames, int numberOfPlayers);
 	void resetMap(std::vector<Map> * mapVector);
 	void resetPlayers();
