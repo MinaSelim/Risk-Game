@@ -32,6 +32,7 @@ GameEngine::GameEngine()
 	reinforceObs = new ReinforceObserver(this);
 	fortifyObs = new FortifyObserver(this);
 
+	//regular game
 	if (gameType == 1) {
 		chooseMap();
 		deck = new Deck(map->getNumberOfCountriesInMap());
@@ -39,6 +40,7 @@ GameEngine::GameEngine()
 		choosePlayerType(numOfPlayers, gameType);
 		startGame(1);
 	}
+	//tournament mode
 	else if (gameType == 2) {
 		int numberOfGames = chooseNumberOfGames();
 		numberOfTurns = chooseNumberOfTurns();
@@ -251,12 +253,13 @@ void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the ga
 			system("pause");
 		}
 
-		if (gameType == 2 && numberOfTurns == counter)
+		if (gameType == 2 && numberOfTurns >= counter)
 		{
-			cout << "A draw occured";
+			cout << "A draw occured" << endl;
 			draw = true;
 			break;
 		}
+	
 
 		if (gameWon() && !draw)
 		{
@@ -284,8 +287,9 @@ void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the ga
 			enumType = "Human";
 			break;
 		}
+		cout << "Winner: " << enumType << endl;
 		finalTable->push_back(enumType);
-		cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName();
+		cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName() << endl;
 	}
 	else
 	{
@@ -425,6 +429,7 @@ void GameEngine::choosePlayerType(int numOfPlayers, int gameType) // Function th
 	}
 }
 
+//asks the player to choose the number of games to play on each map from 1 to 5
 int GameEngine::chooseNumberOfGames() {
 	std::cout << "Select number of games" << " \n";
 	int choice;
@@ -437,6 +442,7 @@ int GameEngine::chooseNumberOfGames() {
 	return choice;
 }
 
+//asks the player to choose the number of turns until a draw occurs in tournament mode between 10 and 50
 int GameEngine::chooseNumberOfTurns() {
 	std::cout << "Select number of turns" << " \n";
 	int choice;
@@ -449,6 +455,11 @@ int GameEngine::chooseNumberOfTurns() {
 	return choice;
 }
 
+
+//asks the player to select number of maps
+//chooses the specific maps to play on
+//loops through all the games and adds the winner to the finalTable vector
+//prints the final table
 void GameEngine::startTournament(int numberOfGames, int numberOfPlayers) {
 	std::cout << "Select number of maps" << " \n";
 	int choice;
@@ -488,15 +499,12 @@ void GameEngine::startTournament(int numberOfGames, int numberOfPlayers) {
 		}
 		resetMap(mapVector);
 	}
-
-	for (unsigned int i = 0; i < finalTable->size(); i++)
-	{
-		std::cout << finalTable->at(i) << endl;
-	}
+	printFinalTable(finalTable);
+	
 	system("pause");
 }
 
-
+//resets the Map by unassigning the player on each node
 void GameEngine::resetMap(std::vector<Map> * mapVector)
 {
 	for (unsigned i = 0; i < mapVector->size(); i++)
@@ -509,6 +517,7 @@ void GameEngine::resetMap(std::vector<Map> * mapVector)
 	}
 }
 
+//this method resets all the players in the tournament mode after each game
 void GameEngine::resetPlayers()
 {
 	vector<Player*>  newPlayers;
@@ -537,4 +546,23 @@ int GameEngine::getNumberOfPlayers()
 	return listOfPlayers->size();
 }
 
+//function which prints the table after the tournament of who won which game
+void GameEngine::printFinalTable(vector <string> * finalTable)
+{
+	for (unsigned int i = 0; i < finalTable->size(); i++)
+	{
+		std::cout << "*** Game " << i + 1 << "***" << endl;
+		std::cout << "Result: ";
+		if (finalTable->at(i).compare("draw"))
+		{
+			std::cout << "Draw" << endl;
+		}
+		else
+		{
+			std::cout << "Winner" << endl;
+			std::cout << "Player Type:" << finalTable->at(i) << endl;
+		}
+
+	}
+}
 

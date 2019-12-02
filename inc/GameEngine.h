@@ -37,6 +37,7 @@ public:
 	void mainLoop(int gameType);
 	vector <Player*> getListOfPlayers();
 	int getNumberOfPlayers();
+	void printFinalTable(vector<string>* finalTable);
 	~GameEngine();
 	void choosePlayerType(int numOfPlayers, int gameType);
 	void update(string s) override;

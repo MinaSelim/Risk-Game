@@ -27,7 +27,6 @@ private:
 
 public:
 	Player();
-	Player(string playerName, BehaviourEnum beheaviourEnum, Map map);
 	Player(string playerName, Map * map, BehaviourEnum behaviour);
 	Player(string playerName, vector<CountryNode*>* listOfCountries, Map * map, BehaviourEnum behaviour);
 	~Player();
