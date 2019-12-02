@@ -25,7 +25,6 @@ private:
 	Map * map;
 	Deck * deck;
 	vector <string> * finalTable;
-	vector <int> * mapTable;
 
 public:
 	GameEngine();
@@ -38,19 +37,22 @@ public:
 	void mainLoop(int gameType);
 	vector <Player*> getListOfPlayers();
 	int getNumberOfPlayers();
-	void printFinalTable(vector <int>* mapTable, vector<string>* finalTable, int numPlayers, int numGames, int numMaps);
 	~GameEngine();
 	void choosePlayerType(int numOfPlayers, int gameType);
 	void update(string s) override;
 private:
 	void chooseMap();
+<<<<<<< HEAD
 	int chooseNumberOfGames();
 	int chooseNumberOfTurns();
-	void changingPlayerBehviour(Player & player);
 	void startTournament(int numberOfGames, int numberOfPlayers);
 	void resetMap(std::vector<Map> * mapVector);
 	void resetPlayers();
 	int selectPlayersNumber(int gameType);
+=======
+	int selectPlayersNumber();
+	void changingPlayerBehviour(Player & player);
+>>>>>>> 01ad9c41fa09d1d7757096775ca830b057506d3a
 	EliminationObserver * eliminateObs;
 	WinnerObserver * winnerObs;
 	ConquerObserver * conquerObs;

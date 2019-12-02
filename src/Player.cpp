@@ -13,6 +13,7 @@ numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), pl
 {
 }
 
+
 Player::Player(string playerName, Map * map, BehaviourEnum behaviour) : playerName(new string(playerName)), countries(new vector<CountryNode*>()),
 numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), map(map), currentBehaviourEnum(new BehaviourEnum(behaviour))
 {
@@ -27,6 +28,14 @@ numberOfArmies(new int(0)), dice(new DicesRoller()), hand(new HandOfCards()), ma
 	else if (behaviour == BehaviourEnum::Benevolent)
 	{
 		this->playerBehaviour = new BenevolentAIBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Random)
+	{
+		this->playerBehaviour = new RandomAIBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Cheater) {	
+		this->playerBehaviour = new CheaterAIBehaviour(this);
+
 	}
 }
 
@@ -44,6 +53,13 @@ countries(listOfCountries), numberOfArmies(new int(0)), dice(new DicesRoller()),
 	else if (behaviour == BehaviourEnum::Human)
 	{
 		this->playerBehaviour = new BenevolentAIBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Random)
+	{
+		this->playerBehaviour = new RandomAIBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Cheater) {
+		this->playerBehaviour = new CheaterAIBehaviour(this);
 	}
 }
 
@@ -582,6 +598,33 @@ int Player::getNumberPlayerCountries()
 int Player::getNumberTotalCountries()
 {
 	return map->getNumberOfCountriesInMap();
+}
+
+void Player::setStrategy(BehaviourEnum  behaviour)
+{
+	delete this->playerBehaviour;
+	*this->currentBehaviourEnum = behaviour;
+	if (behaviour == BehaviourEnum::Human)
+	{
+		this->playerBehaviour = new HumanBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Aggresive)
+	{
+		this->playerBehaviour = new AggresiveAIBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Benevolent)
+	{
+		this->playerBehaviour = new BenevolentAIBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Random)
+	{
+		this->playerBehaviour = new RandomAIBehaviour(this);
+	}
+	else if (behaviour == BehaviourEnum::Cheater) 
+	{
+		this->playerBehaviour = new CheaterAIBehaviour(this);
+
+	}
 }
 
 void Player::printListOfCountriesWithMoreThanOneArmy()

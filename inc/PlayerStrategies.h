@@ -3,6 +3,7 @@
 
 
 class Player;
+const int MAX_NUMBER_OF_RANDOM_ATTACKS = 15;
 
 class Behaviour
 {
@@ -15,6 +16,8 @@ public:
 	virtual int getAttackRoll(int attackArmiesOnNode);
 	virtual int getDefenseRoll(int defenseArmiesOnNode);
 	virtual int getNumberOfTroopsToTransfer(int attackerArmies);
+protected:
+	bool nodeHasEnemies(CountryNode * node);
 	
 };
 
@@ -38,7 +41,7 @@ public:
 private:
 	CountryNode * findCountryNodeWithHighestAmountOfTroupsThatCanAttack();
 	CountryNode * findCountryNodeWithHighestAmountOfTroupsThatCannotAttack();
-	bool nodeHasEnemies(CountryNode * node);
+
 };
 
 class  BenevolentAIBehaviour : public Behaviour {
@@ -49,4 +52,32 @@ public:
 	BenevolentAIBehaviour(Player * player);
 private:
 	CountryNode * findWeakestNodeOwnedByPlayer();
+};
+
+class  RandomAIBehaviour : public Behaviour {
+public:
+	virtual void placeArmiesDuringReinforce();
+	virtual void attackEnemies();
+	virtual void fortify();
+	RandomAIBehaviour(Player * player);
+	CountryNode * findRandomNodeOwnedByPlayerThatCanAttack();
+private:
+	std::vector<CountryNode *> findEveryFortifiableNode();
+	bool hasNeighboursThatCanFortify(CountryNode * node);
+	std::vector<CountryNode *> findEveryNeighbourNodeThatCanFortify(CountryNode* node);
+	std::vector<CountryNode *> findEveryNodeThatCanAttack();
+
+};
+
+class CheaterAIBehaviour : public Behaviour {
+public:
+	CheaterAIBehaviour(Player * player);
+	virtual void placeArmiesDuringReinforce();
+	virtual void attackEnemies();
+	virtual void fortify();
+private:
+	bool hasAnEnemyNeighbor(CountryNode & country);
+	bool hasEnoughArmies(CountryNode & country);
+	void attackingNeighbors(CountryNode & country);
+	void attackingProcedure(CountryNode & attackingNode, CountryNode & defendingNeighbour);
 };
