@@ -25,6 +25,7 @@ private:
 	Map * map;
 	Deck * deck;
 	vector <string> * finalTable;
+	vector <int> * mapTable;
 
 public:
 	GameEngine();
@@ -37,7 +38,7 @@ public:
 	void mainLoop(int gameType);
 	vector <Player*> getListOfPlayers();
 	int getNumberOfPlayers();
-	void printFinalTable(vector<string>* finalTable);
+	void printFinalTable(vector <int>* mapTable, vector<string>* finalTable, int numPlayers, int numGames, int numMaps);
 	~GameEngine();
 	void choosePlayerType(int numOfPlayers, int gameType);
 	void update(string s) override;

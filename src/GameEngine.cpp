@@ -66,6 +66,8 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 		cin >> choice;
 	} while (cin.fail() || choice < 0 || choice >= (int)(mapsNames.size()));
 
+	mapTable->push_back(choice);
+
 	try {
 
 		bool verify = FileIO::verifyTypeOfMapFile(MAPS_DIRECTORY + mapsNames[choice]);
@@ -253,7 +255,7 @@ void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the ga
 			system("pause");
 		}
 
-		if (gameType == 2 && numberOfTurns >= counter)
+		if (gameType == 2 && numberOfTurns == counter)
 		{
 			cout << "A draw occured" << endl;
 			draw = true;
@@ -287,7 +289,6 @@ void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the ga
 			enumType = "Human";
 			break;
 		}
-		cout << "Winner: " << enumType << endl;
 		finalTable->push_back(enumType);
 		cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName() << endl;
 	}
@@ -464,6 +465,7 @@ void GameEngine::startTournament(int numberOfGames, int numberOfPlayers) {
 	std::cout << "Select number of maps" << " \n";
 	int choice;
 	finalTable = new vector <string>;
+	mapTable = new vector <int>;
 	do {
 		cin.clear();
 		cin.ignore(300, '\n');
@@ -499,7 +501,8 @@ void GameEngine::startTournament(int numberOfGames, int numberOfPlayers) {
 		}
 		resetMap(mapVector);
 	}
-	printFinalTable(finalTable);
+	
+	printFinalTable(mapTable,finalTable, numberOfPlayers, numberOfGames, choice);
 	
 	system("pause");
 }
@@ -547,21 +550,65 @@ int GameEngine::getNumberOfPlayers()
 }
 
 //function which prints the table after the tournament of who won which game
-void GameEngine::printFinalTable(vector <string> * finalTable)
+void GameEngine::printFinalTable(vector <int> * mapTable, vector <string> * finalTable, int numPlayers, int numGames, int numMaps)
 {
+	
+	vector <string> playerTypes;
+	
+	for (unsigned int i = 0; i < listOfPlayers->size(); i++) {
+		string enumType;
+		switch (*(*listOfPlayers)[i]->currentBehaviourEnum)
+		{
+		case BehaviourEnum::Aggresive:
+			enumType = "Aggresive";
+			break;
+		case BehaviourEnum::Benevolent:
+			enumType = "Benevolent";
+			break;
+		case BehaviourEnum::Human:
+			enumType = "Human";
+			break;
+		}
+		playerTypes.push_back(enumType);
+	}
+
+	cout << "Players: ";
+	for (unsigned int i = 0; i < playerTypes.size(); i++) {
+		cout << playerTypes.at(i) << " ";
+	}
+	cout << endl;
+	std::vector<string> mapsNames = FileIO::readDirectory(MAPS_DIRECTORY);
+	cout << "Maps: ";
+	for (unsigned int i = 0; i < mapTable->size(); i++) {
+		cout << mapsNames.at(mapTable->at(i)) << " ";
+	}
+	cout << endl;
+	cout << "Games: " << numGames << endl;
+	cout << "Turns till draw: " << numberOfTurns << endl;
+	int mapCounter = 0;
+	int gameCounter = 0;
+	cout << endl;
 	for (unsigned int i = 0; i < finalTable->size(); i++)
 	{
-		std::cout << "*** Game " << i + 1 << "***" << endl;
-		std::cout << "Result: ";
-		if (finalTable->at(i).compare("draw"))
+	
+		if (i > 0 && i % numGames == 0) {
+			mapCounter++;
+		}
+
+		cout << "Game " << mapCounter + 1 << " on the following Map: " << mapsNames.at(mapTable->at(mapCounter)) << endl;
+		cout << "Result: ";
+		string result = finalTable->at(i);
+
+		if (result.compare("draw") == 0)
 		{
-			std::cout << "Draw" << endl;
+			cout << "Draw" << endl;
 		}
 		else
 		{
-			std::cout << "Winner" << endl;
-			std::cout << "Player Type:" << finalTable->at(i) << endl;
+			cout << "Winner" << endl;
+			cout << "Player Type:" << finalTable->at(i) << endl;
 		}
+		cout << endl;
 
 	}
 }
