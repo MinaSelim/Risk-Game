@@ -34,7 +34,8 @@ GameEngine::GameEngine()
 
 	//regular game
 	if (gameType == 1) {
-		chooseMap();
+		destroyMapTable = new bool(false);
+		chooseMap(gameType);
 		deck = new Deck(map->getNumberOfCountriesInMap());
 		cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
 		choosePlayerType(numOfPlayers, gameType);
@@ -42,6 +43,7 @@ GameEngine::GameEngine()
 	}
 	//tournament mode
 	else if (gameType == 2) {
+		destroyMapTable = new bool(true);
 		int numberOfGames = chooseNumberOfGames();
 		numberOfTurns = chooseNumberOfTurns();
 		startTournament(numberOfGames, numOfPlayers);
@@ -50,7 +52,7 @@ GameEngine::GameEngine()
 }
 
 
-void GameEngine::chooseMap() // Function that lets the users select a map
+void GameEngine::chooseMap(int gameType) // Function that lets the users select a map
 {
 	std::vector<string> mapsNames = FileIO::readDirectory(MAPS_DIRECTORY);
 	std::cout << "Select a map: \n";
@@ -65,8 +67,10 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 		std::cout << "Select a valid number: \n";
 		cin >> choice;
 	} while (cin.fail() || choice < 0 || choice >= (int)(mapsNames.size()));
-
-	mapTable->push_back(choice);
+	
+	if (gameType == 2) {
+		mapTable->push_back(choice);
+	}
 
 	try {
 
@@ -87,7 +91,7 @@ void GameEngine::chooseMap() // Function that lets the users select a map
 	catch (int /*i*/)
 	{
 		cout << "You selected an Invalid map, please try a different map"; // It means the map in invalid
-		chooseMap();
+		chooseMap(gameType);
 	}
 
 }
@@ -191,7 +195,7 @@ void GameEngine::setupGame()
 	const int MAX_INITIAL_NUMBER_OF_TROOPS = 40;
 	int troopsLeftToPlace = MAX_INITIAL_NUMBER_OF_TROOPS - ((listOfPlayers->size() - 2) * 5); //formula to calculate number of initial troops
 
-	//troopsLeftToPlace = 5;
+	troopsLeftToPlace = 5;
 
 	while (troopsLeftToPlace > 0)
 	{
@@ -298,12 +302,17 @@ void GameEngine::mainLoop(int gameType = 1) // main game loop, runs until the ga
 			enumType = "Random";
 			break;
 		}
-		finalTable->push_back(enumType);
+		if (*destroyMapTable) {
+			finalTable->push_back(enumType);
+		}
+		
 		cout << "The winner is player " << (*listOfPlayers)[currentPlayer]->getPlayerName() << endl;
 	}
 	else
 	{
-		finalTable->push_back("draw");
+		if (*destroyMapTable) {
+			finalTable->push_back("draw");
+		}
 	}
 }
 
@@ -315,11 +324,14 @@ GameEngine::~GameEngine()
 		delete (*listOfPlayers)[i];
 	}
 	delete listOfPlayers;
-
-	delete mapTable;
-	delete finalTable;
+	
+	if (*destroyMapTable) {
+		delete mapTable;
+		delete finalTable;
+	}
+	delete destroyMapTable;
+	
 		
-	delete listOfPlayers;
 	delete eliminateObs;
 	delete winnerObs;
 	delete reinforceObs;
@@ -491,7 +503,7 @@ void GameEngine::startTournament(int numberOfGames, int numberOfPlayers) {
 	std::vector<Map> * mapVector = new vector<Map>;
 	while (mapVector->size() < choice)
 	{
-		chooseMap();
+		chooseMap(2);
 		deck = new Deck(map->getNumberOfCountriesInMap());
 		cout << "The deck consists of: " << deck->getSize() << " cards" << endl;
 		mapVector->push_back(*map);

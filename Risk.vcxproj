@@ -32,7 +32,6 @@
     <ClInclude Include="inc\Utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="inc\PlayerStrategies.cpp" />
     <ClCompile Include="src\Cards.cpp" />
     <ClCompile Include="src\Dice.cpp" />
     <ClCompile Include="src\GameEngine.cpp" />
@@ -42,6 +41,7 @@
     <ClCompile Include="src\MapLoader.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\PlayerDriver.cpp" />
+    <ClCompile Include="src\PlayerStrategies.cpp" />
     <ClCompile Include="src\Utility.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -694,8 +694,10 @@ void CheaterAIBehaviour::placeArmiesDuringReinforce()
 	else if (gameSetupTurn > 39) {
 		//Multiplying by two the number of armies of each country 
 		for (int i = 0; i < player->countries->size(); i++) {
-			int originalNumberOfArmy = player->countries->at(i)->playerInfo->getNumberOfArmies();
-			player->countries->at(i)->playerInfo->setNumberOfArmies(originalNumberOfArmy * 2);
+			if (player->countries->at(i)->playerInfo->getNumberOfArmies() < 100000) {
+				int originalNumberOfArmy = player->countries->at(i)->playerInfo->getNumberOfArmies();
+				player->countries->at(i)->playerInfo->setNumberOfArmies(originalNumberOfArmy * 2);
+			}
 		}
 		cout << "After the attack phase, player " << player->getPlayerName() << " has these many armies in each of their country: \n" << endl;
 		player->printListOfCountries();
@@ -750,7 +752,7 @@ void CheaterAIBehaviour::fortify()
 	for (int i = 0; i < player->countries->size(); i++) 
 	{
 		//To make sure that the player has at least one enemy neighbor
-		if (hasAnEnemyNeighbor(*player->countries->at(i)))
+		if (hasAnEnemyNeighbor(*player->countries->at(i)) && player->countries->at(i)->playerInfo->getNumberOfArmies() < 100000)
 		{
 			int originalNumberOfArmy = player->countries->at(i)->playerInfo->getNumberOfArmies();
 			player->countries->at(i)->playerInfo->setNumberOfArmies(originalNumberOfArmy * 2);

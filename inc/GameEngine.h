@@ -26,6 +26,7 @@ private:
 	Deck * deck;
 	vector <string> * finalTable;
 	vector <int> * mapTable;
+	bool * destroyMapTable;
 
 public:
 	GameEngine();
@@ -43,7 +44,7 @@ public:
 	void choosePlayerType(int numOfPlayers, int gameType);
 	void update(string s) override;
 private:
-	void chooseMap();
+	void chooseMap(int gameType);
 	int chooseNumberOfGames();
 	int chooseNumberOfTurns();
 	void changingPlayerBehviour(Player & player);
