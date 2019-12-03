@@ -523,6 +523,9 @@ void RandomAIBehaviour::placeArmiesDuringReinforce()
 //The random Ai attacks enemmies a random amount of times
 void RandomAIBehaviour::attackEnemies()
 {
+	if (player->countries->size() == 0) {
+		return;
+	}
 	auto potentialAttackers = findEveryNodeThatCanAttack();
 	int numOfAttacksLeft = rand() % MAX_NUMBER_OF_RANDOM_ATTACKS; // Picked a random number of Max attacks
 
@@ -561,7 +564,12 @@ void RandomAIBehaviour::attackEnemies()
 //fortify a random node to fortify
 void RandomAIBehaviour::fortify()
 {
+	if (player->countries->size() == 0) {
+		return;
+	}
 	auto nodes = findEveryFortifiableNode();
+	if (nodes.size() == 0)
+		return;
 	int nodeToFortifyIndex = rand() % nodes.size();
 	CountryNode * nodeToFortify = nodes[nodeToFortifyIndex];
 
@@ -674,6 +682,9 @@ CheaterAIBehaviour::CheaterAIBehaviour(Player * player)
 //The cheater will reinforce each country they have by doubling the number of armies
 void CheaterAIBehaviour::placeArmiesDuringReinforce()
 {
+	if (player->countries->size() == 0) {
+		return;
+	}
 	//it will count the number of time the method will be called
 	//its purpose is to let the cheater only double the number of armies once 
 	//during the setup time
